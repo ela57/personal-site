@@ -173,7 +173,7 @@
       box-shadow: inset 0 2px 6px rgba(0,0,0,0.2);
     }
     /* Sections */
-    section{ padding: clamp(80px, 10vw, 120px) 0; }
+    section{ padding: clamp(96px, 12vw, 160px) 0; }
     .sectionHead{
   margin-bottom: 32px;
 }
@@ -190,88 +190,104 @@
     }
 
     /* Hero */
-    .hero{
-      padding: 64px 0 30px;
-    }
-    .heroGrid{
-      display: grid;
-      grid-template-columns: 1.25fr 0.75fr;
-      gap: 18px;
-      align-items: stretch;
-    }
-    .heroMain{ padding: 26px; }
-    .kicker{
-      display: inline-flex;
-      gap: 10px;
-      align-items: center;
-      padding: 8px 12px;
-      border-radius: 999px;
-      border: 1px solid var(--border);
-      background: color-mix(in srgb, var(--panel) 75%, transparent);
-      color: var(--muted);
-      font-weight: 700;
-      font-size: 13px;
-    }
-    h1{
-      margin: 14px 0 10px;
-      font-size: clamp(32px, 4.5vw, 54px);
-      line-height: 1.05;
-      letter-spacing: -0.02em;
-    }
-    .sub{
-      color: var(--muted);
-      font-size: 16px;
-      max-width: 62ch;
-      margin: 0 0 18px;
-    }
-    .ctaRow{
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-top: 18px;
-    }
-    .primary{
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
-      border: none;
-      color: white;
-    }
-    .primary:hover{ filter: brightness(1.03); }
-    .ghost{
-      background: transparent;
-    }
+   /* Less clunky cards (subtle, airy) */
+.card{
+  background: color-mix(in srgb, var(--panel) 55%, transparent);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: none; /* removes heavy shadow */
+}
 
-    .heroSide{
-      padding: 22px;
-      display: grid;
-      gap: 12px;
-    }
-    .stat{
-      padding: 16px;
-      border-radius: 16px;
-      border: 1px solid var(--border);
-      background: color-mix(in srgb, var(--panel) 80%, transparent);
-    }
-    .stat b{ display:block; font-size: 18px; }
-    .stat span{ color: var(--muted); font-weight: 600; font-size: 13px; }
+/* HERO: full-screen intro */
+.hero{
+  min-height: calc(100vh - 64px); /* header height offset */
+  display: flex;
+  align-items: center;
+  padding: 0;
+ }
+
+.heroGrid{
+  display: grid;
+  grid-template-columns: 1fr; /* single column */
+  align-items: center;
+}
+
+.heroMain{
+  padding: 0;
+  max-width: 760px;
+}
+
+h1{
+  margin: 0 0 12px;
+  font-size: clamp(44px, 6vw, 72px);
+  line-height: 1.02;
+  letter-spacing: -0.03em;
+}
+
+.sub{
+  color: var(--muted);
+  font-size: 18px;
+  max-width: 62ch;
+  margin: 0 0 22px;
+}
+
+.ctaRow{
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 6px;
+}
+
+/* Scroll hint */
+.scrollHint{
+  margin-top: 28px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--muted);
+  font-weight: 700;
+  font-size: 13px;
+  user-select: none;
+}
+
+.scrollDot{
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent);
+  animation: bob 1.3s ease-in-out infinite;
+}
+
+@keyframes bob{
+  0%, 100%{ transform: translateY(0); }
+  50%{ transform: translateY(5px); }
+}
 
     /* Headings */
-    .sectionHead{
-      display:flex;
-      align-items: end;
-      justify-content: space-between;
-      gap: 14px;
-      margin-bottom: 18px;
-    }
-    .sectionHead h2{
-      margin: 0;
-      font-size: 38px;
-      letter-spacing: -0.01em;
-    }
-    .sectionHead p{
-      margin: 0;
-      color: var(--muted);
-      max-width: 65ch;
-    }
+   .sectionHead{
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 22px;
+}
+
+.sectionHead h2{
+  margin: 0;
+  font-size: 34px;
+  letter-spacing: -0.02em;
+}
+
+.aboutText{
+  max-width: 70ch;
+}
+
+.aboutText p{
+  margin: 0 0 14px;
+  color: var(--muted);
+  font-size: 18px;
+  font-weight: 500;
+}
 
     /* Projects */
     .grid{
@@ -393,58 +409,48 @@
 
   <main>
     <!-- HERO -->
-    <section class="hero">
-      <div class="wrap heroGrid">
-        <div class="card heroMain">
-          <div class="kicker">👋 Available for opportunities • 2026</div>
-          <h1>Ethan Lam</h1>
-          <p class="sub">
-            Computer Engineering student with a passion in game theory and cybersecurity
-          </p>
-          <div class="ctaRow">
-            <a class="btn primary" href="#projects">See my work</a>
-            <a class="btn ghost" href="#contact">Contact me</a>
-            <a class="btn ghost" href="#" aria-label="Download resume">Resume</a>
-          </div>
-        </div>
+    <section class="hero" id="top">
+  <div class="wrap heroGrid">
+    <div class="heroMain">
+      <h1>Ethan Lam</h1>
+      <p class="sub">
+        Computer Engineering @ Georgia Tech (’28). Interested in game theory, cybersecurity, and quantitative systems.
+      </p>
 
-        <aside class="card heroSide" aria-label="Quick stats">
-          <div class="stat">
-            <b>Focus</b>
-            <span>What you’re currently working on</span>
-          </div>
-          <div class="stat">
-            <b>Strengths</b>
-            <span>2–3 skills (e.g., research, coding, writing)</span>
-          </div>
-          <div class="stat">
-            <b>Location</b>
-            <span>City, State • Remote OK?</span>
-          </div>
-        </aside>
+      <div class="ctaRow">
+        <a class="btn primary" href="#projects">Projects</a>
+        <a class="btn ghost" href="#about">About</a>
+        <a class="btn ghost" href="#" aria-label="Download resume">Resume</a>
       </div>
-    </section>
+
+      <div class="scrollHint" aria-hidden="true">
+        <span class="scrollDot"></span>
+        <span>Scroll</span>
+      </div>
+    </div>
+  </div>
+</section>
 
     <!-- ABOUT -->
-    <section id="about" class="reveal">
-      <div class="wrap">
-        <div class="sectionHead">
-          <div>
-            <h2>About</h2>
-            <p><b>Hi, my name is Ethan</b></p>
-          </div>
-        </div>
+   <section id="about" class="reveal">
+  <div class="wrap">
+    <div class="sectionHead">
+      <h2>About</h2>
+    </div>
 
-        <div class="card" style="padding: 18px;">
-          <p style="margin:0; color: var(--muted);">
-            I'm studying Computer Engineering Major at Georgia Tech set to graduate in 2028
-            My professional interest include Quantitative Development, Quantitative Trading, Statistical Analysis, and Reverse Engineering. 
-            I am also huge poker fan, love playing basketball, pickleball, and golf, and enjoy traveling to new places.
-            I enjoy competition and strategic thinking.
-          </p>
-        </div>
-      </div>
-    </section>
+    <div class="aboutText">
+      <p>
+        I’m a Computer Engineering major at Georgia Tech (graduating 2028). I’m interested in quantitative development,
+        trading systems, statistical analysis, and reverse engineering.
+      </p>
+      <p>
+        Outside of school, I’m into poker, basketball, pickleball, golf, and traveling — I like competitive environments
+        where strategy matters.
+      </p>
+    </div>
+  </div>
+</section>
+
 
     <!-- PROJECTS -->
     <section id="projects" class="reveal">
