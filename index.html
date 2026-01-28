@@ -292,8 +292,8 @@ h1{
     /* Projects */
     .grid{
       display:grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 14px;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
     }
     .proj{
       padding: 18px;
@@ -320,6 +320,18 @@ h1{
       gap: 10px;
       flex-wrap: wrap;
     }
+.proj{
+  padding: 18px;
+  border-radius: 18px;
+  background: color-mix(in srgb, var(--panel) 55%, transparent);
+  transition: transform 200ms ease, background 200ms ease, border-color 200ms ease;
+}
+
+.proj:hover{
+  transform: translateY(-3px);
+  background: color-mix(in srgb, var(--panel2) 60%, transparent);
+  border-color: color-mix(in srgb, var(--accent) 30%, var(--border));
+}
 
     /* Skills */
     .tags{
