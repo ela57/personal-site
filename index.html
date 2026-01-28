@@ -92,6 +92,19 @@
       height: 22px;
       filter: drop-shadow(0 10px 20px rgba(0,0,0,0.35));
     }
+    @media (pointer: fine){
+      body{
+        cursor: none;
+      }
+    }
+
+    input, textarea{
+      cursor: text;
+    }
+
+    a, button, .btn{
+      cursor: pointer;
+    }
 
     /* Top nav */
     header{
@@ -574,6 +587,7 @@
       e.target.reset();
       return false;
     }
+    
   </script>
 
   <script>
