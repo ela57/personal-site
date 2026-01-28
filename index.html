@@ -53,6 +53,25 @@
 
     .wrap{ max-width: var(--max); margin: 0 auto; padding: 0 var(--pad); }
 
+    /* Reveal on scroll */
+        .reveal{
+      opacity: 0;
+      transform: translateY(14px);
+      transition: opacity 700ms ease, transform 700ms ease;
+      will-change: opacity, transform;
+    }
+
+    .reveal.in{
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Respect reduced motion */
+    @media (prefers-reduced-motion: reduce){
+      .reveal{ transition: none; transform: none; opacity: 1; }
+    }
+
+
     /* Top nav */
     header{
       position: sticky;
@@ -362,7 +381,7 @@
     </section>
 
     <!-- ABOUT -->
-    <section id="about">
+    <section id="about" class="reveal">
       <div class="wrap">
         <div class="sectionHead">
           <div>
@@ -383,7 +402,7 @@
     </section>
 
     <!-- PROJECTS -->
-    <section id="projects">
+    <section id="projects" class="reveal">
       <div class="wrap">
         <div class="sectionHead">
           <div>
@@ -393,7 +412,7 @@
         </div>
 
         <div class="grid">
-          <article class="card proj">
+          <article class="card proj reveal">
             <div class="badgeRow">
               <span class="badge">Category</span>
               <span class="badge">Tech/Method</span>
@@ -532,5 +551,19 @@
       return false;
     }
   </script>
+  <script>
+  // Scroll reveal using IntersectionObserver
+  const els = document.querySelectorAll(".reveal");
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e) => {
+      if (e.isIntersecting) {
+        e.target.classList.add("in");
+        io.unobserve(e.target); // animate once
+      }
+    });
+  }, { threshold: 0.12 });
+
+  els.forEach(el => io.observe(el));
+</script>
 </body>
 </html>
