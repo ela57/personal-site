@@ -612,7 +612,7 @@ h1{
 
     // Footer year
     document.getElementById("year").textContent = new Date().getFullYear();
-
+    <!---
     // Fake form submit (so the template feels alive)
     function fakeSubmit(e){
       e.preventDefault();
@@ -620,7 +620,7 @@ h1{
       e.target.reset();
       return false;
     }
-    
+    -->
   </script>
 
   <script>
@@ -652,7 +652,6 @@ h1{
     dot.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
   });
 
-  // Add a class when hovering interactive elements
   const interactiveSelector = "a, button, .btn, .card, input, textarea";
   document.addEventListener("mouseover", (e) => {
     if (e.target.closest(interactiveSelector)) {
