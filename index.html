@@ -70,7 +70,27 @@
     @media (prefers-reduced-motion: reduce){
       .reveal{ transition: none; transform: none; opacity: 1; }
     }
+    /* Custom cursor */
+        #cursorDot{
+      position: fixed;
+      top: 0; left: 0;
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      z-index: 9999;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      opacity: 0; /* hidden until mouse moves */
+      transition: width 160ms ease, height 160ms ease, opacity 200ms ease, filter 200ms ease;
+      filter: drop-shadow(0 6px 12px rgba(0,0,0,0.25));
+    }
 
+    /* When hovering clickable stuff, cursor grows */
+    .cursor-hover #cursorDot{
+      width: 22px;
+      height: 22px;
+      filter: drop-shadow(0 10px 20px rgba(0,0,0,0.35));
+    }
 
     /* Top nav */
     header{
@@ -325,6 +345,7 @@
 </head>
 
 <body>
+  <div id="cursorDot" aria-hidden="true"></div>
   <header>
     <div class="wrap nav">
       <div class="brand">
@@ -565,6 +586,28 @@
 
   els.forEach(el => io.observe(el));
 </script>
+<script>
+  const dot = document.getElementById("cursorDot");
+
+  window.addEventListener("mousemove", (e) => {
+    dot.style.opacity = "1";
+    dot.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
+  });
+
+  // Add a class when hovering interactive elements
+  const interactiveSelector = "a, button, .btn, .card, input, textarea";
+  document.addEventListener("mouseover", (e) => {
+    if (e.target.closest(interactiveSelector)) {
+      document.body.classList.add("cursor-hover");
+    }
+  });
+  document.addEventListener("mouseout", (e) => {
+    if (e.target.closest(interactiveSelector)) {
+      document.body.classList.remove("cursor-hover");
+    }
+  });
+</script>
+
 
 </body>
 </html>
