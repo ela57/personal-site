@@ -56,8 +56,9 @@
     /* Reveal on scroll */
         .reveal{
       opacity: 0;
-      transform: translateY(14px);
-      transition: opacity 700ms ease, transform 700ms ease;
+      transform: translateY(24px);
+      transition: opacity 900ms ease-out, transform 900ms ease-out;
+      transition-delay: 200ms;
       will-change: opacity, transform;
     }
 
@@ -572,20 +573,28 @@
       return false;
     }
   </script>
+
   <script>
-  // Scroll reveal using IntersectionObserver
-  const els = document.querySelectorAll(".reveal");
+   const els = document.querySelectorAll(".reveal");
+
   const io = new IntersectionObserver((entries) => {
-    entries.forEach((e) => {
-      if (e.isIntersecting) {
-        e.target.classList.add("in");
-        io.unobserve(e.target); // animate once
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("in");
+        io.unobserve(entry.target);
       }
     });
-  }, { threshold: 0.12 });
+  }, {
+    threshold: 0.15,
+    rootMargin: "0px 0px -80px 0px" // <-- delays reveal until deeper in view
+  });
 
-  els.forEach(el => io.observe(el));
+  els.forEach((el, i) => {
+    el.style.transitionDelay = `${200 + i * 120}ms`; // stagger
+    io.observe(el);
+  });
 </script>
+
 <script>
   const dot = document.getElementById("cursorDot");
 
