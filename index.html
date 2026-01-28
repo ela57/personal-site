@@ -1,0 +1,533 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Your Name — Portfolio</title>
+  <meta name="description" content="Personal website and portfolio for Your Name." />
+
+  <style>
+    :root{
+      --bg: #0b0c10;
+      --panel: rgba(255,255,255,0.06);
+      --panel2: rgba(255,255,255,0.09);
+      --text: #e8e8ea;
+      --muted: rgba(232,232,234,0.72);
+      --border: rgba(255,255,255,0.12);
+      --shadow: 0 10px 30px rgba(0,0,0,0.35);
+      --radius: 18px;
+      --max: 1040px;
+      --pad: 20px;
+      --accent: #7dd3fc;
+      --accent2: #a78bfa;
+      --link: #93c5fd;
+    }
+
+    [data-theme="light"]{
+      --bg: #fafafa;
+      --panel: rgba(0,0,0,0.04);
+      --panel2: rgba(0,0,0,0.06);
+      --text: #111827;
+      --muted: rgba(17,24,39,0.72);
+      --border: rgba(0,0,0,0.12);
+      --shadow: 0 10px 30px rgba(0,0,0,0.12);
+      --accent: #0284c7;
+      --accent2: #7c3aed;
+      --link: #2563eb;
+    }
+
+    *{ box-sizing: border-box; }
+    html{ scroll-behavior: smooth; }
+    body{
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      color: var(--text);
+      background: radial-gradient(1200px 700px at 20% -10%, rgba(125,211,252,0.22), transparent 60%),
+                  radial-gradient(900px 600px at 110% 10%, rgba(167,139,250,0.18), transparent 55%),
+                  var(--bg);
+      line-height: 1.55;
+    }
+
+    a{ color: var(--link); text-decoration: none; }
+    a:hover{ text-decoration: underline; }
+
+    .wrap{ max-width: var(--max); margin: 0 auto; padding: 0 var(--pad); }
+
+    /* Top nav */
+    header{
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(12px);
+      background: color-mix(in srgb, var(--bg) 80%, transparent);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 14px 0;
+    }
+    .brand{
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      letter-spacing: 0.2px;
+    }
+    .dot{
+      width: 12px; height: 12px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 20%, transparent);
+    }
+    nav ul{
+      list-style: none;
+      display: flex;
+      gap: 16px;
+      padding: 0; margin: 0;
+      align-items: center;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+    nav a{
+      display: inline-flex;
+      padding: 8px 10px;
+      border-radius: 12px;
+      color: var(--muted);
+      font-weight: 600;
+      font-size: 14px;
+    }
+    nav a:hover{
+      background: var(--panel);
+      color: var(--text);
+      text-decoration: none;
+    }
+
+    .btn{
+      border: 1px solid var(--border);
+      background: var(--panel);
+      color: var(--text);
+      padding: 10px 12px;
+      border-radius: 14px;
+      cursor: pointer;
+      box-shadow: none;
+      font-weight: 700;
+      font-size: 14px;
+    }
+    .btn:hover{ background: var(--panel2); }
+
+    /* Sections */
+    section{ padding: 64px 0; }
+    .card{
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    /* Hero */
+    .hero{
+      padding: 64px 0 30px;
+    }
+    .heroGrid{
+      display: grid;
+      grid-template-columns: 1.25fr 0.75fr;
+      gap: 18px;
+      align-items: stretch;
+    }
+    .heroMain{ padding: 26px; }
+    .kicker{
+      display: inline-flex;
+      gap: 10px;
+      align-items: center;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: color-mix(in srgb, var(--panel) 75%, transparent);
+      color: var(--muted);
+      font-weight: 700;
+      font-size: 13px;
+    }
+    h1{
+      margin: 14px 0 10px;
+      font-size: clamp(32px, 4.5vw, 54px);
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+    }
+    .sub{
+      color: var(--muted);
+      font-size: 16px;
+      max-width: 62ch;
+      margin: 0 0 18px;
+    }
+    .ctaRow{
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 18px;
+    }
+    .primary{
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border: none;
+      color: white;
+    }
+    .primary:hover{ filter: brightness(1.03); }
+    .ghost{
+      background: transparent;
+    }
+
+    .heroSide{
+      padding: 22px;
+      display: grid;
+      gap: 12px;
+    }
+    .stat{
+      padding: 16px;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      background: color-mix(in srgb, var(--panel) 80%, transparent);
+    }
+    .stat b{ display:block; font-size: 18px; }
+    .stat span{ color: var(--muted); font-weight: 600; font-size: 13px; }
+
+    /* Headings */
+    .sectionHead{
+      display:flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+    .sectionHead h2{
+      margin: 0;
+      font-size: 26px;
+      letter-spacing: -0.01em;
+    }
+    .sectionHead p{
+      margin: 0;
+      color: var(--muted);
+      max-width: 65ch;
+    }
+
+    /* Projects */
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+    .proj{
+      padding: 18px;
+      display:flex;
+      flex-direction: column;
+      gap: 10px;
+      min-height: 190px;
+    }
+    .badgeRow{ display:flex; flex-wrap: wrap; gap: 8px; }
+    .badge{
+      font-size: 12px;
+      font-weight: 800;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      background: color-mix(in srgb, var(--panel2) 70%, transparent);
+    }
+    .proj h3{ margin: 2px 0 0; font-size: 18px; }
+    .proj p{ margin: 0; color: var(--muted); }
+    .proj .links{
+      margin-top: auto;
+      display:flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    /* Skills */
+    .tags{
+      display:flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .tag{
+      padding: 10px 12px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: color-mix(in srgb, var(--panel) 75%, transparent);
+      font-weight: 700;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    /* Contact */
+    form{
+      display:grid;
+      gap: 10px;
+      padding: 18px;
+    }
+    label{ font-weight: 800; font-size: 13px; color: var(--muted); }
+    input, textarea{
+      width: 100%;
+      padding: 12px 12px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: color-mix(in srgb, var(--bg) 80%, transparent);
+      color: var(--text);
+      outline: none;
+      font-size: 14px;
+    }
+    textarea{ min-height: 120px; resize: vertical; }
+    input:focus, textarea:focus{
+      border-color: color-mix(in srgb, var(--accent) 55%, var(--border));
+      box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 15%, transparent);
+    }
+    .formRow{ display:grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .note{ color: var(--muted); font-size: 12px; margin: 0; padding: 0 18px 18px; }
+
+    footer{
+      padding: 26px 0 50px;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+      margin-top: 24px;
+    }
+    .footerRow{
+      display:flex;
+      align-items:center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    /* Responsive */
+    @media (max-width: 900px){
+      .heroGrid{ grid-template-columns: 1fr; }
+      .grid{ grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="wrap nav">
+      <div class="brand">
+        <span class="dot" aria-hidden="true"></span>
+        <span>Your Name</span>
+      </div>
+
+      <nav aria-label="Primary">
+        <ul>
+          <li><a href="#about">About</a></li>
+          <li><a href="#projects">Projects</a></li>
+          <li><a href="#skills">Skills</a></li>
+          <li><a href="#contact">Contact</a></li>
+          <li><button class="btn" id="themeBtn" type="button" aria-label="Toggle theme">Toggle</button></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- HERO -->
+    <section class="hero">
+      <div class="wrap heroGrid">
+        <div class="card heroMain">
+          <div class="kicker">👋 Available for opportunities • 2026</div>
+          <h1>Your Name</h1>
+          <p class="sub">
+            A one-liner about you. Example: “Neuroscience student building tools at the intersection of
+            brain + computation.” Keep it simple and human.
+          </p>
+          <div class="ctaRow">
+            <a class="btn primary" href="#projects">See my work</a>
+            <a class="btn ghost" href="#contact">Contact me</a>
+            <a class="btn ghost" href="#" aria-label="Download resume">Resume</a>
+          </div>
+        </div>
+
+        <aside class="card heroSide" aria-label="Quick stats">
+          <div class="stat">
+            <b>Focus</b>
+            <span>What you’re currently working on</span>
+          </div>
+          <div class="stat">
+            <b>Strengths</b>
+            <span>2–3 skills (e.g., research, coding, writing)</span>
+          </div>
+          <div class="stat">
+            <b>Location</b>
+            <span>City, State • Remote OK?</span>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="about">
+      <div class="wrap">
+        <div class="sectionHead">
+          <div>
+            <h2>About</h2>
+            <p>A short paragraph or two. What you care about, what you’re learning, and what kind of work you want.</p>
+          </div>
+        </div>
+
+        <div class="card" style="padding: 18px;">
+          <p style="margin:0; color: var(--muted);">
+            Write a bit about your background, what you’re curious about, and how you like to solve problems.
+            Add one specific detail so it feels real (a project, a lab, a hobby).
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROJECTS -->
+    <section id="projects">
+      <div class="wrap">
+        <div class="sectionHead">
+          <div>
+            <h2>Projects</h2>
+            <p>Pick 3–6. Each card should say what it is, what you did, and what impact it had.</p>
+          </div>
+        </div>
+
+        <div class="grid">
+          <article class="card proj">
+            <div class="badgeRow">
+              <span class="badge">Category</span>
+              <span class="badge">Tech/Method</span>
+            </div>
+            <h3>Project Title</h3>
+            <p>One sentence on the problem + your solution. Keep it concrete.</p>
+            <div class="links">
+              <a class="btn" href="#">Live</a>
+              <a class="btn" href="#">Code</a>
+              <a class="btn" href="#">Write-up</a>
+            </div>
+          </article>
+
+          <article class="card proj">
+            <div class="badgeRow">
+              <span class="badge">Category</span>
+              <span class="badge">Tech/Method</span>
+            </div>
+            <h3>Project Title</h3>
+            <p>What you built / studied, plus one measurable result if possible.</p>
+            <div class="links">
+              <a class="btn" href="#">Code</a>
+              <a class="btn" href="#">Notes</a>
+            </div>
+          </article>
+
+          <article class="card proj">
+            <div class="badgeRow">
+              <span class="badge">Category</span>
+              <span class="badge">Tech/Method</span>
+            </div>
+            <h3>Project Title</h3>
+            <p>What makes this interesting? One line. Save the details for the write-up.</p>
+            <div class="links">
+              <a class="btn" href="#">Details</a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- SKILLS -->
+    <section id="skills">
+      <div class="wrap">
+        <div class="sectionHead">
+          <div>
+            <h2>Skills</h2>
+            <p>Keep it honest. Use categories if you want, but don’t overstuff it.</p>
+          </div>
+        </div>
+
+        <div class="card" style="padding: 18px;">
+          <div class="tags" aria-label="Skill tags">
+            <span class="tag">Python</span>
+            <span class="tag">Data Analysis</span>
+            <span class="tag">Research</span>
+            <span class="tag">Writing</span>
+            <span class="tag">JavaScript</span>
+            <span class="tag">Statistics</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact">
+      <div class="wrap">
+        <div class="sectionHead">
+          <div>
+            <h2>Contact</h2>
+            <p>Put your email + links. The form below is front-end only unless you connect a service.</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <form onsubmit="return fakeSubmit(event)">
+            <div class="formRow">
+              <div>
+                <label for="name">Name</label>
+                <input id="name" name="name" placeholder="Your name" autocomplete="name" required />
+              </div>
+              <div>
+                <label for="email">Email</label>
+                <input id="email" name="email" type="email" placeholder="you@example.com" autocomplete="email" required />
+              </div>
+            </div>
+
+            <div>
+              <label for="msg">Message</label>
+              <textarea id="msg" name="message" placeholder="What’s up?" required></textarea>
+            </div>
+
+            <button class="btn primary" type="submit">Send message</button>
+          </form>
+          <p class="note">
+            Tip: If you want a real working form, connect this to Formspree / Netlify Forms / a tiny serverless function.
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap footerRow">
+      <div>© <span id="year"></span> Your Name</div>
+      <div style="display:flex; gap:10px; flex-wrap:wrap;">
+        <a href="#">GitHub</a>
+        <a href="#">LinkedIn</a>
+        <a href="#">Email</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Theme toggle (saved to localStorage)
+    const root = document.documentElement;
+    const btn = document.getElementById("themeBtn");
+    const saved = localStorage.getItem("theme");
+    if (saved) root.setAttribute("data-theme", saved);
+
+    btn.addEventListener("click", () => {
+      const current = root.getAttribute("data-theme") || "dark";
+      const next = current === "dark" ? "light" : "dark";
+      root.setAttribute("data-theme", next);
+      localStorage.setItem("theme", next);
+    });
+
+    // Footer year
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    // Fake form submit (so the template feels alive)
+    function fakeSubmit(e){
+      e.preventDefault();
+      alert("Template form submitted (not actually sent). Hook this up to a form service to make it real.");
+      e.target.reset();
+      return false;
+    }
+  </script>
+</body>
+</html>
