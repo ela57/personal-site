@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Ethan — Portfolio</title>
-  <meta name="description" content="Pergitsonal website." />
+  <meta name="description" content="Personal website." />
   <link rel="icon" type="image/png" href="/favicon.png">
 
   <style>
@@ -290,6 +290,49 @@ h1{
   font-weight: 500;
 }
 
+    /* Experience */
+    .expList{
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+    .expItem{
+      padding: 20px 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .expTop{
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .expTop h3{
+      margin: 0;
+      font-size: 18px;
+    }
+    .expTop .expWhen{
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .expOrg{
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 700;
+      margin: 0;
+    }
+    .expItem ul{
+      margin: 4px 0 0;
+      padding-left: 18px;
+      color: var(--muted);
+      font-size: 15px;
+    }
+    .expItem li{ margin: 4px 0; }
+
     /* Projects */
     .grid{
       display:grid;
@@ -411,6 +454,7 @@ h1{
           <li><a href="#about">
             About
           </a></li>
+          <li><a href="#experience">Experience</a></li>
           <li><a href="#projects">Projects</a></li>
           <li><a href="#skills">Skills</a></li>
         <!-- <li><a href="#contact">Contact</a></li> -->
@@ -427,14 +471,14 @@ h1{
     <div class="heroMain">
       <h1>Ethan Lam</h1>
       <p class="sub">
-        Computer Engineering @ Georgia Tech (’28). Interested in game theory, cybersecurity, and quantitative systems.
+        Computer Engineering @ Georgia Tech (’28). Interested in GPU/graphics programming, game theory, cybersecurity, and quantitative systems.
       </p>
 
       <div class="ctaRow">
         <a class="btn primary" href="#projects">Projects</a>
         <a class="btn ghost" href="#about">About</a>
-        <a class="btn ghost" href="assets/Ethan_Resume_vF_.pdf" target="_blank" rel="noopener noreferrer">
-        Resume</a>
+       <!-- <a class="btn ghost" href="assets/Ethan_Resume_vF_.pdf" target="_blank" rel="noopener noreferrer">
+        Resume</a>-->
       </div>
 
       <div class="scrollHint" aria-hidden="true">
@@ -454,17 +498,45 @@ h1{
 
     <div class="aboutText">
       <p>
-        I’m a Computer Engineering major at Georgia Tech (graduating 2028). I’m interested in quantitative development,
-        trading systems, statistical analysis, and reverse engineering.
+        I’m a Computer Engineering major at Georgia Tech (graduating 2028), on the Cybersecurity/Distributed
+        Systems &amp; Software Design thread. I’m interested in GPU and graphics programming, quantitative
+        development and trading systems, and reverse engineering.
       </p>
       <p>
-        Outside of school, I’m into poker, basketball, pickleball, golf, and traveling — I like competitive environments
-        where strategy matters.
+        Outside of school, I’m into poker, basketball, pickleball, golf, rock climbing, and traveling — I like
+        competitive environments where strategy matters.
       </p>
     </div>
   </div>
 </section>
 
+    <!-- EXPERIENCE -->
+    <section id="experience" class="reveal">
+      <div class="wrap">
+        <div class="sectionHead">
+          <div>
+            <h2>Experience</h2>
+          </div>
+        </div>
+
+        <div class="expList">
+          <article class="card expItem reveal">
+            <div class="expTop">
+              <h3>Project Manager, GTSF Investment Committee — Quant Sector</h3>
+              <span class="expWhen">Aug 2025 – Present</span>
+            </div>
+            <p class="expOrg">Atlanta, GA</p>
+            <ul>
+              <li>Developed a centralized portfolio controller in Python to coordinate capital allocation, rebalancing, and risk constraints</li>
+              <li>Optimized trading scripts and the backtesting pipeline, enabling out-of-sample validation for strategy correctness and reproducibility</li>
+              <li>Led integration and deployment of two independent trading strategies into a single production-ready system</li>
+            </ul>
+          </article>
+
+         
+        </div>
+      </div>
+    </section>
 
     <!-- PROJECTS -->
     <section id="projects" class="reveal">
@@ -477,6 +549,46 @@ h1{
         </div>
 
         <div class="grid">
+          <article class="proj reveal">
+            <div class="badgeRow">
+              <span class="badge">Graphics</span>
+              <span class="badge">Unity · HLSL · C#</span>
+            </div>
+            <h3>Thermal-Vision Post-Processing Shader</h3>
+            <p>
+              A custom depth-based thermal-vision effect in HLSL — cold-to-hot color mapping with an
+              adjustable max-distance range, Sobel-based edge outlining, and a procedural film-grain pass,
+              exposed through a Unity PostProcessing volume.
+            </p>
+          </article>
+
+          <article class="proj reveal">
+            <div class="badgeRow">
+              <span class="badge">Graphics</span>
+              <span class="badge">Python · NumPy · Matplotlib</span>
+            </div>
+            <h3>Software 3D Renderer</h3>
+            <p>
+              A 3D renderer built entirely from scratch with no 3D graphics API — world/view/projection
+              transforms, perspective divide, backface culling, NDC-space z-clipping and z-sorting, and
+              diffuse lighting.
+            </p>
+          </article>
+
+          <article class="proj reveal">
+            <div class="badgeRow">
+              <span class="badge">Security</span>
+              <span class="badge">IDA Pro · x86 Assembly</span>
+            </div>
+            <h3>Malware Reverse Engineering: PE Worm Analysis</h3>
+            <p>
+              Fully annotated x86 IDA disassembly of Windows PE file-infecting worms, documenting infection,
+              encryption, and evasion behavior — including manual PE export-table parsing, XOR/rotate
+              encryption schemes, a polymorphic stub generator, and logic bugs in the samples' anti-VM and
+              anti-debug checks.
+            </p>
+          </article>
+
           <article class="proj reveal">
   <h3>Realized Volatility & SPY Returns</h3>
   <p>
@@ -538,11 +650,17 @@ h1{
         <div class="card" style="padding: 18px;">
           <div class="tags" aria-label="Skill tags">
             <span class="tag">Python</span>
+            <span class="tag">Java</span>
+            <span class="tag">C / C#</span>
+            <span class="tag">x86 Assembly</span>
+            <span class="tag">Unity / HLSL</span>
+            <span class="tag">IDA Pro</span>
             <span class="tag">Data Analysis</span>
+            <span class="tag">Statistics</span>
+            <span class="tag">Financial Modeling</span>
+            <span class="tag">Reverse Engineering</span>
             <span class="tag">Research</span>
             <span class="tag">Writing</span>
-            <span class="tag">JavaScript</span>
-            <span class="tag">Statistics</span>
           </div>
         </div>
       </div>
