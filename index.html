@@ -3,9 +3,30 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Ethan — Portfolio</title>
-  <meta name="description" content="Personal website." />
+  <title>Ethan Lam — Portfolio</title>
+  <meta name="description" content="Ethan Lam — Computer Engineering at Georgia Tech ('28). GPU/graphics programming, quantitative systems, and security research." />
+  <link rel="canonical" href="https://ethan-lam.com/" />
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0b0c10" />
+  <meta name="theme-color" media="(prefers-color-scheme: light)" content="#fafafa" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Ethan Lam — Portfolio" />
+  <meta property="og:description" content="Ethan Lam — Computer Engineering at Georgia Tech ('28). GPU/graphics programming, quantitative systems, and security research." />
+  <meta property="og:url" content="https://ethan-lam.com/" />
+  <meta property="og:image" content="https://ethan-lam.com/og-image.png" />
+  <meta name="twitter:card" content="summary" />
   <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+  <script>
+    // Apply theme + mark JS availability before first paint
+    (function(){
+      document.documentElement.classList.add("js");
+      var t = null;
+      try{ t = localStorage.getItem("theme"); }catch(e){}
+      if(!t) t = matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+      document.documentElement.setAttribute("data-theme", t);
+    })();
+  </script>
 
   <style>
     :root{
@@ -22,6 +43,9 @@
       --accent: #7dd3fc;
       --accent2: #a78bfa;
       --link: #93c5fd;
+      --glow1: rgba(125,211,252,0.22);
+      --glow2: rgba(167,139,250,0.18);
+      color-scheme: dark;
     }
 
     [data-theme="light"]{
@@ -35,6 +59,9 @@
       --accent: #0284c7;
       --accent2: #7c3aed;
       --link: #2563eb;
+      --glow1: rgba(2,132,199,0.14);
+      --glow2: rgba(124,58,237,0.10);
+      color-scheme: light;
     }
 
     *{ box-sizing: border-box; }
@@ -43,8 +70,8 @@
       margin: 0;
       font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji","Segoe UI Emoji";
       color: var(--text);
-      background: radial-gradient(1200px 700px at 20% -10%, rgba(125,211,252,0.22), transparent 60%),
-                  radial-gradient(900px 600px at 110% 10%, rgba(167,139,250,0.18), transparent 55%),
+      background: radial-gradient(1200px 700px at 20% -10%, var(--glow1), transparent 60%),
+                  radial-gradient(900px 600px at 110% 10%, var(--glow2), transparent 55%),
                   var(--bg);
       line-height: 1.55;
     }
@@ -54,13 +81,19 @@
 
     .wrap{ max-width: var(--max); margin: 0 auto; padding: 0 var(--pad); }
 
-    /* Reveal on scroll */
-        .reveal{
+    /* Reveal on scroll — hiding is gated on the .js class so content
+       stays visible if JavaScript never runs */
+    .js .reveal{
       opacity: 0;
       transform: translateY(24px);
-      transition: opacity 900ms ease-out, transform 900ms ease-out;
-      transition-delay: 200ms;
       will-change: opacity, transform;
+    }
+
+    /* The reveal transition only applies until .shown is added after
+       the animation, so it can't interfere with hover transitions */
+    .js .reveal:not(.shown){
+      transition: opacity 900ms ease-out, transform 900ms ease-out;
+      transition-delay: var(--d, 0ms);
     }
 
     .reveal.in{
@@ -70,10 +103,15 @@
 
     /* Respect reduced motion */
     @media (prefers-reduced-motion: reduce){
-      .reveal{ transition: none; transform: none; opacity: 1; }
+      html{ scroll-behavior: auto !important; }
+      .js .reveal{ transition: none !important; transform: none; opacity: 1; }
+      .scrollDot{ animation: none !important; }
+      .proj{ transition: none !important; }
+      .proj:hover{ transform: none !important; }
     }
     /* Custom cursor */
         #cursorDot{
+      display: none; /* enabled only for fine pointers below */
       position: fixed;
       top: 0; left: 0;
       width: 10px; height: 10px;
@@ -96,6 +134,9 @@
     @media (pointer: fine){
       body{
         cursor: none;
+      }
+      #cursorDot{
+        display: block;
       }
     }
 
@@ -173,31 +214,25 @@
     .btn:active{
       box-shadow: inset 0 2px 6px rgba(0,0,0,0.2);
     }
+    .btn.primary{
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border-color: transparent;
+      color: #fff;
+    }
+    .btn.primary:hover{ filter: brightness(1.06); }
+    .btn.ghost{ background: transparent; }
+    a.btn:hover{ text-decoration: none; }
+
     /* Sections */
     section{ padding: clamp(96px, 12vw, 160px) 0; }
-    .sectionHead{
-  margin-bottom: 32px;
-}
 
-.grid{
-  gap: 24px;
-}
-
+    /* Subtle, airy cards */
     .card{
-      background: var(--panel);
+      background: color-mix(in srgb, var(--panel) 55%, transparent);
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      box-shadow: var(--shadow);
+      box-shadow: none;
     }
-
-    /* Hero */
-   /* Less clunky cards (subtle, airy) */
-.card{
-  background: color-mix(in srgb, var(--panel) 55%, transparent);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  box-shadow: none; /* removes heavy shadow */
-}
 
 /* HERO: full-screen intro */
 .hero{
@@ -345,6 +380,10 @@ h1{
       flex-direction: column;
       gap: 10px;
       min-height: 190px;
+      border-radius: 18px;
+      border: 1px solid var(--border);
+      background: color-mix(in srgb, var(--panel) 55%, transparent);
+      transition: transform 200ms ease, background 200ms ease, border-color 200ms ease;
     }
     .badgeRow{ display:flex; flex-wrap: wrap; gap: 8px; }
     .badge{
@@ -364,12 +403,6 @@ h1{
       gap: 10px;
       flex-wrap: wrap;
     }
-.proj{
-  padding: 18px;
-  border-radius: 18px;
-  background: color-mix(in srgb, var(--panel) 55%, transparent);
-  transition: transform 200ms ease, background 200ms ease, border-color 200ms ease;
-}
 
 .proj:hover{
   transform: translateY(-3px);
@@ -701,8 +734,8 @@ h1{
         </div>
       </div>
     </section>
-  </main>
 -->
+  </main>
   <footer>
     <div class="wrap footerRow">
       <div>© <span id="year"></span> Ethan Lam</div>
@@ -715,22 +748,30 @@ h1{
   </footer>
 
   <script>
-    // Theme toggle (saved to localStorage)
+    // Theme toggle — the initial theme is applied by the <head> script
+    // so there's no flash; this just handles the button.
     const root = document.documentElement;
     const btn = document.getElementById("themeBtn");
-    const saved = localStorage.getItem("theme");
-    if (saved) root.setAttribute("data-theme", saved);
+
+    function syncThemeBtn(){
+      const current = root.getAttribute("data-theme") || "dark";
+      const next = current === "dark" ? "Light" : "Dark";
+      btn.textContent = next;
+      btn.setAttribute("aria-label", "Switch to " + next.toLowerCase() + " mode");
+    }
 
     btn.addEventListener("click", () => {
       const current = root.getAttribute("data-theme") || "dark";
       const next = current === "dark" ? "light" : "dark";
       root.setAttribute("data-theme", next);
-      localStorage.setItem("theme", next);
+      try{ localStorage.setItem("theme", next); }catch(e){}
+      syncThemeBtn();
     });
+    syncThemeBtn();
 
     // Footer year
     document.getElementById("year").textContent = new Date().getFullYear();
-    <!---
+    /*
     // Fake form submit (so the template feels alive)
     function fakeSubmit(e){
       e.preventDefault();
@@ -738,47 +779,63 @@ h1{
       e.target.reset();
       return false;
     }
-    -->
+    */
   </script>
 
   <script>
-   const els = document.querySelectorAll(".reveal");
+    const els = document.querySelectorAll(".reveal");
 
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add("in");
-        io.unobserve(entry.target);
-      }
+    const io = new IntersectionObserver((entries) => {
+      // Stagger only the elements entering the viewport together,
+      // so far-down sections don't inherit a huge delay.
+      const batch = entries.filter((entry) => entry.isIntersecting);
+      batch.forEach((entry, i) => {
+        const el = entry.target;
+        const delay = 200 + i * 120;
+        el.style.setProperty("--d", delay + "ms");
+        el.classList.add("in");
+        io.unobserve(el);
+
+        // Once the reveal finishes, remove the delay and hand
+        // transitions back to the element's own CSS (hover states).
+        const done = () => {
+          el.style.removeProperty("--d");
+          el.classList.add("shown");
+        };
+        el.addEventListener("transitionend", done, { once: true });
+        setTimeout(done, delay + 950); // fallback if transitionend never fires
+      });
+    }, {
+      threshold: 0.15,
+      rootMargin: "0px 0px -80px 0px" // <-- delays reveal until deeper in view
     });
-  }, {
-    threshold: 0.15,
-    rootMargin: "0px 0px -80px 0px" // <-- delays reveal until deeper in view
-  });
 
-  els.forEach((el, i) => {
-    el.style.transitionDelay = `${200 + i * 120}ms`; // stagger
-    io.observe(el);
-  });
-</script>
+    els.forEach((el) => io.observe(el));
+  </script>
 
 <script>
   const dot = document.getElementById("cursorDot");
+  const finePointer = window.matchMedia("(pointer: fine)");
+  const interactiveSelector = "a, button, input, textarea";
 
   window.addEventListener("mousemove", (e) => {
+    if (!finePointer.matches) return; // skip on touch devices
     dot.style.opacity = "1";
-    dot.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
+    // translate(-50%,-50%) keeps the dot centered on the pointer
+    dot.style.transform = `translate(${e.clientX}px, ${e.clientY}px) translate(-50%, -50%)`;
   });
 
-  const interactiveSelector = "a, button, .btn, .card, input, textarea";
+  document.addEventListener("mouseout", (e) => {
+    if (!e.relatedTarget) {
+      dot.style.opacity = "0"; // pointer left the window
+    }
+    if (e.target.closest(interactiveSelector)) {
+      document.body.classList.remove("cursor-hover");
+    }
+  });
   document.addEventListener("mouseover", (e) => {
     if (e.target.closest(interactiveSelector)) {
       document.body.classList.add("cursor-hover");
-    }
-  });
-  document.addEventListener("mouseout", (e) => {
-    if (e.target.closest(interactiveSelector)) {
-      document.body.classList.remove("cursor-hover");
     }
   });
 </script>
