@@ -5,7 +5,6 @@
   const $ = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
   const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)");
-  const finePointer = matchMedia("(hover: hover) and (pointer: fine)");
   const motionOK = () => !reduceMotion.matches;
   const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
   const PAPER = [233, 229, 218], INK = [21, 21, 19], BLUE = [29, 68, 240];
@@ -73,9 +72,11 @@
       const s = state;
       ctx.clearRect(0, 0, w, h);
       const size = Math.min(w, h) * s.scale * 2;            // NDC [-1, 1] → this many px
-      const view = ICO.v.map(p => { const q = rotX(rotY(p, s.ry), s.rx); return [q[0], q[1], q[2] + s.camZ]; });
-      // Perspective divide. Scaled by camZ/focal so the focal slider changes perspective, not overall size.
-      const norm = s.camZ / s.focal * 0.62;
+      // Dolly zoom: the camera backs off as focal length grows, so the mesh keeps its size
+      // on screen while perspective flattens (short lens) or exaggerates (wide lens).
+      const camZ = s.camZ * s.focal / 2.2;
+      const view = ICO.v.map(p => { const q = rotX(rotY(p, s.ry), s.rx); return [q[0], q[1], q[2] + camZ]; });
+      const norm = camZ / s.focal * 0.62;
       const ndc = view.map(p => [p[0] * s.focal / p[2] * norm, p[1] * s.focal / p[2] * norm, p[2]]);
       const screen = ndc.map(p => [w / 2 + p[0] * size / 2, h / 2 - p[1] * size / 2, p[2]]);
 
@@ -253,7 +254,7 @@
       update() { const on = pinned || hovered; fig.classList.toggle("annotated", on); if (btn) btn.setAttribute("aria-pressed", String(pinned)); if (on) layout(); api.onChange && api.onChange(on); },
     };
     const art = fig.closest(".proj") || fig;
-    art.addEventListener("pointerenter", e => { if (e.pointerType === "mouse" && finePointer.matches) { hovered = true; api.update(); } });
+    art.addEventListener("pointerenter", e => { if (e.pointerType === "mouse") { hovered = true; api.update(); } });
     art.addEventListener("pointerleave", e => { if (e.pointerType === "mouse") { hovered = false; api.update(); } });
     art.addEventListener("focusin", () => { hovered = true; api.update(); });
     art.addEventListener("focusout", e => { if (!art.contains(e.relatedTarget)) { hovered = false; api.update(); } });
