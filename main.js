@@ -176,12 +176,13 @@
     const endDrag = () => (drag = null);
     canvas.addEventListener("pointerup", endDrag); canvas.addEventListener("pointercancel", endDrag);
 
-    reduceMotion.addEventListener("change", () => { stop(); start(); });
+    const onMotionChange = () => { stop(); start(); };
+    reduceMotion.addEventListener("change", onMotionChange);
     return {
       set(patch) { Object.assign(state, patch); dirty = true; if (!raf) draw(); if (state.rotate) start(); },
       get state() { return state; },
       start, stop, draw,
-      destroy() { stop(); ro.disconnect(); },
+      destroy() { stop(); ro.disconnect(); reduceMotion.removeEventListener("change", onMotionChange); },
     };
   }
 
@@ -301,6 +302,9 @@
   const focusables = () => $$('a[href], button:not([disabled]), input:not([disabled]), [tabindex]:not([tabindex="-1"])', detail)
     .filter(el => el.offsetParent !== null || el === closeBtn);
   let openSlug = null, returnFocus = null, lastScroll = 0;
+  // True when the current dialog's "#project/…" entry was pushed by us (a click),
+  // so closing can pop it with history.back() instead of pushing another entry.
+  let pushedEntry = false;
 
   function cardFor(slug) { return $(`.proj[data-project="${slug}"]`); }
 
@@ -313,7 +317,7 @@
     return true;
   }
 
-  function openDetail(slug, { fromClick = false } = {}) {
+  function openDetail(slug, { fromClick = false, trigger = null } = {}) {
     if (openSlug === slug) return;
     const card = cardFor(slug);
     if (!fillDetail(slug)) return;
@@ -328,9 +332,10 @@
       requestAnimationFrame(() => requestAnimationFrame(() => detail.classList.add("in")));
       closeBtn.focus({ preventScroll: true });
     };
-    returnFocus = fromClick && card ? $(".open", card) : returnFocus;
+    if (fromClick) returnFocus = trigger || (card && $(".open", card));
+    const fromCard = !!(trigger && card && card.contains(trigger));
     const media = card && $(".projMedia", card), target = $(".detailMedia", content);
-    if (fromClick && motionOK() && document.startViewTransition && media && target && !wasOpen) {
+    if (fromCard && motionOK() && document.startViewTransition && media && target && !wasOpen) {
       media.style.viewTransitionName = "project-media";
       const vt = document.startViewTransition(() => { media.style.viewTransitionName = ""; target.style.viewTransitionName = "project-media"; show(); });
       vt.finished.finally(() => { target.style.viewTransitionName = ""; media.style.viewTransitionName = ""; });
@@ -347,30 +352,41 @@
       $$("[data-vis]", content).forEach(el => el._cleanup && el._cleanup());
       content.replaceChildren();
       const card = cardFor(slug);
-      (returnFocus || (card && $(".open", card)))?.focus({ preventScroll: true });
+      const target = returnFocus && returnFocus.isConnected ? returnFocus : card && $(".open", card);
+      target?.focus({ preventScroll: true });
       returnFocus = null;
     };
     if (motionOK() && document.startViewTransition) document.startViewTransition(finish); else finish();
-    if (location.hash.startsWith("#project/")) history.replaceState(null, "", location.pathname + location.search);
+  }
+
+  // Close from the UI (button, Escape, backdrop). Pops our own history entry when
+  // there is one; a directly-linked dialog is closed in place instead.
+  function requestClose() {
+    if (!openSlug) return;
+    if (pushedEntry) { history.back(); return; }
+    history.replaceState(null, "", location.pathname + location.search);
+    closeDetail();
   }
 
   function route() {
     const m = location.hash.match(/^#project\/([a-z0-9-]+)$/);
-    if (m) openDetail(m[1]); else if (openSlug) closeDetail();
+    if (m) openDetail(m[1]);
+    else if (openSlug) { pushedEntry = false; closeDetail(); }
   }
   document.addEventListener("click", e => {
     const a = e.target.closest('a[href^="#project/"]');
     if (!a || e.metaKey || e.ctrlKey || e.button !== 0) return;
     e.preventDefault();
     const slug = a.getAttribute("href").slice(9);
-    history.pushState(null, "", `#project/${slug}`);
-    openDetail(slug, { fromClick: true });
+    if (openSlug) history.replaceState(null, "", `#project/${slug}`); // switching dialogs keeps one entry
+    else { history.pushState(null, "", `#project/${slug}`); pushedEntry = true; }
+    openDetail(slug, { fromClick: true, trigger: a });
   });
-  closeBtn.addEventListener("click", () => { history.pushState(null, "", location.pathname + location.search); closeDetail(); });
-  detail.addEventListener("click", e => { if (e.target === detail) closeBtn.click(); });
+  closeBtn.addEventListener("click", requestClose);
+  detail.addEventListener("click", e => { if (e.target === detail) requestClose(); });
   addEventListener("keydown", e => {
     if (!openSlug) return;
-    if (e.key === "Escape") { closeBtn.click(); return; }
+    if (e.key === "Escape") { requestClose(); return; }
     if (e.key !== "Tab") return;
     const els = focusables();
     if (!els.length) return;
