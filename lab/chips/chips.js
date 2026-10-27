@@ -4,9 +4,9 @@ let matterPromise;
 function loadMatter() {
   if (!matterPromise) matterPromise = new Promise((resolve, reject) => {
     const script = document.createElement("script"); script.src = new URL("../../vendor/matter.js", import.meta.url).href;
-    script.onload = () => resolve(window.Matter); script.onerror = () => reject(new Error("The physics library could not load."));
+    script.onload = () => resolve(window.Matter); script.onerror = () => { script.remove(); reject(new Error("The physics library could not load.")); };
     document.head.append(script);
-  });
+  }).catch(error => { matterPromise = null; throw error; });
   return matterPromise;
 }
 
@@ -89,6 +89,6 @@ export function mountChips(section) {
   canvas.addEventListener("pointerup", release, opts); canvas.addEventListener("pointercancel", release, opts);
   canvas.addEventListener("pointerleave", () => { previous = null; }, opts);
   function cleanup() { disposed = true; stop(); ro.disconnect(); io.disconnect(); controller.abort(); physics?.dispose(); physics = null; }
-  addEventListener("pagehide", cleanup, { ...opts, once: true });
+  addEventListener("pagehide", e => { if (!e.persisted) cleanup(); }, opts);
   return cleanup;
 }
