@@ -295,7 +295,11 @@
 
   /* ---------------- Project detail overlay (hash routed) ---------------- */
   const detail = $("#detail"), content = $("#detailContent"), closeBtn = $("#detailClose");
-  const main = $("#main");
+  // Everything outside the dialog is made inert while it is open.
+  const backdropEls = Array.from(document.body.children).filter(el => el !== detail && el.tagName !== "TEMPLATE" && el.tagName !== "SCRIPT");
+  const setInert = on => backdropEls.forEach(el => (el.inert = on));
+  const focusables = () => $$('a[href], button:not([disabled]), input:not([disabled]), [tabindex]:not([tabindex="-1"])', detail)
+    .filter(el => el.offsetParent !== null || el === closeBtn);
   let openSlug = null, returnFocus = null, lastScroll = 0;
 
   function cardFor(slug) { return $(`.proj[data-project="${slug}"]`); }
@@ -320,7 +324,7 @@
       detail.hidden = false; detail.classList.add("open");
       detail.scrollTop = 0;
       document.body.classList.add("noscroll");
-      main.inert = true; nav.inert = true;
+      setInert(true);
       requestAnimationFrame(() => requestAnimationFrame(() => detail.classList.add("in")));
       closeBtn.focus({ preventScroll: true });
     };
@@ -339,7 +343,7 @@
     const finish = () => {
       detail.classList.remove("open", "in"); detail.hidden = true;
       document.body.classList.remove("noscroll");
-      main.inert = false; nav.inert = false;
+      setInert(false);
       $$("[data-vis]", content).forEach(el => el._cleanup && el._cleanup());
       content.replaceChildren();
       const card = cardFor(slug);
@@ -364,7 +368,16 @@
   });
   closeBtn.addEventListener("click", () => { history.pushState(null, "", location.pathname + location.search); closeDetail(); });
   detail.addEventListener("click", e => { if (e.target === detail) closeBtn.click(); });
-  addEventListener("keydown", e => { if (e.key === "Escape" && openSlug) closeBtn.click(); });
+  addEventListener("keydown", e => {
+    if (!openSlug) return;
+    if (e.key === "Escape") { closeBtn.click(); return; }
+    if (e.key !== "Tab") return;
+    const els = focusables();
+    if (!els.length) return;
+    const first = els[0], last = els[els.length - 1];
+    if (e.shiftKey && (document.activeElement === first || !detail.contains(document.activeElement))) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && (document.activeElement === last || !detail.contains(document.activeElement))) { e.preventDefault(); first.focus(); }
+  });
   addEventListener("hashchange", route);
   addEventListener("popstate", route);
   route();

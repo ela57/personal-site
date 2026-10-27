@@ -184,7 +184,8 @@ section + section{ padding-top:0; }
   overflow:hidden; box-shadow:var(--shadow-sm);
   transition:transform .6s var(--ease-out), box-shadow .6s var(--ease-out), border-color .4s;
 }
-.proj:hover, .proj:focus-within{ transform:translateY(-4px) scale(1.012); box-shadow:var(--shadow-md); border-color:var(--line-strong); }
+.proj:hover, .proj:focus-within, .js .proj.reveal.in:hover, .js .proj.reveal.in:focus-within{ transform:translateY(-4px) scale(1.012); box-shadow:var(--shadow-md); border-color:var(--line-strong); }
+.js .proj.reveal.shown{ transition:transform .6s var(--ease-out), box-shadow .6s var(--ease-out), border-color .4s; }
 .proj.wide{ grid-column:1 / -1; }
 .proj.wide{ display:grid; grid-template-columns:1.15fr 1fr; }
 .proj.wide .projMedia{ aspect-ratio:auto; min-height:360px; order:2; }
@@ -329,8 +330,9 @@ footer{ padding:28px 0 40px; color:var(--fg-3); font-size:14px; }
   width:min(1040px, 100% - 2*var(--gutter)); margin:clamp(24px, 6vh, 72px) auto clamp(40px, 8vh, 96px);
   background:var(--bg-elev); border:1px solid var(--line); border-radius:28px; box-shadow:var(--shadow-lg); overflow:hidden;
 }
+.detail .closeBar{ position:sticky; top:0; z-index:3; height:0; width:min(1040px, 100% - 2*var(--gutter)); margin:0 auto; }
 .detail .close{
-  position:fixed; top:18px; right:18px; z-index:2;
+  position:absolute; top:14px; right:14px;
   width:44px; height:44px; border-radius:50%; background:rgba(255,255,255,.85); border:1px solid var(--line); box-shadow:var(--shadow-sm); display:grid; place-items:center;
   -webkit-backdrop-filter:blur(10px); backdrop-filter:blur(10px); transition:background .25s, transform .3s var(--ease-out);
 }
@@ -383,7 +385,7 @@ footer{ padding:28px 0 40px; color:var(--fg-3); font-size:14px; }
   html{ scroll-behavior:auto; }
   *,*::before,*::after{ animation-duration:.01ms!important; animation-iteration-count:1!important; transition-duration:.01ms!important; scroll-behavior:auto!important; }
   .js .hero .w, .js .hero .lede, .js .hero .ctaRow, .js .hero .meta, .js .reveal, .js .detail .panel{ opacity:1; transform:none; }
-  .proj:hover{ transform:none; }
+  .proj:hover, .js .proj.reveal.in:hover, .js .proj.reveal.in:focus-within{ transform:none; }
   ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*){ animation:none!important; }
 }
 
