@@ -377,14 +377,17 @@ import("./lab/hero-type.js").then(({ mountHeroType }) => mountHeroType(document.
     if (!tpl) return false;
     cleanup();
     content.replaceChildren(tpl.content.cloneNode(true));
-    nextEl.hidden = slug === "lab-chess";
-    if (slug === "lab-chess") {
-      countEl.textContent = "Lab / 01 · Chess puzzles";
-      const version = labVersion, host = $("[data-chess]", content);
-      import("./lab/chess/board.js").then(({ mountChess }) => {
-        if (version === labVersion && host.isConnected) labCleanup = mountChess(host);
+    const isLab = slug.startsWith("lab-");
+    nextEl.hidden = isLab;
+    if (isLab) {
+      const chess = slug === "lab-chess";
+      countEl.textContent = chess ? "Lab / 01 · Chess puzzles" : "Lab / 02 · Strategy sandbox";
+      const version = labVersion, host = $(chess ? "[data-chess]" : "[data-strategy]", content);
+      const module = chess ? import("./lab/chess/board.js") : import("./lab/strategy/sandbox.js");
+      module.then(exports => {
+        if (version === labVersion && host.isConnected) labCleanup = chess ? exports.mountChess(host) : exports.mountStrategy(host);
       }).catch(() => {
-        if (version === labVersion) host.textContent = "The board could not load. Close and reopen to try again.";
+        if (version === labVersion) host.textContent = "The experiment could not load. Close and reopen to try again.";
       });
       return true;
     }
@@ -436,7 +439,7 @@ import("./lab/hero-type.js").then(({ mountHeroType }) => mountHeroType(document.
       detail.hidden = true; detail.classList.remove("entering");
       document.body.classList.remove("noscroll"); setInert(false);
       cleanup(); content.replaceChildren();
-      const target = returnFocus && returnFocus.isConnected ? returnFocus : card ? $("a.more, .more a", card) : $('a[href="#lab/chess"]');
+      const target = returnFocus && returnFocus.isConnected ? returnFocus : card ? $("a.more, .more a", card) : $(`a[href="#lab/${slug.slice(4)}"]`);
       target && target.focus({ preventScroll: true });
       returnFocus = null;
     };
@@ -456,7 +459,7 @@ import("./lab/hero-type.js").then(({ mountHeroType }) => mountHeroType(document.
   function route() {
     const m = location.hash.match(/^#(project|lab)\/([a-z0-9-]+)$/);
     const slug = m && (m[1] === "lab" ? `lab-${m[2]}` : m[2]);
-    if (slug && (ORDER.includes(slug) || slug === "lab-chess")) { openDetail(slug); }
+    if (slug && (ORDER.includes(slug) || ["lab-chess", "lab-strategy"].includes(slug))) { openDetail(slug); }
     else if (openSlug) { pushedEntry = false; closeDetail(); }
   }
   document.addEventListener("click", e => {
