@@ -29,6 +29,7 @@
     <nav aria-label="Primary">
       <ul class="navLinks">
         <li><a href="#projects" data-section="projects">Work</a></li>
+        <li><a href="#lab" data-section="lab">Lab</a></li>
         <li><a href="#about" data-section="about">About</a></li>
         <li><a href="#contact" data-section="contact">Contact</a></li>
         <li><a href="mailto:ethanlam52@gmail.com?subject=R%C3%A9sum%C3%A9%20request" title="Résumé available on request by email">Résumé</a></li>
@@ -148,6 +149,17 @@
         <p class="secLede">Step through the same pipeline as project 01. Turn off culling, then sorting, and watch visibility break — then work out why a convex mesh only needs one of them.</p>
       </header>
       <div class="benchMount" data-bench></div>
+    </section>
+
+    <section class="labSec" id="lab" aria-labelledby="labTitle">
+      <header class="secHead grid rule">
+        <p class="sec mono"><span>§ Lab</span> Experiments</p>
+        <h2 class="secTitle" id="labTitle">Think with your hands.</h2>
+        <p class="secNote mono">Small systems. Playable ideas.</p>
+      </header>
+      <ol class="labIndex">
+        <li class="labEntry"><a href="#lab/chess" class="grid"><span class="mono">01 / CHESS</span><h3>Find the forcing line.</h3><p>Twelve chess puzzles. A board, a few clues, and a move that changes everything.</p><span class="mono">Open experiment ↗</span></a></li>
+      </ol>
     </section>
 
     <!-- § 04 — ABOUT -->
@@ -348,6 +360,10 @@
     </div>
   </template>
 
+  <template id="tpl-lab-chess">
+    <header class="csHead grid"><p class="sec mono"><span>§ Lab / 01</span> Chess puzzles</p><h2 class="csTitle" id="detailTitle">Find the forcing line.</h2></header>
+    <div class="chessMount" data-chess><p role="status">Loading the board…</p></div>
+  </template>
   <script src="main.js" type="module"></script>
 </body>
 </html>

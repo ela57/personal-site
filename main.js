@@ -31,7 +31,7 @@ import("./lab/hero-type.js").then(({ mountHeroType }) => mountHeroType(document.
   }), { rootMargin: "-45% 0px -50% 0px" });
   // The last section can be too short to reach the observer band; at the end of the page it's current.
   addEventListener("scroll", () => { if (atBottom()) setCurrent("contact"); }, { passive: true });
-  ["top", "projects", "bench", "about", "contact"].forEach(id => { const el = document.getElementById(id); if (el) sectionIO.observe(el); });
+  ["top", "projects", "bench", "lab", "about", "contact"].forEach(id => { const el = document.getElementById(id); if (el) sectionIO.observe(el); });
 
   /* ---------------- Entrances ---------------- */
   $$(".index li").forEach((li, i) => li.style.setProperty("--i", i));
@@ -363,16 +363,31 @@ import("./lab/hero-type.js").then(({ mountHeroType }) => mountHeroType(document.
   const countEl = $("#detailCount"), nextEl = $("#detailNext");
   const backdropEls = Array.from(document.body.children).filter(el => el !== detail && el.tagName !== "TEMPLATE" && el.tagName !== "SCRIPT");
   const setInert = on => backdropEls.forEach(el => (el.inert = on));
-  const focusables = () => $$('a[href], button:not([disabled]), input:not([disabled]), [tabindex]:not([tabindex="-1"])', detail).filter(el => el.offsetParent !== null);
+  const focusables = () => $$('a[href], button:not([disabled]):not([tabindex="-1"]), select, input:not([disabled]), [tabindex]:not([tabindex="-1"])', detail).filter(el => el.offsetParent !== null);
   let openSlug = null, returnFocus = null, pushedEntry = false, enterTimer = 0;
   const cardFor = slug => $(`.proj[data-project="${slug}"]`);
-  const cleanup = () => $$("[data-vis], [data-bench]", content).forEach(el => el._cleanup && el._cleanup());
+  let labCleanup = null, labVersion = 0;
+  const cleanup = () => {
+    labVersion++; labCleanup?.(); labCleanup = null;
+    $$("[data-vis], [data-bench]", content).forEach(el => el._cleanup && el._cleanup());
+  };
 
   function fillDetail(slug) {
     const tpl = $(`#tpl-${slug}`);
     if (!tpl) return false;
     cleanup();
     content.replaceChildren(tpl.content.cloneNode(true));
+    nextEl.hidden = slug === "lab-chess";
+    if (slug === "lab-chess") {
+      countEl.textContent = "Lab / 01 · Chess puzzles";
+      const version = labVersion, host = $("[data-chess]", content);
+      import("./lab/chess/board.js").then(({ mountChess }) => {
+        if (version === labVersion && host.isConnected) labCleanup = mountChess(host);
+      }).catch(() => {
+        if (version === labVersion) host.textContent = "The board could not load. Close and reopen to try again.";
+      });
+      return true;
+    }
     const i = ORDER.indexOf(slug), next = ORDER[(i + 1) % ORDER.length];
     countEl.textContent = `Case study ${String(i + 1).padStart(2, "0")} / ${String(ORDER.length).padStart(2, "0")}`;
     nextEl.href = `#project/${next}`;
@@ -421,7 +436,7 @@ import("./lab/hero-type.js").then(({ mountHeroType }) => mountHeroType(document.
       detail.hidden = true; detail.classList.remove("entering");
       document.body.classList.remove("noscroll"); setInert(false);
       cleanup(); content.replaceChildren();
-      const target = returnFocus && returnFocus.isConnected ? returnFocus : card && $("a.more, .more a", card);
+      const target = returnFocus && returnFocus.isConnected ? returnFocus : card ? $("a.more, .more a", card) : $('a[href="#lab/chess"]');
       target && target.focus({ preventScroll: true });
       returnFocus = null;
     };
@@ -439,17 +454,19 @@ import("./lab/hero-type.js").then(({ mountHeroType }) => mountHeroType(document.
     closeDetail();
   }
   function route() {
-    const m = location.hash.match(/^#project\/([a-z0-9-]+)$/);
-    if (m && ORDER.includes(m[1])) { pushedEntry = true; openDetail(m[1]); }
+    const m = location.hash.match(/^#(project|lab)\/([a-z0-9-]+)$/);
+    const slug = m && (m[1] === "lab" ? `lab-${m[2]}` : m[2]);
+    if (slug && (ORDER.includes(slug) || slug === "lab-chess")) { openDetail(slug); }
     else if (openSlug) { pushedEntry = false; closeDetail(); }
   }
   document.addEventListener("click", e => {
-    const a = e.target.closest('a[href^="#project/"]');
+    const a = e.target.closest('a[href^="#project/"], a[href^="#lab/"]');
     if (!a || e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
     e.preventDefault();
-    const slug = a.getAttribute("href").slice(9);
-    if (openSlug) { history.replaceState(null, "", `#project/${slug}`); openSlug = null; openDetail(slug); return; }
-    history.pushState(null, "", `#project/${slug}`); pushedEntry = true;
+    const hash = a.getAttribute("href");
+    const slug = hash.startsWith("#lab/") ? `lab-${hash.slice(5)}` : hash.slice(9);
+    if (openSlug) { history.replaceState(null, "", hash); openSlug = null; openDetail(slug); return; }
+    history.pushState(null, "", hash); pushedEntry = true;
     const card = a.closest(".proj");
     openDetail(slug, { trigger: card ? ($(".more", card).matches("a") ? $(".more", card) : $(".more a", card)) : a });
   });
@@ -465,5 +482,5 @@ import("./lab/hero-type.js").then(({ mountHeroType }) => mountHeroType(document.
   });
   addEventListener("popstate", route);
   addEventListener("hashchange", route);
-  if (location.hash.startsWith("#project/")) openDetail(location.hash.slice(9));
+  route();
 })();
