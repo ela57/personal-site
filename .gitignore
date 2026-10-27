@@ -3,3 +3,4 @@ assets/*.pdf
 .env
 .env.*
 __pycache__/
+node_modules/

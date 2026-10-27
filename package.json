@@ -1,0 +1,12 @@
+{
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests/"
+  },
+  "devDependencies": {
+    "chess.js": "1.4.0",
+    "lightweight-charts": "5.2.1",
+    "matter-js": "0.20.0"
+  }
+}

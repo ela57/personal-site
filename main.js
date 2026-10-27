@@ -1,6 +1,8 @@
-/* Ethan Lam — portfolio behaviour. Vanilla JS, no dependencies.
-   Sections: motion prefs · nav · hero · reveals · visuals (renderer, thermal, diagram)
-             · scroll-linked showcase · project detail overlay (hash routed). */
+/* Ethan Lam — "The Engineering Notebook". Vanilla JS, no dependencies.
+   nav · hero · reveals · renderer (hero wireframe, plate, bench) · thermal · annotations · case-study overlay */
+import("./lab/hero-type.js").then(({ mountHeroType }) => mountHeroType(document.querySelector(".hero")));
+import("./lab/chips/chips.js").then(({ mountChips }) => mountChips(document.querySelector("#experiments")));
+
 (() => {
   "use strict";
   const $ = (s, r = document) => r.querySelector(s);
@@ -8,60 +10,42 @@
   const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)");
   const motionOK = () => !reduceMotion.matches;
   const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+  const PAPER = [233, 229, 218], INK = [21, 21, 19], BLUE = [29, 68, 240];
+  const mix = (a, b, t) => `rgb(${a.map((c, i) => Math.round(c + (b[i] - c) * t)).join(",")})`;
+
+  const yearEl = $("#year"); if (yearEl) yearEl.textContent = new Date().getFullYear();
 
   /* ---------------- Navigation ---------------- */
   const nav = $("#nav");
-  const menuBtn = $("#menuBtn");
   const setScrolled = () => nav.classList.toggle("scrolled", scrollY > 8);
-  addEventListener("scroll", setScrolled, { passive: true });
-  setScrolled();
-
-  const closeMenu = () => {
-    nav.classList.remove("open");
-    menuBtn.setAttribute("aria-expanded", "false");
-    menuBtn.setAttribute("aria-label", "Open menu");
-  };
-  menuBtn.addEventListener("click", () => {
-    const open = nav.classList.toggle("open");
-    menuBtn.setAttribute("aria-expanded", String(open));
-    menuBtn.setAttribute("aria-label", open ? "Close menu" : "Open menu");
-  });
-  $$("#navLinks a").forEach(a => a.addEventListener("click", closeMenu));
-  addEventListener("keydown", e => { if (e.key === "Escape" && nav.classList.contains("open")) closeMenu(); });
-
-  // Highlight the nav item for the section in view.
+  addEventListener("scroll", setScrolled, { passive: true }); setScrolled();
   const navFor = {};
-  $$("#navLinks a[data-section]").forEach(a => (navFor[a.dataset.section] = a));
-  const sectionIO = new IntersectionObserver(entries => {
-    entries.forEach(en => {
-      if (!en.isIntersecting) return;
-      Object.values(navFor).forEach(a => a.removeAttribute("aria-current"));
-      const a = navFor[en.target.id];
-      if (a) a.setAttribute("aria-current", "true");
-    });
-  }, { rootMargin: "-45% 0px -50% 0px" });
-  ["projects", "showcase", "about", "contact"].forEach(id => { const el = document.getElementById(id); if (el) sectionIO.observe(el); });
+  $$(".navLinks a[data-section]").forEach(a => (navFor[a.dataset.section] = a));
+  const setCurrent = id => {
+    Object.values(navFor).forEach(a => a.removeAttribute("aria-current"));
+    if (navFor[id]) navFor[id].setAttribute("aria-current", "true");
+  };
+  const atBottom = () => innerHeight + scrollY >= document.documentElement.scrollHeight - 2;
+  const sectionIO = new IntersectionObserver(entries => entries.forEach(en => {
+    if (!en.isIntersecting || atBottom()) return;
+    setCurrent(en.target.id === "bench" ? "projects" : en.target.id);
+  }), { rootMargin: "-45% 0px -50% 0px" });
+  // The last section can be too short to reach the observer band; at the end of the page it's current.
+  addEventListener("scroll", () => { if (atBottom()) setCurrent("contact"); }, { passive: true });
+  ["top", "projects", "bench", "lab", "about", "contact"].forEach(id => { const el = document.getElementById(id); if (el) sectionIO.observe(el); });
 
-  /* ---------------- Hero entrance ---------------- */
+  /* ---------------- Entrances ---------------- */
+  $$(".index li").forEach((li, i) => li.style.setProperty("--i", i));
   requestAnimationFrame(() => requestAnimationFrame(() => $(".hero").classList.add("in")));
+  const revealIO = new IntersectionObserver((entries, io) => entries.forEach(en => {
+    if (!en.isIntersecting) return;
+    en.target.classList.add("in"); io.unobserve(en.target);
+  }), { threshold: 0.15, rootMargin: "0px 0px -8% 0px" });
+  $$(".rule, .proj, .contact").forEach(el => revealIO.observe(el));
 
-  /* ---------------- Scroll reveals ---------------- */
-  const revealIO = new IntersectionObserver((entries, io) => {
-    entries.filter(e => e.isIntersecting).forEach((en, i) => {
-      const el = en.target;
-      el.style.setProperty("--d", `${i * 90}ms`);
-      el.classList.add("in");
-      io.unobserve(el);
-      const done = () => { el.style.removeProperty("--d"); el.classList.add("shown"); };
-      el.addEventListener("transitionend", done, { once: true });
-      setTimeout(done, 1200);
-    });
-  }, { threshold: 0.12, rootMargin: "0px 0px -60px 0px" });
-  $$(".reveal").forEach(el => revealIO.observe(el));
-
-  /* ---------------- Software renderer (canvas) ----------------
-     Mirrors the pipeline of the Python project: model → world → view →
-     projection → perspective divide → backface culling → z-sort → diffuse. */
+  /* ---------------- Software renderer (Canvas 2D) ----------------
+     Same pipeline as the Python project: model → world → view → projection →
+     perspective divide (NDC) → backface culling → painter's sort → diffuse. */
   const ICO = (() => {
     const t = (1 + Math.sqrt(5)) / 2;
     const v = [[-1,t,0],[1,t,0],[-1,-t,0],[1,-t,0],[0,-1,t],[0,1,t],[0,-1,-t],[0,1,-t],[t,0,-1],[t,0,1],[-t,0,-1],[-t,0,1]]
@@ -69,120 +53,123 @@
     const f = [[0,11,5],[0,5,1],[0,1,7],[0,7,10],[0,10,11],[1,5,9],[5,11,4],[11,10,2],[10,7,6],[7,1,8],[3,9,4],[3,4,2],[3,2,6],[3,6,8],[3,8,9],[4,9,5],[2,4,11],[6,2,10],[8,6,7],[9,8,1]];
     return { v, f };
   })();
+  const normalize = v => { const l = Math.hypot(...v) || 1; return v.map(c => c / l); };
+  const sub = (a, b) => [a[0]-b[0], a[1]-b[1], a[2]-b[2]];
+  const cross = (a, b) => [a[1]*b[2]-a[2]*b[1], a[2]*b[0]-a[0]*b[2], a[0]*b[1]-a[1]*b[0]];
+  const dot = (a, b) => a[0]*b[0] + a[1]*b[1] + a[2]*b[2];
+  const rotX = (p, a) => { const c = Math.cos(a), s = Math.sin(a); return [p[0], p[1]*c - p[2]*s, p[1]*s + p[2]*c]; };
+  const rotY = (p, a) => { const c = Math.cos(a), s = Math.sin(a); return [p[0]*c + p[2]*s, p[1], -p[0]*s + p[2]*c]; };
+  const LIGHT = normalize([-0.5, 0.75, -0.9]); // toward the light, in view space (camera looks down +z)
 
   function createRenderer(canvas, opts = {}) {
     const ctx = canvas.getContext("2d");
     const state = Object.assign({
-      stage: 3, wire: true, cull: true, light: true, rotate: motionOK(),
-      rx: 0.5, ry: 0.4, dark: false, scale: 0.34, speed: 0.25,
+      stage: 3, cull: true, sort: true, rotate: true, dots: false, ndc: false,
+      rx: 0.45, ry: 0.5, focal: 2.2, camZ: 4.2, scale: 0.36, speed: 0.22, paused: false, drag: true,
     }, opts);
-    let w = 0, h = 0, dpr = 1, raf = 0, last = 0, dirty = true;
-    const light = normalize([-0.4, 0.8, 1]);
-
-    function resize() {
-      const r = canvas.getBoundingClientRect();
-      dpr = Math.min(devicePixelRatio || 1, 2);
+    let w = 0, h = 0, raf = 0, last = 0;
+    const resize = () => {
+      const r = canvas.getBoundingClientRect(), dpr = Math.min(devicePixelRatio || 1, 2);
       w = Math.max(1, Math.round(r.width)); h = Math.max(1, Math.round(r.height));
-      canvas.width = w * dpr; canvas.height = h * dpr;
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      dirty = true;
-    }
-    const ro = new ResizeObserver(() => { resize(); draw(); });
-    ro.observe(canvas);
-
-    function rotX(p, a) { const c = Math.cos(a), s = Math.sin(a); return [p[0], p[1]*c - p[2]*s, p[1]*s + p[2]*c]; }
-    function rotY(p, a) { const c = Math.cos(a), s = Math.sin(a); return [p[0]*c + p[2]*s, p[1], -p[0]*s + p[2]*c]; }
-    function normalize(v) { const l = Math.hypot(...v) || 1; return v.map(c => c / l); }
-    function sub(a, b) { return [a[0]-b[0], a[1]-b[1], a[2]-b[2]]; }
-    function cross(a, b) { return [a[1]*b[2]-a[2]*b[1], a[2]*b[0]-a[0]*b[2], a[0]*b[1]-a[1]*b[0]]; }
-    function dot(a, b) { return a[0]*b[0] + a[1]*b[1] + a[2]*b[2]; }
+      canvas.width = w * dpr; canvas.height = h * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    };
+    const ro = new ResizeObserver(() => { resize(); draw(); }); ro.observe(canvas);
 
     function draw() {
       if (!w || !h) return;
       const s = state;
       ctx.clearRect(0, 0, w, h);
-      const camZ = 4.2, f = 2.2; // view translation + focal length (projection)
-      // model → world → view
+      const size = Math.min(w, h) * s.scale * 2;            // NDC [-1, 1] → this many px
+      // Dolly zoom: the camera backs off as focal length grows, so the mesh keeps its size
+      // on screen while perspective flattens (short lens) or exaggerates (wide lens).
+      const camZ = s.camZ * s.focal / 2.2;
       const view = ICO.v.map(p => { const q = rotX(rotY(p, s.ry), s.rx); return [q[0], q[1], q[2] + camZ]; });
-      // projection + perspective divide → NDC → screen
-      const size = Math.min(w, h) * s.scale * 2;
-      const screen = view.map(p => [w/2 + (p[0] * f / p[2]) * size/2, h/2 - (p[1] * f / p[2]) * size/2, p[2]]);
-      const ink = s.dark ? "255,255,255" : "23,25,29";
-      const blue = s.dark ? [143,176,255] : [56,107,230];
+      const norm = camZ / s.focal * 0.62;
+      const ndc = view.map(p => [p[0] * s.focal / p[2] * norm, p[1] * s.focal / p[2] * norm, p[2]]);
+      const screen = ndc.map(p => [w / 2 + p[0] * size / 2, h / 2 - p[1] * size / 2, p[2]]);
 
-      let culled = 0;
-      let faces = ICO.f.map(idx => {
-        const a = view[idx[0]], b = view[idx[1]], c = view[idx[2]];
+      if (s.ndc) {
+        ctx.save(); ctx.setLineDash([4, 4]); ctx.strokeStyle = "rgba(21,21,19,.28)"; ctx.lineWidth = 1;
+        ctx.strokeRect(w / 2 - size / 2 + .5, h / 2 - size / 2 + .5, size, size);
+        ctx.setLineDash([]); ctx.beginPath(); ctx.moveTo(w / 2 - 6, h / 2); ctx.lineTo(w / 2 + 6, h / 2); ctx.moveTo(w / 2, h / 2 - 6); ctx.lineTo(w / 2, h / 2 + 6); ctx.stroke();
+        ctx.fillStyle = "rgba(21,21,19,.5)"; ctx.font = "11px 'IBM Plex Mono', monospace";
+        ctx.fillText("(−1, −1)", w / 2 - size / 2 + 6, h / 2 + size / 2 - 8);
+        const lbl = "(1, 1)"; ctx.fillText(lbl, w / 2 + size / 2 - ctx.measureText(lbl).width - 6, h / 2 - size / 2 + 16);
+        ctx.restore();
+      }
+
+      const all = ICO.f.map((idx, order) => {
+        const [a, b, c] = idx.map(i => view[i]);
         const n = normalize(cross(sub(b, a), sub(c, a)));
         const centroid = [(a[0]+b[0]+c[0])/3, (a[1]+b[1]+c[1])/3, (a[2]+b[2]+c[2])/3];
-        const facing = dot(n, centroid) < 0; // faces whose normal points toward the camera
-        return { idx, n, z: centroid[2], facing };
+        const facing = dot(n, centroid) < 0;
+        const sc = idx.map(i => screen[i]);
+        return { idx, order, n, z: centroid[2], facing, lit: clamp(dot(n, LIGHT), 0, 1),
+          cx: (sc[0][0]+sc[1][0]+sc[2][0])/3, cy: (sc[0][1]+sc[1][1]+sc[2][1])/3 };
       });
-      if (s.stage >= 2 && s.cull) { culled = faces.filter(fc => !fc.facing).length; faces = faces.filter(fc => fc.facing); }
-      faces.sort((p, q) => q.z - p.z); // painter's algorithm: far to near
+      let faces = all;
+      const culled = s.stage >= 2 && s.cull ? all.filter(f => !f.facing).length : 0;
+      if (s.stage >= 2 && s.cull) faces = all.filter(f => f.facing);
+      if (s.stage >= 2 && s.sort) faces = faces.slice().sort((p, q) => q.z - p.z);
 
       ctx.lineJoin = "round"; ctx.lineCap = "round";
+      const path = f => { const [i, j, m] = f.idx; ctx.beginPath(); ctx.moveTo(screen[i][0], screen[i][1]); ctx.lineTo(screen[j][0], screen[j][1]); ctx.lineTo(screen[m][0], screen[m][1]); ctx.closePath(); };
       if (s.stage >= 2) {
-        faces.forEach(fc => {
-          const [i, j, k] = fc.idx;
-          const lit = s.stage >= 3 && s.light ? clamp(dot(fc.n, light), 0, 1) : 0.55;
-          const a = s.stage >= 3 && s.light ? 0.3 + lit * 0.7 : 0.6;
-          ctx.beginPath();
-          ctx.moveTo(screen[i][0], screen[i][1]); ctx.lineTo(screen[j][0], screen[j][1]); ctx.lineTo(screen[k][0], screen[k][1]); ctx.closePath();
-          ctx.fillStyle = `rgba(${blue[0]},${blue[1]},${blue[2]},${a.toFixed(3)})`;
+        faces.forEach(f => {
+          path(f);
+          ctx.fillStyle = s.stage >= 3 ? (f.facing ? mix(PAPER, BLUE, 0.18 + f.lit * 0.82) : mix(PAPER, INK, .42)) : (f.facing ? mix(PAPER, BLUE, .45) : mix(PAPER, INK, .55));
           ctx.fill();
-          if (s.wire) { ctx.strokeStyle = s.dark ? "rgba(255,255,255,.35)" : "rgba(255,255,255,.9)"; ctx.lineWidth = 1; ctx.stroke(); }
+          ctx.strokeStyle = s.stage >= 3 ? "rgba(242,239,231,.55)" : "rgba(21,21,19,.55)"; ctx.lineWidth = 1; ctx.stroke();
         });
       } else if (s.stage === 1) {
-        ctx.strokeStyle = `rgba(${ink},.55)`; ctx.lineWidth = 1.1;
-        ICO.f.forEach(([i, j, k]) => {
-          ctx.beginPath(); ctx.moveTo(screen[i][0], screen[i][1]); ctx.lineTo(screen[j][0], screen[j][1]); ctx.lineTo(screen[k][0], screen[k][1]); ctx.closePath(); ctx.stroke();
+        all.forEach(f => {
+          path(f);
+          ctx.strokeStyle = f.facing ? "rgba(21,21,19,.82)" : "rgba(21,21,19,.22)";
+          ctx.lineWidth = f.facing ? 1.1 : 1; ctx.stroke();
         });
       }
-      if (s.stage <= 1) {
+      if (s.stage === 0 || s.dots) {
         screen.forEach(p => {
-          const r = clamp(10 / p[2], 1.5, 4.5);
-          ctx.beginPath(); ctx.arc(p[0], p[1], r, 0, Math.PI * 2);
-          ctx.fillStyle = `rgb(${blue.join(",")})`; ctx.fill();
+          ctx.beginPath(); ctx.arc(p[0], p[1], clamp(13 / p[2], 1.8, 4), 0, Math.PI * 2);
+          ctx.fillStyle = `rgb(${BLUE.join(",")})`; ctx.fill();
         });
       }
-      if (s.onFrame) s.onFrame({ vertices: ICO.v.length, faces: ICO.f.length, culled });
-      dirty = false;
+      if (s.onFrame) s.onFrame({ w, h, screen, view, faces: all, drawn: s.stage >= 2 ? faces.length : 0, culled, state: s });
     }
 
     function tick(t) {
       raf = 0;
-      if (s().rotate && motionOK() && !document.hidden) {
+      if (state.rotate && !state.paused && motionOK() && !document.hidden) {
         const dt = last ? Math.min(0.05, (t - last) / 1000) : 0;
         state.ry += dt * state.speed; state.rx += dt * state.speed * 0.3;
-        dirty = true;
-      }
-      last = t;
-      if (dirty) draw();
-      if (s().rotate && motionOK()) raf = requestAnimationFrame(tick);
+        draw(); last = t; raf = requestAnimationFrame(tick);
+      } else last = 0;
     }
-    const s = () => state;
-    function start() { if (!raf) { last = 0; raf = requestAnimationFrame(tick); } }
-    function stop() { if (raf) cancelAnimationFrame(raf); raf = 0; }
+    const start = () => { if (!raf) raf = requestAnimationFrame(tick); };
+    const stop = () => { if (raf) cancelAnimationFrame(raf); raf = 0; last = 0; };
 
-    // Pointer drag to rotate.
     let drag = null;
-    canvas.addEventListener("pointerdown", e => { drag = { x: e.clientX, y: e.clientY }; canvas.setPointerCapture(e.pointerId); });
-    canvas.addEventListener("pointermove", e => {
-      if (!drag) return;
-      state.ry += (e.clientX - drag.x) * 0.008; state.rx += (e.clientY - drag.y) * 0.008;
-      drag = { x: e.clientX, y: e.clientY }; dirty = true; if (!raf) draw();
-    });
-    const endDrag = () => (drag = null);
-    canvas.addEventListener("pointerup", endDrag); canvas.addEventListener("pointercancel", endDrag);
-
-    const onMotionChange = () => { stop(); start(); };
-    reduceMotion.addEventListener("change", onMotionChange);
+    if (state.drag) {
+      canvas.addEventListener("pointerdown", e => { drag = { x: e.clientX, y: e.clientY }; canvas.setPointerCapture(e.pointerId); });
+      canvas.addEventListener("pointermove", e => {
+        if (!drag) return;
+        state.ry += (e.clientX - drag.x) * 0.008; state.rx += (e.clientY - drag.y) * 0.008;
+        drag = { x: e.clientX, y: e.clientY }; draw();
+      });
+      const end = () => (drag = null);
+      canvas.addEventListener("pointerup", end); canvas.addEventListener("pointercancel", end);
+    }
+    const onMotion = () => { stop(); start(); draw(); };
+    reduceMotion.addEventListener("change", onMotion);
+    let inView = false;
+    const onVisibility = () => { if (!document.hidden && inView) start(); };
+    document.addEventListener("visibilitychange", onVisibility);
+    const vis = new IntersectionObserver(([en]) => { inView = en.isIntersecting; if (inView) start(); else stop(); });
+    vis.observe(canvas);
     return {
-      set(patch) { Object.assign(state, patch); dirty = true; if (!raf) draw(); if (state.rotate) start(); },
-      get state() { return state; },
-      start, stop, draw,
-      destroy() { stop(); ro.disconnect(); reduceMotion.removeEventListener("change", onMotionChange); },
+      state, draw,
+      set(patch) { Object.assign(state, patch); draw(); start(); },
+      destroy() { stop(); ro.disconnect(); vis.disconnect(); reduceMotion.removeEventListener("change", onMotion); document.removeEventListener("visibilitychange", onVisibility); },
     };
   }
 
@@ -194,10 +181,9 @@
     const i = Math.floor(t), k = t - i, a = RAMP[i], b = RAMP[Math.min(i + 1, RAMP.length - 1)];
     return `rgb(${Math.round(a[0] + (b[0]-a[0])*k)},${Math.round(a[1] + (b[1]-a[1])*k)},${Math.round(a[2] + (b[2]-a[2])*k)})`;
   }
-  // A simple scene: floor, back wall, and boxes at different depths (0 = nearest, 1 = farthest).
   const THERMAL_SCENE = [
-    { d: 1.00, pts: "0,0 320,0 320,110 0,110" },               // far wall
-    { d: 0.95, pts: "0,110 320,110 320,200 0,200", floor: true }, // floor
+    { d: 1.00, pts: "0,0 320,0 320,110 0,110" },
+    { d: 0.95, pts: "0,110 320,110 320,200 0,200", floor: true },
     { d: 0.82, pts: "40,70 92,70 92,128 40,128" },
     { d: 0.74, pts: "232,62 300,62 300,136 232,136" },
     { d: 0.58, pts: "140,80 196,80 196,150 140,150" },
@@ -211,11 +197,9 @@
     const id = `g${++thermalUID}`;
     const render = () => {
       const polys = THERMAL_SCENE.map(o => {
-        const depth = o.d / state.range; // distance normalized by max-distance; >1 clamps to coldest
-        const t = 1 - clamp(depth, 0, 1);
-        let fill = heat(t);
-        if (o.floor) fill = `url(#${id}f)`;
-        const stroke = state.edges ? `stroke="rgba(255,255,255,${(0.75 * (1 - clamp(depth,0,1)) + 0.15).toFixed(2)})" stroke-width="1.2"` : "";
+        const depth = o.d / state.range, t = 1 - clamp(depth, 0, 1);
+        const fill = o.floor ? `url(#${id}f)` : heat(t);
+        const stroke = state.edges ? `stroke="rgba(255,255,255,${(0.75 * (1 - clamp(depth, 0, 1)) + 0.15).toFixed(2)})" stroke-width="1.2"` : "";
         return `<polygon points="${o.pts}" fill="${fill}" ${stroke} />`;
       }).join("");
       const floorNear = heat(1 - clamp(0.42 / state.range, 0, 1)), floorFar = heat(1 - clamp(1 / state.range, 0, 1));
@@ -226,178 +210,281 @@
         </defs>
         ${polys}
         ${state.grain ? `<rect width="320" height="200" filter="url(#${id}n)" style="mix-blend-mode:overlay" />` : ""}
-        <rect x="8" y="8" width="52" height="14" rx="3" fill="rgba(0,0,0,.45)"/><text x="12" y="18.5" font-size="8" font-family="ui-monospace,Menlo,monospace" fill="rgba(255,255,255,.9)">THERMAL</text>
-        <rect x="246" y="8" width="66" height="14" rx="3" fill="rgba(0,0,0,.45)"/><text x="250" y="18.5" font-size="8" font-family="ui-monospace,Menlo,monospace" fill="rgba(255,255,255,.9)">RANGE ${state.range.toFixed(2)}</text>
+        <text x="8" y="192" font-size="7" font-family="'IBM Plex Mono',monospace" fill="rgba(255,255,255,.75)">MAX DIST ${state.range.toFixed(2)}</text>
       </svg>`;
     };
     render();
     return { set(p) { Object.assign(state, p); render(); } };
   }
 
-  /* ---------------- Visual mounting ---------------- */
-  const live = new Set(); // renderers to pause/resume on visibility
+  /* ---------------- Interaction A: technical annotations ----------------
+     Each <li> in .notes is a label; data-at="x,y" (fractions of the plate) is the
+     point it describes. Leader lines are drawn in an SVG over the plate. Renderer
+     plates supply live targets every frame instead of fixed ones. */
+  const SVGNS = "http://www.w3.org/2000/svg";
+  function setupAnnotations(fig) {
+    const vis = $(".plateVis", fig), notes = $$(".notes li", fig), btn = $(".annoBtn", fig);
+    if (!vis || !notes.length) return null;
+    const svg = document.createElementNS(SVGNS, "svg");
+    svg.classList.add("annoSvg"); svg.setAttribute("aria-hidden", "true");
+    fig.insertBefore(svg, $(".notes", fig));
+    const live = {};
+    const parts = notes.map((li, i) => {
+      li.style.setProperty("--i", i);
+      const g = document.createElementNS(SVGNS, "g"); g.style.setProperty("--i", i);
+      const p = document.createElementNS(SVGNS, "path"); p.setAttribute("pathLength", "1");
+      const ring = document.createElementNS(SVGNS, "circle"); ring.setAttribute("r", "7"); ring.classList.add("ring");
+      const c = document.createElementNS(SVGNS, "circle"); c.setAttribute("r", "3"); c.classList.add("dot");
+      const t = document.createElementNS(SVGNS, "text"); t.textContent = i + 1; t.setAttribute("text-anchor", "middle"); t.setAttribute("dy", "4");
+      g.append(p, ring, c, t); svg.appendChild(g);
+      return { li, p, ring, c, t, at: (li.dataset.at || ".5,.5").split(",").map(Number), key: li.dataset.key };
+    });
+    const layout = () => {
+      const W = vis.clientWidth, H = vis.clientHeight;
+      if (!W) return;
+      svg.setAttribute("width", W); svg.setAttribute("height", H);
+      const small = innerWidth < 720;
+      parts.forEach(pt => {
+        const at = (pt.key && live[pt.key]) || [pt.at[0] * W, pt.at[1] * H];
+        const [tx, ty] = at;
+        pt.c.setAttribute("cx", tx); pt.c.setAttribute("cy", ty); pt.ring.setAttribute("cx", tx); pt.ring.setAttribute("cy", ty);
+        pt.c.setAttribute("r", small ? 9 : 3);
+        pt.t.setAttribute("x", tx); pt.t.setAttribute("y", ty);
+        if (small) return;
+        const lx = parseFloat(getComputedStyle(pt.li).getPropertyValue("--lx")) / 100 * W;
+        const ly = parseFloat(getComputedStyle(pt.li).getPropertyValue("--ly")) / 100 * H;
+        const sh = pt.li.dataset.side === "l" ? 16 : -16;
+        pt.p.setAttribute("d", `M${tx.toFixed(1)} ${ty.toFixed(1)} L${(lx + sh).toFixed(1)} ${ly.toFixed(1)} H${lx.toFixed(1)}`);
+      });
+    };
+    new ResizeObserver(layout).observe(vis);
+    let pinned = false, hovered = false;
+    const api = {
+      layout, live, onChange: null,
+      get on() { return pinned || hovered; },
+      update() { const on = pinned || hovered; fig.classList.toggle("annotated", on); if (btn) btn.setAttribute("aria-pressed", String(pinned)); if (on) layout(); api.onChange && api.onChange(on); },
+    };
+    const art = fig.closest(".proj") || fig;
+    art.addEventListener("pointerenter", e => { if (e.pointerType === "mouse") { hovered = true; api.update(); } });
+    art.addEventListener("pointerleave", e => { if (e.pointerType === "mouse") { hovered = false; api.update(); } });
+    art.addEventListener("focusin", () => { hovered = true; api.update(); });
+    art.addEventListener("focusout", e => { if (!art.contains(e.relatedTarget)) { hovered = false; api.update(); } });
+    if (btn) btn.addEventListener("click", e => { e.stopPropagation(); pinned = !pinned; api.update(); });
+    layout();
+    return api;
+  }
+
+  /* ---------------- Interaction C: the bench ---------------- */
+  const BENCH_NOTES = {
+    "1,1": "Correct: back faces are skipped and the rest are drawn far to near.",
+    "1,0": "Still correct. On a convex mesh, front faces never overlap each other — culling alone fixes visibility.",
+    "0,1": "Correct, at roughly twice the work: back faces are drawn first, then painted over.",
+    "0,0": "Broken. Faces are drawn in mesh order, so back faces (grey) paint over front ones.",
+  };
+  function mountBench(host) {
+    if (host.dataset.mounted) return; host.dataset.mounted = "1";
+    host.replaceChildren($("#tpl-bench").content.cloneNode(true));
+    const canvas = $(".benchCanvas", host), out = k => $(`[data-r="${k}"]`, host);
+    const cache = {};
+    const put = (k, v) => { if (cache[k] !== v) { cache[k] = v; out(k).textContent = v; } };
+    const r = createRenderer(canvas, {
+      stage: 3, ndc: true, scale: 0.4, speed: 0.12,
+      onFrame: ({ drawn, culled, state: s }) => {
+        put("drawn", s.stage >= 2 ? String(drawn) : "—");
+        put("culled", s.stage >= 2 ? String(culled) : "—");
+        put("order", s.stage >= 2 ? (s.sort ? "far → near" : "mesh index") : "—");
+        put("note", s.stage >= 2 ? BENCH_NOTES[`${+s.cull},${+s.sort}`] : "Visibility only matters once faces are filled — step to 03 or 04.");
+      },
+    });
+    const btns = $$("[data-stage]", host);
+    btns.forEach(b => b.addEventListener("click", () => {
+      btns.forEach(x => x.setAttribute("aria-pressed", String(x === b)));
+      r.set({ stage: +b.dataset.stage });
+    }));
+    $$('input[type="checkbox"][data-opt]', host).forEach(inp => inp.addEventListener("change", () => r.set({ [inp.dataset.opt]: inp.checked })));
+    const focal = $('input[data-opt="focal"]', host), fo = $('output[data-out="focal"]', host);
+    focal.addEventListener("input", () => { r.set({ focal: +focal.value }); fo.value = (+focal.value).toFixed(2); });
+    canvas.addEventListener("pointerdown", () => r.set({ rotate: false }));
+    host._cleanup = () => r.destroy();
+  }
+
+  /* ---------------- Mount visuals ---------------- */
   function mountVisuals(root) {
     $$("[data-vis]", root).forEach(el => {
-      if (el.dataset.mounted) return;
-      el.dataset.mounted = "1";
-      const interactive = el.hasAttribute("data-interactive");
-      if (el.dataset.vis === "renderer") {
-        const c = document.createElement("canvas"); c.className = "rendererCanvas"; c.setAttribute("aria-label", "Rotating icosahedron rendered with backface culling and diffuse lighting"); c.setAttribute("role", "img");
+      if (el.dataset.mounted) return; el.dataset.mounted = "1";
+      const kind = el.dataset.vis, fig = el.closest(".plate");
+      if (kind === "wire" || kind === "renderer") {
+        const c = document.createElement("canvas"); c.className = "rendererCanvas";
+        c.setAttribute("role", "img");
+        c.setAttribute("aria-label", kind === "wire" ? "Wireframe icosahedron; front edges dark, back edges faint." : "Shaded icosahedron with backface culling, depth sorting and diffuse lighting.");
         el.appendChild(c);
-        const r = createRenderer(c, { scale: interactive ? 0.3 : 0.36, speed: interactive ? 0.35 : 0.22 });
-        live.add(r); r.start();
-        if (interactive) {
-          const demo = $('[data-demo="renderer"]', root);
-          if (demo) $$("input[data-opt]", demo).forEach(inp => inp.addEventListener("change", () => r.set({ [inp.dataset.opt]: inp.checked })));
+        let anno = null;
+        const r = createRenderer(c, kind === "wire"
+          ? { stage: 1, dots: true, scale: 0.4, speed: 0.16 }
+          : { stage: 3, scale: el.hasAttribute("data-big") ? 0.4 : 0.34, drag: el.hasAttribute("data-big"),
+              onFrame: f => {
+                if (!anno) return;
+                const vis = f.faces.filter(x => x.facing);
+                const near = f.screen.reduce((a, p) => (p[2] < a[2] ? p : a));
+                const lit = vis.reduce((a, x) => (x.lit > a.lit ? x : a));
+                const far = vis.reduce((a, x) => (x.z > a.z ? x : a));
+                anno.live.vertex = [near[0], near[1]]; anno.live.lit = [lit.cx, lit.cy]; anno.live.far = [far.cx, far.cy];
+                const cl = fig && $('[data-live="culled"]', fig); if (cl) cl.textContent = f.faces.length - vis.length;
+                if (anno.on || innerWidth < 720) anno.layout();
+              } });
+        if (fig && fig.dataset.annotate) {
+          anno = setupAnnotations(fig);
+          if (anno) anno.onChange = on => r.set({ paused: on });
+          r.draw();
         }
-        el._cleanup = () => { r.destroy(); live.delete(r); };
-      } else if (el.dataset.vis === "thermal") {
+        el._cleanup = () => r.destroy();
+      } else if (kind === "thermal") {
+        const interactive = el.hasAttribute("data-interactive");
         const t = mountThermal(el, { range: interactive ? 0.7 : 0.62 });
-        if (interactive) {
-          const demo = $('[data-demo="thermal"]', root);
-          if (demo) {
-            const range = $('input[data-opt="range"]', demo), out = $('output[data-out="range"]', demo);
-            range.addEventListener("input", () => { t.set({ range: +range.value }); out.value = (+range.value).toFixed(2); });
-            $$('input[type="checkbox"][data-opt]', demo).forEach(inp => inp.addEventListener("change", () => t.set({ [inp.dataset.opt]: inp.checked })));
-          }
+        const demo = interactive && $('[data-demo="thermal"]', root);
+        if (demo) {
+          const range = $('input[data-opt="range"]', demo), out = $('output[data-out="range"]', demo);
+          range.addEventListener("input", () => { t.set({ range: +range.value }); out.value = (+range.value).toFixed(2); });
+          $$('input[type="checkbox"][data-opt]', demo).forEach(inp => inp.addEventListener("change", () => t.set({ [inp.dataset.opt]: inp.checked })));
         }
-      } else if (el.dataset.vis === "worm") {
-        el.appendChild($("#svg-worm").content.cloneNode(true));
+        if (fig && fig.dataset.annotate) setupAnnotations(fig);
       }
     });
+    $$(".plate[data-annotate]:not([data-vis-host])", root).forEach(fig => {
+      if (!$("[data-vis]", fig) && !fig.dataset.annoReady) { fig.dataset.annoReady = "1"; setupAnnotations(fig); }
+    });
+    $$("[data-bench]", root).forEach(mountBench);
   }
   mountVisuals(document);
-  document.addEventListener("visibilitychange", () => live.forEach(r => (document.hidden ? r.stop() : r.start())));
 
-  /* ---------------- Scroll-linked showcase ---------------- */
-  const track = $("#showcaseTrack"), showCanvas = $("#showcaseCanvas"), readout = $("#readout");
-  const steps = $$("#steps .step");
-  if (track && showCanvas) {
-    const r = createRenderer(showCanvas, {
-      dark: true, rotate: false, scale: 0.36, stage: 0,
-      onFrame: ({ vertices, faces, culled }) => { readout.textContent = `${vertices} vertices · ${faces} faces · ${culled} culled`; },
-    });
-    let progress = 0, inView = false;
-    const update = () => {
-      const rect = track.getBoundingClientRect();
-      const total = rect.height - innerHeight;
-      progress = clamp(-rect.top / total, 0, 1);
-      const stage = progress < 0.24 ? 0 : progress < 0.49 ? 1 : progress < 0.74 ? 2 : 3;
-      steps.forEach(s => s.classList.toggle("active", +s.dataset.step === stage));
-      const spin = motionOK() ? progress * Math.PI * 1.6 : 0.6;
-      r.set({ stage, ry: 0.4 + spin, rx: 0.45 + Math.sin(progress * Math.PI) * 0.35, rotate: false });
-    };
-    const onScroll = () => { if (inView) update(); };
-    addEventListener("scroll", onScroll, { passive: true });
-    addEventListener("resize", onScroll);
-    new IntersectionObserver(([en]) => { inView = en.isIntersecting; if (inView) update(); }).observe(track);
-    update();
-  }
-
-  /* ---------------- Project detail overlay (hash routed) ---------------- */
+  /* ---------------- Interaction B: case-study overlay (hash routed) ---------------- */
+  const ORDER = ["renderer", "thermal", "vol"];
+  const TITLES = { renderer: "Software 3D renderer", thermal: "Thermal-vision shader", vol: "Realized volatility & SPY" };
   const detail = $("#detail"), content = $("#detailContent"), closeBtn = $("#detailClose");
-  // Everything outside the dialog is made inert while it is open.
+  const countEl = $("#detailCount"), nextEl = $("#detailNext");
   const backdropEls = Array.from(document.body.children).filter(el => el !== detail && el.tagName !== "TEMPLATE" && el.tagName !== "SCRIPT");
   const setInert = on => backdropEls.forEach(el => (el.inert = on));
-  const focusables = () => $$('a[href], button:not([disabled]), input:not([disabled]), [tabindex]:not([tabindex="-1"])', detail)
-    .filter(el => el.offsetParent !== null || el === closeBtn);
-  let openSlug = null, returnFocus = null, lastScroll = 0;
-  // True when the current dialog's "#project/…" entry was pushed by us (a click),
-  // so closing can pop it with history.back() instead of pushing another entry.
-  let pushedEntry = false;
-
-  function cardFor(slug) { return $(`.proj[data-project="${slug}"]`); }
+  const focusables = () => $$('a[href], button:not([disabled]):not([tabindex="-1"]), select, input:not([disabled]), [tabindex]:not([tabindex="-1"])', detail).filter(el => el.offsetParent !== null);
+  let openSlug = null, returnFocus = null, pushedEntry = false, enterTimer = 0;
+  const cardFor = slug => $(`.proj[data-project="${slug}"]`);
+  let labCleanup = null, labVersion = 0;
+  const cleanup = () => {
+    labVersion++; labCleanup?.(); labCleanup = null;
+    $$("[data-vis], [data-bench]", content).forEach(el => el._cleanup && el._cleanup());
+  };
 
   function fillDetail(slug) {
     const tpl = $(`#tpl-${slug}`);
     if (!tpl) return false;
-    $$("[data-vis]", content).forEach(el => el._cleanup && el._cleanup());
+    cleanup();
     content.replaceChildren(tpl.content.cloneNode(true));
+    const isLab = slug.startsWith("lab-");
+    nextEl.hidden = isLab;
+    if (isLab) {
+      const chess = slug === "lab-chess";
+      countEl.textContent = chess ? "Lab / 01 · Chess puzzles" : "Lab / 02 · Strategy sandbox";
+      const version = labVersion, host = $(chess ? "[data-chess]" : "[data-strategy]", content);
+      const module = chess ? import("./lab/chess/board.js") : import("./lab/strategy/sandbox.js");
+      module.then(exports => {
+        if (version === labVersion && host.isConnected) labCleanup = chess ? exports.mountChess(host) : exports.mountStrategy(host);
+      }).catch(() => {
+        if (version === labVersion) host.textContent = "The experiment could not load. Close and reopen to try again.";
+      });
+      return true;
+    }
+    const i = ORDER.indexOf(slug), next = ORDER[(i + 1) % ORDER.length];
+    countEl.textContent = `Case study ${String(i + 1).padStart(2, "0")} / ${String(ORDER.length).padStart(2, "0")}`;
+    nextEl.href = `#project/${next}`;
+    nextEl.textContent = `Next: ${String(ORDER.indexOf(next) + 1).padStart(2, "0")} ${TITLES[next]} →`;
     mountVisuals(content);
     return true;
   }
+  const withTransition = (fn, a, b) => {
+    if (!(motionOK() && document.startViewTransition && a && b)) { fn(); return; }
+    a.style.viewTransitionName = "project-media";
+    const vt = document.startViewTransition(() => { a.style.viewTransitionName = ""; b.style.viewTransitionName = "project-media"; fn(); });
+    vt.finished.finally(() => { a.style.viewTransitionName = ""; b.style.viewTransitionName = ""; });
+  };
 
-  function openDetail(slug, { fromClick = false, trigger = null } = {}) {
+  function openDetail(slug, { trigger = null } = {}) {
     if (openSlug === slug) return;
-    const card = cardFor(slug);
-    if (!fillDetail(slug)) return;
-    const wasOpen = !!openSlug;
-    openSlug = slug;
+    const wasOpen = !!openSlug, card = cardFor(slug);
     const show = () => {
-      if (!wasOpen) lastScroll = scrollY;
-      detail.hidden = false; detail.classList.add("open");
-      detail.scrollTop = 0;
-      document.body.classList.add("noscroll");
-      setInert(true);
-      requestAnimationFrame(() => requestAnimationFrame(() => detail.classList.add("in")));
+      if (!fillDetail(slug)) return;
+      openSlug = slug;
+      detail.hidden = false; detail.scrollTop = 0;
+      document.body.classList.add("noscroll"); setInert(true);
+      detail.classList.remove("entering"); void detail.offsetWidth; detail.classList.add("entering");
+      clearTimeout(enterTimer); enterTimer = setTimeout(() => detail.classList.remove("entering"), 1600);
       closeBtn.focus({ preventScroll: true });
     };
-    if (fromClick) returnFocus = trigger || (card && $(".open", card));
-    const fromCard = !!(trigger && card && card.contains(trigger));
-    const media = card && $(".projMedia", card), target = $(".detailMedia", content);
-    if (fromCard && motionOK() && document.startViewTransition && media && target && !wasOpen) {
+    if (trigger) returnFocus = trigger;
+    const fromCard = !wasOpen && trigger && card && card.contains(trigger);
+    if (!$(`#tpl-${slug}`)) return;
+    if (fromCard && motionOK() && document.startViewTransition) {
+      const media = $(".plateVis", card);
       media.style.viewTransitionName = "project-media";
-      const vt = document.startViewTransition(() => { media.style.viewTransitionName = ""; target.style.viewTransitionName = "project-media"; show(); });
-      vt.finished.finally(() => { target.style.viewTransitionName = ""; media.style.viewTransitionName = ""; });
+      const vt = document.startViewTransition(() => {
+        media.style.viewTransitionName = ""; show();
+        const t = $(".csMedia .plateVis", content); if (t) t.style.viewTransitionName = "project-media";
+      });
+      vt.finished.finally(() => { media.style.viewTransitionName = ""; const t = $(".csMedia .plateVis", content); if (t) t.style.viewTransitionName = ""; });
     } else show();
   }
 
   function closeDetail() {
     if (!openSlug) return;
     const slug = openSlug; openSlug = null;
+    const card = cardFor(slug);
     const finish = () => {
-      detail.classList.remove("open", "in"); detail.hidden = true;
-      document.body.classList.remove("noscroll");
-      setInert(false);
-      $$("[data-vis]", content).forEach(el => el._cleanup && el._cleanup());
-      content.replaceChildren();
-      const card = cardFor(slug);
-      const target = returnFocus && returnFocus.isConnected ? returnFocus : card && $(".open", card);
-      target?.focus({ preventScroll: true });
+      detail.hidden = true; detail.classList.remove("entering");
+      document.body.classList.remove("noscroll"); setInert(false);
+      cleanup(); content.replaceChildren();
+      const target = returnFocus && returnFocus.isConnected ? returnFocus : card ? $("a.more, .more a", card) : $(`a[href="#lab/${slug.slice(4)}"]`);
+      target && target.focus({ preventScroll: true });
       returnFocus = null;
     };
-    if (motionOK() && document.startViewTransition) document.startViewTransition(finish); else finish();
+    const from = $(".csMedia .plateVis", content), to = card && $(".plateVis", card);
+    const r = to && to.getBoundingClientRect();
+    const onScreen = r && r.bottom > 0 && r.top < innerHeight;
+    if (onScreen) withTransition(finish, from, to);
+    else if (motionOK() && document.startViewTransition) document.startViewTransition(finish);
+    else finish();
   }
-
-  // Close from the UI (button, Escape, backdrop). Pops our own history entry when
-  // there is one; a directly-linked dialog is closed in place instead.
   function requestClose() {
     if (!openSlug) return;
     if (pushedEntry) { history.back(); return; }
     history.replaceState(null, "", location.pathname + location.search);
     closeDetail();
   }
-
   function route() {
-    const m = location.hash.match(/^#project\/([a-z0-9-]+)$/);
-    if (m) { pushedEntry = true; openDetail(m[1]); }
+    const m = location.hash.match(/^#(project|lab)\/([a-z0-9-]+)$/);
+    const slug = m && (m[1] === "lab" ? `lab-${m[2]}` : m[2]);
+    if (slug && (ORDER.includes(slug) || ["lab-chess", "lab-strategy"].includes(slug))) { openDetail(slug); }
     else if (openSlug) { pushedEntry = false; closeDetail(); }
   }
   document.addEventListener("click", e => {
-    const a = e.target.closest('a[href^="#project/"]');
-    if (!a || e.metaKey || e.ctrlKey || e.button !== 0) return;
+    const a = e.target.closest('a[href^="#project/"], a[href^="#lab/"]');
+    if (!a || e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
     e.preventDefault();
-    const slug = a.getAttribute("href").slice(9);
-    if (openSlug) history.replaceState(null, "", `#project/${slug}`); // switching dialogs keeps one entry
-    else { history.pushState(null, "", `#project/${slug}`); pushedEntry = true; }
-    openDetail(slug, { fromClick: true, trigger: a });
+    const hash = a.getAttribute("href");
+    const slug = hash.startsWith("#lab/") ? `lab-${hash.slice(5)}` : hash.slice(9);
+    if (openSlug) { history.replaceState(null, "", hash); openSlug = null; openDetail(slug); return; }
+    history.pushState(null, "", hash); pushedEntry = true;
+    const card = a.closest(".proj");
+    openDetail(slug, { trigger: card ? ($(".more", card).matches("a") ? $(".more", card) : $(".more a", card)) : a });
   });
   closeBtn.addEventListener("click", requestClose);
-  detail.addEventListener("click", e => { if (e.target === detail) requestClose(); });
   addEventListener("keydown", e => {
     if (!openSlug) return;
     if (e.key === "Escape") { requestClose(); return; }
     if (e.key !== "Tab") return;
-    const els = focusables();
-    if (!els.length) return;
+    const els = focusables(); if (!els.length) return;
     const first = els[0], last = els[els.length - 1];
     if (e.shiftKey && (document.activeElement === first || !detail.contains(document.activeElement))) { e.preventDefault(); last.focus(); }
     else if (!e.shiftKey && (document.activeElement === last || !detail.contains(document.activeElement))) { e.preventDefault(); first.focus(); }
   });
-  addEventListener("hashchange", route);
   addEventListener("popstate", route);
-  if (location.hash.startsWith("#project/")) openDetail(location.hash.slice(9)); // deep link on load: no entry pushed by us
-
-  /* ---------------- Misc ---------------- */
-  $("#year").textContent = new Date().getFullYear();
+  addEventListener("hashchange", route);
+  route();
 })();
