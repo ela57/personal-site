@@ -110,9 +110,10 @@ h1,h2,h3,h4,p,figure,dl,dd{ margin:0; }
   font-family:var(--display); font-weight:620; font-stretch:72%;
   font-size:clamp(4.2rem, 12.4vw, 13.5rem); line-height:.84; letter-spacing:-.035em;
 }
-.hl{ display:block; overflow:hidden; padding:.02em 0 .1em; margin-bottom:-.1em; }
+.hl{ display:block; padding:.08em 0 .16em; margin-bottom:-.16em; }
 .hl2{ padding-left:16.66%; }
 .hlIn{ display:inline-block; position:relative; }
+.heroLetter{ display:inline-block; transform-origin:50% 55%; }
 .ref{
   position:absolute; left:100%; top:.28em; margin-left:.35rem;
   font:500 clamp(.65rem, .9vw, .8rem)/1 var(--mono); letter-spacing:0; color:var(--blue);
@@ -130,6 +131,112 @@ h1,h2,h3,h4,p,figure,dl,dd{ margin:0; }
 .heroIntro{ grid-column:6 / 11; grid-row:3; margin-top:clamp(36px, 5vw, 72px); }
 .heroIntro p{ font-size:clamp(1.2rem, 1.6vw, 1.5rem); line-height:1.42; color:var(--ink-2); text-wrap:pretty; }
 .heroIntro .aside{ font-style:italic; color:var(--ink-3); }
+.heroRefs{ display:flex; gap:24px; margin-top:20px; font-size:.75rem; color:var(--blue); }
+.heroRefs a{ border-bottom:1px solid currentColor; padding-block:4px; }
+
+/* Lab -------------------------------------------------------------------- */
+.labSec{ margin-top:clamp(130px, 17vw, 260px); }
+.labIndex{ margin-top:48px; }
+.labEntry{ border-block:1px solid var(--rule-strong); }
+.labEntry + .labEntry{ border-top:0; }
+.labSec + .about, .experimentsSec, .experimentsSec + .about{ margin-top:clamp(72px, 7vw, 110px); }
+.labEntry a{ padding-block:32px; align-items:baseline; row-gap:16px; }
+.labEntry a > :nth-child(1){ grid-column:1 / 3; font-size:.75rem; color:var(--ink-3); }
+.labEntry h3{ grid-column:3 / 8; font:550 clamp(1.8rem, 3vw, 3rem)/1.05 var(--display); letter-spacing:-.035em; }
+.labEntry p{ grid-column:8 / 12; color:var(--ink-2); }
+.labEntry a > :last-child{ grid-column:3 / 8; color:var(--blue); font-size:.75rem; }
+.labEntry a:hover h3{ color:var(--blue); }
+.chessMount{ width:min(1180px, calc(100% - 2 * var(--margin))); margin:48px auto 80px; }
+.chessLayout{ display:grid; grid-template-columns:minmax(0, 1.4fr) minmax(240px, 1fr); gap:clamp(24px, 5vw, 80px); align-items:start; }
+.chessBoard{ width:100%; aspect-ratio:1; border:1px solid var(--ink); touch-action:none; user-select:none; }
+.chessBoard [role="row"]{ display:flex; height:12.5%; }
+.chessSquare{ position:relative; display:grid; place-items:center; width:12.5%; padding:0; border:0; min-width:0; }
+.chessLight{ background:var(--paper); }
+.chessDark{ background:#787064; }
+.chessPiece{ width:88%; height:88%; fill:var(--ink); stroke:var(--paper); stroke-width:1.3; stroke-linejoin:miter; pointer-events:none; }
+.pieceWhite{ fill:var(--paper); stroke:var(--ink); }
+.pieceEye{ fill:var(--paper); stroke:none; }
+.chessCoord{ position:absolute; left:3px; bottom:1px; font-size:clamp(.5rem, 1vw, .65rem); line-height:1; color:var(--ink); pointer-events:none; }
+.chessRank{ top:3px; bottom:auto; }
+.chessFile{ right:3px; left:auto; }
+.chessDark .chessCoord{ color:var(--paper); }
+.chessSquare.lastMove{ box-shadow:inset 0 0 0 3px rgba(29,68,240,.5); }
+.chessSquare.selected, .chessSquare.hint{ box-shadow:inset 0 0 0 4px var(--blue); }
+.chessSquare.legal::after{ content:""; position:absolute; width:16%; aspect-ratio:1; background:var(--blue); border:1px solid var(--paper); border-radius:50%; pointer-events:none; }
+.chessSquare:focus-visible{ outline:3px solid var(--blue); outline-offset:-5px; z-index:1; }
+.chessSolved .mateSquare::before{ content:""; position:absolute; inset:5%; border:2px solid var(--blue); border-radius:50%; pointer-events:none; animation:chessRing 600ms ease-out; }
+.chessCaption{ font-size:.75rem; margin-top:14px; color:var(--ink-3); }
+.chessPanel > label{ display:block; font-size:.75rem; text-transform:uppercase; margin-bottom:8px; }
+.chessPanel select{ width:100%; background:var(--paper); color:var(--ink); border:1px solid var(--rule-strong); padding:12px; font:500 .9rem var(--mono); }
+.chessNumber{ font-size:.7rem; color:var(--ink-3); margin-top:28px; }
+.chessTitle{ font:550 clamp(1.8rem, 3vw, 2.6rem)/1.05 var(--display); letter-spacing:-.035em; margin-top:10px; }
+.chessStatus{ min-height:3.5em; margin-block:20px; color:var(--blue); font:400 .85rem/1.6 var(--mono); }
+.chessControls{ display:flex; flex-wrap:wrap; gap:10px; }
+.chessControls button{ border:1px solid var(--rule-strong); padding:10px 12px; font:500 .75rem var(--mono); }
+.chessControls button:hover:not(:disabled){ background:var(--ink); color:var(--paper); }
+.chessControls button:disabled{ opacity:.4; cursor:default; }
+.chessProgress{ margin-top:24px; padding-top:16px; border-top:1px solid var(--rule); font-size:.75rem; }
+.chessExplanation{ margin-top:20px; }
+.chessHelp{ font-size:.7rem; color:var(--ink-3); margin-top:24px; line-height:1.6; }
+.chessGhost{ position:fixed; left:0; top:0; width:60px; height:60px; pointer-events:none; z-index:1000; }
+.chessWrong{ animation:chessShake 350ms ease-out; outline:2px solid var(--blue); }
+.strategyMount{ width:min(1260px, calc(100% - 2 * var(--margin))); margin:32px auto 80px; }
+.strategyDisclaimer{ position:sticky; top:56px; z-index:3; background:var(--paper); color:var(--blue); font-size:.75rem; padding-block:14px; border-block:1px solid var(--rule-strong); }
+.strategyControls{ display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:24px 32px; margin-top:28px; }
+.strategyControls label{ display:flex; flex-direction:column; gap:10px; font:400 .7rem/1.5 var(--mono); text-transform:uppercase; }
+.strategyControls input, .strategyControls select{ min-width:0; max-width:100%; width:100%; padding:10px; border:1px solid var(--rule-strong); background:var(--paper); color:var(--ink); font:400 .85rem var(--mono); border-radius:0; }
+.strategyPair{ display:flex; align-items:center; gap:16px; }
+.strategyPair input[type="range"]{ padding:0; border:0; accent-color:var(--blue); }
+.strategyPair input[type="number"]{ flex:0 0 76px; }
+.strategyActions{ display:flex; gap:24px; align-items:center; margin-top:24px; font-size:.7rem; }
+.strategyActions button{ padding:10px 14px; border:1px solid var(--rule-strong); white-space:nowrap; }
+.strategyActions button:hover{ color:var(--paper); background:var(--ink); }
+.strategySource, .strategyAttribution{ font-size:.68rem; color:var(--ink-3); margin-block:20px; }
+.strategySource a, .strategyAttribution a{ color:var(--blue); text-decoration:underline; text-underline-offset:3px; }
+.strategyChartSection{ margin-top:36px; border-top:1px solid var(--rule-strong); }
+.strategyChartSection header, .strategyTrades header{ padding-block:18px; display:flex; justify-content:space-between; gap:16px; align-items:baseline; flex-wrap:wrap; }
+.strategyMount h3{ font:550 1.25rem/1.2 var(--display); letter-spacing:-.02em; }
+.strategyChartSection header p, .strategyTrades header p{ font-size:.65rem; color:var(--ink-3); }
+.strategyChart{ width:100%; min-width:0; }
+.strategyPriceChart{ height:310px; }
+.strategyEquityChart{ height:250px; }
+.strategyResults{ display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:64px; margin-top:40px; padding-top:24px; border-top:1px solid var(--rule-strong); }
+.strategyMount table{ border-collapse:collapse; width:100%; text-align:right; font-size:.72rem; }
+.strategyMount th, .strategyMount td{ padding:12px 8px; border-bottom:1px solid var(--rule); white-space:nowrap; }
+.strategyMount th{ font-weight:500; }
+.strategyMount th:first-child, .strategyMount td:first-child{ text-align:left; padding-left:0; }
+.strategyMetrics{ margin-top:20px; }
+.strategyMetrics caption{ position:absolute; width:1px; height:1px; clip-path:inset(50%); overflow:hidden; white-space:nowrap; }
+.strategyMethod p{ margin-top:14px; color:var(--ink-2); font-size:.9rem; }
+.strategyTrades{ margin-top:40px; border-top:1px solid var(--rule-strong); }
+.strategyTableScroll{ max-height:360px; overflow:auto; }
+.strategyTableScroll table{ min-width:680px; }
+.strategyTableScroll thead{ position:sticky; top:0; background:var(--paper); }
+.chipPlate{ row-gap:18px; margin-top:40px; }
+.chipCanvas{ grid-column:1 / -1; width:100%; aspect-ratio:16 / 9; border:1px solid var(--rule-strong); background:var(--paper-2); touch-action:pan-y; cursor:grab; }
+.chipCanvas:active{ cursor:grabbing; }
+.chipPlate figcaption{ grid-column:1 / -1; font-size:.7rem; color:var(--ink-3); }
+.chipControls{ grid-column:1 / 7; display:flex; flex-wrap:wrap; gap:10px; }
+.chipControls button{ padding:10px 14px; border:1px solid var(--rule-strong); font-size:.75rem; }
+.chipControls button:hover:not(:disabled){ background:var(--ink); color:var(--paper); }
+.chipControls button:disabled{ opacity:.45; cursor:default; }
+.chipStatus{ grid-column:7 / -1; font-size:.7rem; color:var(--ink-3); align-self:center; }
+@keyframes chessShake{ 25%{ transform:translateX(-4px); } 75%{ transform:translateX(4px); } }
+@keyframes chessRing{ from{ opacity:0; transform:scale(.6); } to{ opacity:1; transform:scale(1); } }
+@media (max-width:719px){
+  .chipCanvas{ aspect-ratio:4 / 5; }
+  .chipControls, .chipStatus{ grid-column:1 / -1; }
+  .strategyControls{ grid-template-columns:minmax(0,1fr); gap:20px; }
+  .strategyResults{ grid-template-columns:minmax(0,1fr); gap:32px; }
+  .strategyMount table{ font-size:.63rem; }
+  .strategyActions{ align-items:flex-start; flex-direction:column; gap:14px; }
+  .labEntry a > :nth-child(1), .labEntry h3, .labEntry p, .labEntry a > :last-child{ grid-column:1 / -1; }
+  .chessLayout{ grid-template-columns:minmax(0,1fr); }
+  .chessMount{ margin-top:28px; }
+}
+@media (prefers-reduced-motion:reduce){
+  .chessWrong, .chessSolved .mateSquare::before{ animation:none; }
+}
 
 .index{ grid-column:1 / -1; grid-row:4; margin-top:clamp(56px, 8vw, 120px); border-bottom:1px solid var(--rule-strong); }
 .index li{ border-top:1px solid var(--rule-strong); }
@@ -395,9 +502,6 @@ input[type="range"]{ width:100%; margin:0; }
    Each section enters differently: the hero masks up line by line, rules draw,
    plates wipe open from the bottom edge, text settles in place. */
 @media (prefers-reduced-motion:no-preference){
-  .js .hlIn{ transform:translateY(108%); transition:transform 900ms var(--ease-out); }
-  .js .hl2 .hlIn{ transition-delay:90ms; }
-  .js .hero.in .hlIn{ transform:none; }
   .js .hero .ref{ opacity:0; transition:opacity 400ms linear 900ms, background var(--t-ui), color var(--t-ui); }
   .js .hero.in .ref{ opacity:1; }
   .js .heroFig, .js .heroIntro, .js .hero .sec, .js .heroWho{ opacity:0; transition:opacity 700ms linear 450ms; }
@@ -484,8 +588,8 @@ input[type="range"]{ width:100%; margin:0; }
   body{ font-size:17px; }
   .brand{ grid-column:1 / 5; }
   .nav nav{ grid-column:5 / 13; }
-  .navLinks{ gap:14px; }
-  .navLinks a{ font-size:.85rem; }
+  .navLinks{ gap:10px; }
+  .navLinks a{ font-size:.78rem; }
   .heroWho{ display:none; }
   .heroTitle{ font-size:clamp(3.3rem, 19.5vw, 6.5rem); line-height:.86; }
   .hl2{ padding-left:9%; }

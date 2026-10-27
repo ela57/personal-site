@@ -29,6 +29,7 @@
     <nav aria-label="Primary">
       <ul class="navLinks">
         <li><a href="#projects" data-section="projects">Work</a></li>
+        <li><a href="#lab" data-section="lab">Lab</a></li>
         <li><a href="#about" data-section="about">About</a></li>
         <li><a href="#contact" data-section="contact">Contact</a></li>
         <li><a href="mailto:ethanlam52@gmail.com?subject=R%C3%A9sum%C3%A9%20request" title="Résumé available on request by email">Résumé</a></li>
@@ -40,11 +41,11 @@
     <!-- § 01 — HERO / INDEX -->
     <section class="hero grid" id="top" aria-labelledby="heroTitle">
       <p class="sec mono"><span>§ 01</span> Index</p>
-      <p class="heroWho mono">Ethan Lam<br>Atlanta, GA</p>
+      <p class="heroWho mono">Atlanta, GA</p>
 
-      <h1 class="heroTitle" id="heroTitle">
-        <span class="hl hl1"><span class="hlIn">Graphics<a class="ref" href="#work-renderer" aria-label="Projects 01 and 02">01·02</a></span></span>
-        <span class="hl hl2"><span class="hlIn">&amp;&nbsp;markets.<a class="ref" href="#work-vol" aria-label="Project 03">03</a></span></span>
+      <h1 class="heroTitle" id="heroTitle" aria-label="Ethan Lam">
+        <span class="hl hl1" aria-hidden="true"><span class="hlIn"><span class="heroLetter">E</span><span class="heroLetter">t</span><span class="heroLetter">h</span><span class="heroLetter">a</span><span class="heroLetter">n</span></span></span>
+        <span class="hl hl2" aria-hidden="true"><span class="hlIn"><span class="heroLetter">L</span><span class="heroLetter">a</span><span class="heroLetter">m</span></span></span>
       </h1>
 
       <figure class="heroFig" aria-label="Figure 0: a wireframe icosahedron drawn by a JavaScript port of my software renderer">
@@ -54,6 +55,7 @@
 
       <div class="heroIntro">
         <p>I’m Ethan, a computer engineering student at Georgia Tech. I like taking systems apart to see the mechanism: a 3D renderer with no graphics API, a thermal-vision shader in HLSL, and whether volatility says anything about tomorrow’s SPY return. <span class="aside">(Mostly, it doesn’t.)</span></p>
+        <nav class="heroRefs mono" aria-label="Featured projects"><a href="#work-renderer" aria-label="Graphics projects 01 and 02">01·02 ↘</a><a href="#work-vol" aria-label="Markets project 03">03 ↘</a></nav>
       </div>
 
       <ol class="index" aria-label="Project index">
@@ -147,6 +149,32 @@
         <p class="secLede">Step through the same pipeline as project 01. Turn off culling, then sorting, and watch visibility break — then work out why a convex mesh only needs one of them.</p>
       </header>
       <div class="benchMount" data-bench></div>
+    </section>
+
+    <section class="labSec" id="lab" aria-labelledby="labTitle">
+      <header class="secHead grid rule">
+        <p class="sec mono"><span>§ Lab</span> Experiments</p>
+        <h2 class="secTitle" id="labTitle">Think with your hands.</h2>
+        <p class="secNote mono">Small systems. Playable ideas.</p>
+      </header>
+      <ol class="labIndex">
+        <li class="labEntry"><a href="#lab/chess" class="grid"><span class="mono">01 / CHESS</span><h3>Find the forcing line.</h3><p>Twelve chess puzzles. A board, a few clues, and a move that changes everything.</p><span class="mono">Open experiment ↗</span></a></li>
+        <li class="labEntry"><a href="#lab/strategy" class="grid"><span class="mono">02 / STRATEGY SANDBOX</span><h3>Test the signal.</h3><p>A moving-average model. Historical prices, explicit assumptions, and the cost of being wrong.</p><span class="mono">Open experiment ↗</span></a></li>
+      </ol>
+    </section>
+
+    <section class="experimentsSec" id="experiments" aria-labelledby="experimentsTitle">
+      <header class="secHead grid rule">
+        <p class="sec mono"><span>§ Experiments</span> Chip waterfall</p>
+        <h2 class="secTitle" id="experimentsTitle">Let the chips fall.</h2>
+        <p class="secNote mono">A study in collisions and momentum.</p>
+      </header>
+      <figure class="chipPlate grid">
+        <canvas class="chipCanvas" aria-label="Decorative chip waterfall: ivory, charcoal, red and green rigid bodies fall and settle in a contained plate. Use the buttons to release, clear or replay the scene."></canvas>
+        <figcaption class="mono">Fig. — 2D rigid bodies (Matter.js), drawn in 2.5D</figcaption>
+        <div class="chipControls mono"><button type="button" data-chip-action="release">Release chips</button><button type="button" data-chip-action="reset">Reset</button><button type="button" data-chip-action="replay">Replay</button></div>
+        <p class="chipStatus mono" data-chip-status role="status">A small study in collisions and momentum.</p>
+      </figure>
     </section>
 
     <!-- § 04 — ABOUT -->
@@ -347,6 +375,14 @@
     </div>
   </template>
 
-  <script src="main.js" defer></script>
+  <template id="tpl-lab-chess">
+    <header class="csHead grid"><p class="sec mono"><span>§ Lab / 01</span> Chess puzzles</p><h2 class="csTitle" id="detailTitle">Find the forcing line.</h2></header>
+    <div class="chessMount" data-chess><p role="status">Loading the board…</p></div>
+  </template>
+  <template id="tpl-lab-strategy">
+    <header class="csHead grid"><p class="sec mono"><span>§ Lab / 02</span> Strategy sandbox</p><h2 class="csTitle" id="detailTitle">Test the signal.</h2></header>
+    <div class="strategyMount" data-strategy><p role="status">Loading the sandbox…</p></div>
+  </template>
+  <script src="main.js" type="module"></script>
 </body>
 </html>
