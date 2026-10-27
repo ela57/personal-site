@@ -1,2 +1,5 @@
 .DS_Store
 assets/*.pdf
+.env
+.env.*
+__pycache__/
