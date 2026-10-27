@@ -103,6 +103,6 @@ export function mountHeroType(hero) {
   const destroy = () => {
     reset(); controller.abort(); resize.disconnect(); observer.disconnect();
   };
-  addEventListener("pagehide", destroy, { ...options, once: true });
+  addEventListener("pagehide", e => { if (!e.persisted) destroy(); }, options);
   return destroy;
 }

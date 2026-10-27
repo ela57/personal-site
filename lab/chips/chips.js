@@ -89,6 +89,6 @@ export function mountChips(section) {
   canvas.addEventListener("pointerup", release, opts); canvas.addEventListener("pointercancel", release, opts);
   canvas.addEventListener("pointerleave", () => { previous = null; }, opts);
   function cleanup() { disposed = true; stop(); ro.disconnect(); io.disconnect(); controller.abort(); physics?.dispose(); physics = null; }
-  addEventListener("pagehide", cleanup, { ...opts, once: true });
+  addEventListener("pagehide", e => { if (!e.persisted) cleanup(); }, opts);
   return cleanup;
 }
