@@ -18,12 +18,17 @@
   addEventListener("scroll", setScrolled, { passive: true }); setScrolled();
   const navFor = {};
   $$(".navLinks a[data-section]").forEach(a => (navFor[a.dataset.section] = a));
-  const sectionIO = new IntersectionObserver(entries => entries.forEach(en => {
-    if (!en.isIntersecting) return;
+  const setCurrent = id => {
     Object.values(navFor).forEach(a => a.removeAttribute("aria-current"));
-    const id = en.target.id === "bench" ? "projects" : en.target.id;
     if (navFor[id]) navFor[id].setAttribute("aria-current", "true");
+  };
+  const atBottom = () => innerHeight + scrollY >= document.documentElement.scrollHeight - 2;
+  const sectionIO = new IntersectionObserver(entries => entries.forEach(en => {
+    if (!en.isIntersecting || atBottom()) return;
+    setCurrent(en.target.id === "bench" ? "projects" : en.target.id);
   }), { rootMargin: "-45% 0px -50% 0px" });
+  // The last section can be too short to reach the observer band; at the end of the page it's current.
+  addEventListener("scroll", () => { if (atBottom()) setCurrent("contact"); }, { passive: true });
   ["top", "projects", "bench", "about", "contact"].forEach(id => { const el = document.getElementById(id); if (el) sectionIO.observe(el); });
 
   /* ---------------- Entrances ---------------- */
