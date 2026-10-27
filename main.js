@@ -158,12 +158,15 @@
     }
     const onMotion = () => { stop(); start(); draw(); };
     reduceMotion.addEventListener("change", onMotion);
-    const vis = new IntersectionObserver(([en]) => { if (en.isIntersecting) start(); else stop(); });
+    let inView = false;
+    const onVisibility = () => { if (!document.hidden && inView) start(); };
+    document.addEventListener("visibilitychange", onVisibility);
+    const vis = new IntersectionObserver(([en]) => { inView = en.isIntersecting; if (inView) start(); else stop(); });
     vis.observe(canvas);
     return {
       state, draw,
       set(patch) { Object.assign(state, patch); draw(); start(); },
-      destroy() { stop(); ro.disconnect(); vis.disconnect(); reduceMotion.removeEventListener("change", onMotion); },
+      destroy() { stop(); ro.disconnect(); vis.disconnect(); reduceMotion.removeEventListener("change", onMotion); document.removeEventListener("visibilitychange", onVisibility); },
     };
   }
 
@@ -324,7 +327,7 @@
                 const far = vis.reduce((a, x) => (x.z > a.z ? x : a));
                 anno.live.vertex = [near[0], near[1]]; anno.live.lit = [lit.cx, lit.cy]; anno.live.far = [far.cx, far.cy];
                 const cl = fig && $('[data-live="culled"]', fig); if (cl) cl.textContent = f.faces.length - vis.length;
-                if (anno.on) anno.layout();
+                if (anno.on || innerWidth < 720) anno.layout();
               } });
         if (fig && fig.dataset.annotate) {
           anno = setupAnnotations(fig);
@@ -420,7 +423,7 @@
       detail.hidden = true; detail.classList.remove("entering");
       document.body.classList.remove("noscroll"); setInert(false);
       cleanup(); content.replaceChildren();
-      const target = returnFocus && returnFocus.isConnected ? returnFocus : card && $(".more, .more a", card);
+      const target = returnFocus && returnFocus.isConnected ? returnFocus : card && $("a.more, .more a", card);
       target && target.focus({ preventScroll: true });
       returnFocus = null;
     };
