@@ -4,9 +4,9 @@ let matterPromise;
 function loadMatter() {
   if (!matterPromise) matterPromise = new Promise((resolve, reject) => {
     const script = document.createElement("script"); script.src = new URL("../../vendor/matter.js", import.meta.url).href;
-    script.onload = () => resolve(window.Matter); script.onerror = () => reject(new Error("The physics library could not load."));
+    script.onload = () => resolve(window.Matter); script.onerror = () => { script.remove(); reject(new Error("The physics library could not load.")); };
     document.head.append(script);
-  });
+  }).catch(error => { matterPromise = null; throw error; });
   return matterPromise;
 }
 
