@@ -50,8 +50,8 @@ export function mountHeroType(hero) {
       const dy = pointer ? (s.cy - pointer.y) / s.size : 0;
       const distance = Math.hypot(dx, dy);
       const influence = pointer ? Math.max(0, 1 - distance / 1.25) : 0;
-      s.target = [dx / (distance || 1) * influence * .075,
-        dy / (distance || 1) * influence * .075, influence * .055];
+      s.target = [dx / (distance || 1) * influence * .02,
+        dy / (distance || 1) * influence * .05, influence * .055];
       for (let i = 0; i < 3; i++) {
         s.velocity[i] += (240 * (s.target[i] - s.value[i]) - 25 * s.velocity[i]) * dt;
         s.value[i] += s.velocity[i] * dt;
@@ -79,7 +79,7 @@ export function mountHeroType(hero) {
     }
   }
   hero.addEventListener("pointermove", e => {
-    if (!fine.matches || e.pointerType === "touch" || !allowed()) return;
+    if (!["mouse", "pen"].includes(e.pointerType) || !allowed()) return;
     pointer = { x: e.clientX + scrollX, y: e.clientY + scrollY };
     wake();
   }, options);
