@@ -370,7 +370,7 @@
 
   function route() {
     const m = location.hash.match(/^#project\/([a-z0-9-]+)$/);
-    if (m) openDetail(m[1]);
+    if (m) { pushedEntry = true; openDetail(m[1]); }
     else if (openSlug) { pushedEntry = false; closeDetail(); }
   }
   document.addEventListener("click", e => {
@@ -396,7 +396,7 @@
   });
   addEventListener("hashchange", route);
   addEventListener("popstate", route);
-  route();
+  if (location.hash.startsWith("#project/")) openDetail(location.hash.slice(9)); // deep link on load: no entry pushed by us
 
   /* ---------------- Misc ---------------- */
   $("#year").textContent = new Date().getFullYear();
