@@ -40,11 +40,11 @@
     <!-- § 01 — HERO / INDEX -->
     <section class="hero grid" id="top" aria-labelledby="heroTitle">
       <p class="sec mono"><span>§ 01</span> Index</p>
-      <p class="heroWho mono">Ethan Lam<br>Atlanta, GA</p>
+      <p class="heroWho mono">Atlanta, GA</p>
 
-      <h1 class="heroTitle" id="heroTitle">
-        <span class="hl hl1"><span class="hlIn">Graphics<a class="ref" href="#work-renderer" aria-label="Projects 01 and 02">01·02</a></span></span>
-        <span class="hl hl2"><span class="hlIn">&amp;&nbsp;markets.<a class="ref" href="#work-vol" aria-label="Project 03">03</a></span></span>
+      <h1 class="heroTitle" id="heroTitle" aria-label="Ethan Lam">
+        <span class="hl hl1" aria-hidden="true"><span class="hlIn"><span class="heroLetter">E</span><span class="heroLetter">t</span><span class="heroLetter">h</span><span class="heroLetter">a</span><span class="heroLetter">n</span></span></span>
+        <span class="hl hl2" aria-hidden="true"><span class="hlIn"><span class="heroLetter">L</span><span class="heroLetter">a</span><span class="heroLetter">m</span></span></span>
       </h1>
 
       <figure class="heroFig" aria-label="Figure 0: a wireframe icosahedron drawn by a JavaScript port of my software renderer">
@@ -54,6 +54,7 @@
 
       <div class="heroIntro">
         <p>I’m Ethan, a computer engineering student at Georgia Tech. I like taking systems apart to see the mechanism: a 3D renderer with no graphics API, a thermal-vision shader in HLSL, and whether volatility says anything about tomorrow’s SPY return. <span class="aside">(Mostly, it doesn’t.)</span></p>
+        <nav class="heroRefs mono" aria-label="Featured projects"><a href="#work-renderer" aria-label="Graphics projects 01 and 02">01·02 ↘</a><a href="#work-vol" aria-label="Markets project 03">03 ↘</a></nav>
       </div>
 
       <ol class="index" aria-label="Project index">
@@ -347,6 +348,6 @@
     </div>
   </template>
 
-  <script src="main.js" defer></script>
+  <script src="main.js" type="module"></script>
 </body>
 </html>

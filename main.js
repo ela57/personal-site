@@ -1,5 +1,7 @@
 /* Ethan Lam — "The Engineering Notebook". Vanilla JS, no dependencies.
    nav · hero · reveals · renderer (hero wireframe, plate, bench) · thermal · annotations · case-study overlay */
+import("./lab/hero-type.js").then(({ mountHeroType }) => mountHeroType(document.querySelector(".hero")));
+
 (() => {
   "use strict";
   const $ = (s, r = document) => r.querySelector(s);
