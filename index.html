@@ -3,11 +3,10 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Ethan Lam — Portfolio</title>
+  <title>Ethan Lam — Computer Engineering Portfolio</title>
   <meta name="description" content="Ethan Lam — Computer Engineering at Georgia Tech ('28). GPU/graphics programming, quantitative systems, and security research." />
   <link rel="canonical" href="https://ethan-lam.com/" />
-  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0b0c10" />
-  <meta name="theme-color" media="(prefers-color-scheme: light)" content="#fafafa" />
+  <meta name="theme-color" content="#F8F9FA" />
   <meta property="og:type" content="website" />
   <meta property="og:title" content="Ethan Lam — Portfolio" />
   <meta property="og:description" content="Ethan Lam — Computer Engineering at Georgia Tech ('28). GPU/graphics programming, quantitative systems, and security research." />
@@ -16,828 +15,404 @@
   <meta name="twitter:card" content="summary" />
   <link rel="icon" type="image/png" href="/favicon.png">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-
-  <script>
-    // Apply theme + mark JS availability before first paint
-    (function(){
-      document.documentElement.classList.add("js");
-      var t = null;
-      try{ t = localStorage.getItem("theme"); }catch(e){}
-      if(!t) t = matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
-      document.documentElement.setAttribute("data-theme", t);
-    })();
-  </script>
-
-  <style>
-    :root{
-      --bg: #0b0c10;
-      --panel: rgba(255,255,255,0.06);
-      --panel2: rgba(255,255,255,0.09);
-      --text: #e8e8ea;
-      --muted: rgba(232,232,234,0.72);
-      --border: rgba(255,255,255,0.12);
-      --shadow: 0 10px 30px rgba(0,0,0,0.35);
-      --radius: 18px;
-      --max: 1040px;
-      --pad: 20px;
-      --accent: #7dd3fc;
-      --accent2: #a78bfa;
-      --link: #93c5fd;
-      --glow1: rgba(125,211,252,0.22);
-      --glow2: rgba(167,139,250,0.18);
-      color-scheme: dark;
-    }
-
-    [data-theme="light"]{
-      --bg: #fafafa;
-      --panel: rgba(0,0,0,0.04);
-      --panel2: rgba(0,0,0,0.06);
-      --text: #111827;
-      --muted: rgba(17,24,39,0.72);
-      --border: rgba(0,0,0,0.12);
-      --shadow: 0 10px 30px rgba(0,0,0,0.12);
-      --accent: #0284c7;
-      --accent2: #7c3aed;
-      --link: #2563eb;
-      --glow1: rgba(2,132,199,0.14);
-      --glow2: rgba(124,58,237,0.10);
-      color-scheme: light;
-    }
-
-    *{ box-sizing: border-box; }
-    html{ scroll-behavior: smooth; }
-    body{
-      margin: 0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji","Segoe UI Emoji";
-      color: var(--text);
-      background: radial-gradient(1200px 700px at 20% -10%, var(--glow1), transparent 60%),
-                  radial-gradient(900px 600px at 110% 10%, var(--glow2), transparent 55%),
-                  var(--bg);
-      line-height: 1.55;
-    }
-
-    a{ color: var(--link); text-decoration: none; }
-    a:hover{ text-decoration: underline; }
-
-    .wrap{ max-width: var(--max); margin: 0 auto; padding: 0 var(--pad); }
-
-    /* Reveal on scroll — hiding is gated on the .js class so content
-       stays visible if JavaScript never runs */
-    .js .reveal{
-      opacity: 0;
-      transform: translateY(24px);
-      will-change: opacity, transform;
-    }
-
-    /* The reveal transition only applies until .shown is added after
-       the animation, so it can't interfere with hover transitions */
-    .js .reveal:not(.shown){
-      transition: opacity 900ms ease-out, transform 900ms ease-out;
-      transition-delay: var(--d, 0ms);
-    }
-
-    .reveal.in{
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    /* Respect reduced motion */
-    @media (prefers-reduced-motion: reduce){
-      html{ scroll-behavior: auto !important; }
-      .js .reveal{ transition: none !important; transform: none; opacity: 1; }
-      .scrollDot{ animation: none !important; }
-      .proj{ transition: none !important; }
-      .proj:hover{ transform: none !important; }
-    }
-    /* Custom cursor */
-        #cursorDot{
-      display: none; /* enabled only for fine pointers below */
-      position: fixed;
-      top: 0; left: 0;
-      width: 10px; height: 10px;
-      border-radius: 50%;
-      transform: translate(-50%, -50%);
-      pointer-events: none;
-      z-index: 9999;
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
-      opacity: 0; /* hidden until mouse moves */
-      transition: width 160ms ease, height 160ms ease, opacity 200ms ease, filter 200ms ease;
-      filter: drop-shadow(0 6px 12px rgba(0,0,0,0.25));
-    }
-
-    /* When hovering clickable stuff, cursor grows */
-    .cursor-hover #cursorDot{
-      width: 22px;
-      height: 22px;
-      filter: drop-shadow(0 10px 20px rgba(0,0,0,0.35));
-    }
-    @media (pointer: fine){
-      body{
-        cursor: none;
-      }
-      #cursorDot{
-        display: block;
-      }
-    }
-
-    input, textarea{
-      cursor: text;
-    }
-
-    a, button, .btn{
-      cursor: pointer;
-    }
-
-    /* Top nav */
-    header{
-      position: sticky;
-      top: 0;
-      z-index: 50;
-      backdrop-filter: blur(12px);
-      background: color-mix(in srgb, var(--bg) 80%, transparent);
-      border-bottom: 1px solid var(--border);
-    }
-    .nav{
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 14px;
-      padding: 14px 0;
-    }
-    .brand{
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-weight: 700;
-      letter-spacing: 0.2px;
-    }
-    .dot{
-      width: 12px; height: 12px; border-radius: 50%;
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
-      box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 20%, transparent);
-    }
-    nav ul{
-      list-style: none;
-      display: flex;
-      gap: 16px;
-      padding: 0; margin: 0;
-      align-items: center;
-      flex-wrap: wrap;
-      justify-content: flex-end;
-    }
-    nav a{
-      display: inline-flex;
-      padding: 8px 10px;
-      border-radius: 12px;
-      color: var(--muted);
-      font-weight: 600;
-      font-size: 14px;
-    }
-    nav a:hover{
-      background: var(--panel);
-      color: var(--text);
-      text-decoration: none;
-    }
-
-    .btn{
-      border: 1px solid var(--border);
-      background: var(--panel);
-      color: var(--text);
-      padding: 10px 12px;
-      border-radius: 14px;
-      cursor: pointer;
-      box-shadow: none;
-      font-weight: 700;
-      font-size: 14px;
-    }
-    .btn:hover{ background: var(--panel2); }
-    .btn:active{
-      box-shadow: inset 0 2px 6px rgba(0,0,0,0.2);
-    }
-    .btn.primary{
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
-      border-color: transparent;
-      color: #fff;
-    }
-    .btn.primary:hover{ filter: brightness(1.06); }
-    .btn.ghost{ background: transparent; }
-    a.btn:hover{ text-decoration: none; }
-
-    /* Sections */
-    section{ padding: clamp(96px, 12vw, 160px) 0; }
-
-    /* Subtle, airy cards */
-    .card{
-      background: color-mix(in srgb, var(--panel) 55%, transparent);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      box-shadow: none;
-    }
-
-/* HERO: full-screen intro */
-.hero{
-  min-height: calc(100vh - 64px); /* header height offset */
-  display: flex;
-  align-items: center;
-  padding: 0;
- }
-
-.heroGrid{
-  display: grid;
-  grid-template-columns: 1fr; /* single column */
-  align-items: center;
-}
-
-.heroMain{
-  padding: 0;
-  max-width: 760px;
-}
-
-h1{
-  margin: 0 0 12px;
-  font-size: clamp(44px, 6vw, 72px);
-  line-height: 1.02;
-  letter-spacing: -0.03em;
-}
-
-.sub{
-  color: var(--muted);
-  font-size: 18px;
-  max-width: 62ch;
-  margin: 0 0 22px;
-}
-
-.ctaRow{
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  margin-top: 6px;
-}
-
-/* Scroll hint */
-.scrollHint{
-  margin-top: 28px;
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  color: var(--muted);
-  font-weight: 700;
-  font-size: 13px;
-  user-select: none;
-}
-
-.scrollDot{
-  width: 10px;
-  height: 10px;
-  border-radius: 999px;
-  background: linear-gradient(135deg, var(--accent), var(--accent2));
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent);
-  animation: bob 1.3s ease-in-out infinite;
-}
-
-@keyframes bob{
-  0%, 100%{ transform: translateY(0); }
-  50%{ transform: translateY(5px); }
-}
-
-    /* Headings */
-   .sectionHead{
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  margin-bottom: 22px;
-}
-
-.sectionHead h2{
-  margin: 0;
-  font-size: 34px;
-  letter-spacing: -0.02em;
-}
-
-.aboutText{
-  max-width: 70ch;
-}
-
-.aboutText p{
-  margin: 0 0 14px;
-  color: var(--muted);
-  font-size: 18px;
-  font-weight: 500;
-}
-
-    /* Experience */
-    .expList{
-      display: flex;
-      flex-direction: column;
-      gap: 18px;
-    }
-    .expItem{
-      padding: 20px 22px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-    .expTop{
-      display: flex;
-      align-items: baseline;
-      justify-content: space-between;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-    .expTop h3{
-      margin: 0;
-      font-size: 18px;
-    }
-    .expTop .expWhen{
-      color: var(--muted);
-      font-size: 13px;
-      font-weight: 700;
-      white-space: nowrap;
-    }
-    .expOrg{
-      color: var(--muted);
-      font-size: 14px;
-      font-weight: 700;
-      margin: 0;
-    }
-    .expItem ul{
-      margin: 4px 0 0;
-      padding-left: 18px;
-      color: var(--muted);
-      font-size: 15px;
-    }
-    .expItem li{ margin: 4px 0; }
-
-    /* Projects */
-    .grid{
-      display:grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 18px;
-    }
-    .proj{
-      padding: 18px;
-      display:flex;
-      flex-direction: column;
-      gap: 10px;
-      min-height: 190px;
-      border-radius: 18px;
-      border: 1px solid var(--border);
-      background: color-mix(in srgb, var(--panel) 55%, transparent);
-      transition: transform 200ms ease, background 200ms ease, border-color 200ms ease;
-    }
-    .badgeRow{ display:flex; flex-wrap: wrap; gap: 8px; }
-    .badge{
-      font-size: 12px;
-      font-weight: 800;
-      padding: 6px 10px;
-      border-radius: 999px;
-      border: 1px solid var(--border);
-      color: var(--muted);
-      background: color-mix(in srgb, var(--panel2) 70%, transparent);
-    }
-    .proj h3{ margin: 2px 0 0; font-size: 18px; }
-    .proj p{ margin: 0; color: var(--muted); }
-    .proj .links{
-      margin-top: auto;
-      display:flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-.proj:hover{
-  transform: translateY(-3px);
-  background: color-mix(in srgb, var(--panel2) 60%, transparent);
-  border-color: color-mix(in srgb, var(--accent) 30%, var(--border));
-}
-
-    /* Skills */
-    .tags{
-      display:flex;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-    .tag{
-      padding: 10px 12px;
-      border-radius: 14px;
-      border: 1px solid var(--border);
-      background: color-mix(in srgb, var(--panel) 75%, transparent);
-      font-weight: 700;
-      color: var(--muted);
-      font-size: 13px;
-    }
-
-    /* Contact */
-    form{
-      display:grid;
-      gap: 10px;
-      padding: 18px;
-    }
-    label{ font-weight: 800; font-size: 13px; color: var(--muted); }
-    input, textarea{
-      width: 100%;
-      padding: 12px 12px;
-      border-radius: 14px;
-      border: 1px solid var(--border);
-      background: color-mix(in srgb, var(--bg) 80%, transparent);
-      color: var(--text);
-      outline: none;
-      font-size: 14px;
-    }
-    textarea{ min-height: 120px; resize: vertical; }
-    input:focus, textarea:focus{
-      border-color: color-mix(in srgb, var(--accent) 55%, var(--border));
-      box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 15%, transparent);
-    }
-    .formRow{ display:grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-    .note{ color: var(--muted); font-size: 12px; margin: 0; padding: 0 18px 18px; }
-
-    footer{
-      padding: 26px 0 50px;
-      color: var(--muted);
-      border-top: 1px solid var(--border);
-      margin-top: 24px;
-    }
-    .footerRow{
-      display:flex;
-      align-items:center;
-      justify-content: space-between;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    /* Responsive */
-    @media (max-width: 900px){
-      .heroGrid{ grid-template-columns: 1fr; }
-      .grid{ grid-template-columns: 1fr; }
-    }
-  </style>
+  <script>document.documentElement.classList.add("js");</script>
+  <link rel="stylesheet" href="styles.css" />
 </head>
-
 <body>
-  <div id="cursorDot" aria-hidden="true"></div>
-  <header>
-    <div class="wrap nav">
-      <div class="brand">
-        <span class="dot" aria-hidden="true"></span>
-        <span>Ethan Lam</span>
-      </div>
+  <a class="skip" href="#main">Skip to content</a>
 
+  <header class="nav" id="nav">
+    <div class="wrap">
+      <a class="brand" href="#top" aria-label="Ethan Lam — home"><span class="mark" aria-hidden="true"></span>Ethan Lam</a>
+      <button class="menuBtn" id="menuBtn" type="button" aria-expanded="false" aria-controls="navLinks" aria-label="Open menu"><span></span></button>
       <nav aria-label="Primary">
-        <ul>
-          <li><a href="#about">
-            About
-          </a></li>
-          <li><a href="#experience">Experience</a></li>
-          <li><a href="#projects">Projects</a></li>
-          <li><a href="#skills">Skills</a></li>
-        <!-- <li><a href="#contact">Contact</a></li> -->
-          <li><button class="btn" id="themeBtn" type="button" aria-label="Toggle theme">Toggle</button></li>
+        <ul class="navLinks" id="navLinks">
+          <li><a href="#projects" data-section="projects">Work</a></li>
+          <li><a href="#about" data-section="about">About</a></li>
+          <li><a href="#contact" data-section="contact">Contact</a></li>
+          <li><a class="cta" href="mailto:ethanlam52@gmail.com?subject=R%C3%A9sum%C3%A9%20request">Résumé</a></li>
         </ul>
       </nav>
     </div>
   </header>
 
-  <main>
+  <main id="main">
     <!-- HERO -->
     <section class="hero" id="top">
-  <div class="wrap heroGrid">
-    <div class="heroMain">
-      <h1>Ethan Lam</h1>
-      <p class="sub">
-        Computer Engineering @ Georgia Tech (’28). Interested in GPU/graphics programming, game theory, cybersecurity, and quantitative systems.
-      </p>
-
-      <div class="ctaRow">
-        <a class="btn primary" href="#projects">Projects</a>
-        <a class="btn ghost" href="#about">About</a>
-      </div>
-
-      <div class="scrollHint" aria-hidden="true">
-         <span class="scrollDot"></span>
-        <span>Scroll</span>
-      </div>
-    </div>
-  </div>
-</section>
-
-    <!-- ABOUT -->
-   <section id="about" class="reveal">
-  <div class="wrap">
-    <div class="sectionHead">
-      <h2>About</h2>
-    </div>
-
-    <div class="aboutText">
-      <p>
-        I’m a Computer Engineering major at Georgia Tech (graduating 2028), on the Cybersecurity/Distributed
-        Systems &amp; Software Design thread. I’m interested in GPU and graphics programming, quantitative
-        development and trading systems, and reverse engineering.
-      </p>
-      <p>
-        Outside of school, I’m into poker, basketball, pickleball, golf, rock climbing, and traveling.
-      </p>
-    </div>
-  </div>
-</section>
-
-    <!-- EXPERIENCE -->
-    <section id="experience" class="reveal">
       <div class="wrap">
-        <div class="sectionHead">
-          <div>
-            <h2>Experience</h2>
-          </div>
-        </div>
-
-        <div class="expList">
-          <article class="card expItem reveal">
-            <div class="expTop">
-              <h3>Project Manager, GTSF Investment Committee — Quant Sector</h3>
-              <span class="expWhen">Aug 2025 – Present</span>
-            </div>
-            <p class="expOrg">Atlanta, GA</p>
-            <ul>
-              <li>Developed a centralized portfolio controller in Python to coordinate capital allocation, rebalancing, and risk constraints</li>
-              <li>Optimized trading scripts and the backtesting pipeline, enabling out-of-sample validation for strategy correctness and reproducibility</li>
-              <li>Led integration and deployment of two independent trading strategies into a single production-ready system</li>
-            </ul>
-          </article>
-
-         
-        </div>
-      </div>
-    </section>
-
-    <!-- PROJECTS -->
-    <section id="projects" class="reveal">
-      <div class="wrap">
-        <div class="sectionHead">
-          <div>
-            <h2>Projects</h2>
-       <!-- <p>Pick 3–6. Each card should say what it is, what you did, and what impact it had.</p> -->
-          </div>
-        </div>
-
-        <div class="grid">
-          <article class="proj reveal">
-            <div class="badgeRow">
-              <span class="badge">Graphics</span>
-              <span class="badge">Unity · HLSL · C#</span>
-            </div>
-            <h3>Thermal-Vision Post-Processing Shader</h3>
-            <p>
-              A custom depth-based thermal-vision effect in HLSL — cold-to-hot color mapping with an
-              adjustable max-distance range, Sobel-based edge outlining, and a procedural film-grain pass,
-              exposed through a Unity PostProcessing volume.
-            </p>
-          </article>
-
-          <article class="proj reveal">
-            <div class="badgeRow">
-              <span class="badge">Graphics</span>
-              <span class="badge">Python · NumPy · Matplotlib</span>
-            </div>
-            <h3>Software 3D Renderer</h3>
-            <p>
-              A 3D renderer built entirely from scratch with no 3D graphics API — world/view/projection
-              transforms, perspective divide, backface culling, NDC-space z-clipping and z-sorting, and
-              diffuse lighting.
-            </p>
-          </article>
-
-          <article class="proj reveal">
-            <div class="badgeRow">
-              <span class="badge">Security</span>
-              <span class="badge">IDA Pro · x86 Assembly</span>
-            </div>
-            <h3>Malware Reverse Engineering: PE Worm Analysis</h3>
-            <p>
-              Fully annotated x86 IDA disassembly of Windows PE file-infecting worms, documenting infection,
-              encryption, and evasion behavior — including manual PE export-table parsing, XOR/rotate
-              encryption schemes, a polymorphic stub generator, and logic bugs in the samples' anti-VM and
-              anti-debug checks.
-            </p>
-          </article>
-
-          <article class="proj reveal">
-  <h3>Realized Volatility & SPY Returns</h3>
-  <p>
-    Tested whether today’s realized volatility predicts next-day SPY returns.
-    Found no standalone signal, but small mean-reversion effects when adding lagged factors.
-  </p>
-  <div class="links">
-    <a class="btn" 
-    href="https://github.com/ela57/Projects/blob/main/realized_vol_spy.ipynb"
-    target="_blank"
-    rel="noopener noreferrer">
-    Jupyter Notebook</a>
-    <a class="btn" 
-    href="https://github.com/ela57/Projects/blob/main/realized_volatility_writeup.pdf"
-    target="_blank"
-    rel="noopener noreferrer">
-    Write-up</a>
-  </div>
-</article>
-
-<!---
-          <article class="card proj">
-            <div class="badgeRow">
-              <span class="badge">Category</span>
-              <span class="badge">Tech/Method</span>
-            </div>
-            <h3>Project Title</h3>
-            <p>What you built / studied, plus one measurable result if possible.</p>
-            <div class="links">
-              <a class="btn" href="#">Code</a>
-              <a class="btn" href="#">Notes</a>
-            </div>
-          </article>
-        -->
-        <!-- <article class="card proj">
-            <div class="badgeRow">
-              <span class="badge">Category</span>
-              <span class="badge">Tech/Method</span>
-            </div>
-            <h3>Project Title</h3>
-            <p>What makes this interesting? One line. Save the details for the write-up.</p>
-            <div class="links">
-              <a class="btn" href="#">Details</a>
-            </div>
-          </article> -->
-        </div>
-      </div>
-    </section>
-
-    <!-- SKILLS -->
-    <section id="skills" class="reveal">
-      <div class="wrap">
-        <div class="sectionHead">
-          <div>
-            <h2>Skills</h2>
-                      </div>
-        </div>
-
-        <div class="card" style="padding: 18px;">
-          <div class="tags" aria-label="Skill tags">
-            <span class="tag">Python</span>
-            <span class="tag">Java</span>
-            <span class="tag">C / C#</span>
-            <span class="tag">x86 Assembly</span>
-            <span class="tag">Unity / HLSL</span>
-            <span class="tag">IDA Pro</span>
-            <span class="tag">Data Analysis</span>
-            <span class="tag">Statistics</span>
-            <span class="tag">Financial Modeling</span>
-            <span class="tag">Reverse Engineering</span>
-            <span class="tag">Research</span>
-            <span class="tag">Writing</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- CONTACT 
-    <section id="contact">
-      <div class="wrap">
-        <div class="sectionHead">
-          <div>
-            <h2>Contact</h2>
-            <p>Put your email + links. The form below is front-end only unless you connect a service.</p>
-          </div>
-        </div>
-
-        <div class="card">
-          <form onsubmit="return fakeSubmit(event)">
-            <div class="formRow">
-              <div>
-                <label for="name">Name</label>
-                <input id="name" name="name" placeholder="Your name" autocomplete="name" required />
-              </div>
-              <div>
-                <label for="email">Email</label>
-                <input id="email" name="email" type="email" placeholder="you@example.com" autocomplete="email" required />
-              </div>
-            </div>
-
-            <div>
-              <label for="msg">Message</label>
-              <textarea id="msg" name="message" placeholder="What’s up?" required></textarea>
-            </div>
-
-            <button class="btn primary" type="submit">Send message</button>
-          </form>
-          <p class="note">
-            Tip: If you want a real working form, connect this to Formspree / Netlify Forms / a tiny serverless function.
+        <div class="heroInner">
+          <h1>
+            <span class="line"><span class="w" style="--i:0">Building</span> <span class="w" style="--i:1">complex</span> <span class="w" style="--i:2">things.</span></span>
+            <span class="line accent"><span class="w" style="--i:3">Making</span> <span class="w" style="--i:4">them</span> <span class="w" style="--i:5">feel</span> <span class="w" style="--i:6">simple.</span></span>
+          </h1>
+          <p class="lede">
+            I’m Ethan, a Computer Engineering student at Georgia Tech working across GPU and graphics programming, quantitative trading systems, and reverse engineering.
           </p>
+          <div class="ctaRow">
+            <a class="btn primary" href="#projects">View work</a>
+            <a class="btn" href="#contact">Get in touch</a>
+          </div>
+          <div class="meta">
+            <div><b>Georgia Tech</b>B.S. Computer Engineering, 2028</div>
+            <div><b>Focus</b>Graphics · Quant systems · Security</div>
+            <div><b>Location</b>Atlanta, GA</div>
+          </div>
         </div>
       </div>
     </section>
--->
+
+    <!-- INTRO -->
+    <section class="intro reveal" id="intro">
+      <div class="wrap">
+        <span class="eyebrow">Introduction</span>
+        <div>
+          <p>I like the layer where hardware, math, and software meet — rendering pipelines, trading infrastructure, and the disassembly of code that was never meant to be read.</p>
+          <p>I’m on the Cybersecurity / Distributed Systems &amp; Software Design thread at Georgia Tech. My work spans GPU and graphics programming, quantitative development and trading systems, and malware reverse engineering.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- FEATURED WORK -->
+    <section class="work" id="projects">
+      <div class="wrap">
+        <div class="sectionHead reveal">
+          <span class="eyebrow">Featured work</span>
+          <h2>Graphics, quantitative software, and security.</h2>
+          <p>Selected projects. Each one opens into a short case study with technical detail, diagrams, and where possible an interactive demonstration.</p>
+        </div>
+
+        <div class="workGrid">
+          <article class="proj wide reveal" data-project="renderer">
+            <div class="projMedia"><div class="vis" data-vis="renderer"></div></div>
+            <div class="projBody">
+              <div class="badgeRow"><span class="badge">Graphics</span><span class="badge neutral">Python · NumPy · Matplotlib</span></div>
+              <h3>Software 3D Renderer</h3>
+              <p>A 3D renderer built entirely from scratch with no 3D graphics API — world/view/projection transforms, perspective divide, backface culling, NDC-space z-clipping and z-sorting, and diffuse lighting.</p>
+              <div class="links"><span class="btn link">Case study <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h9M8.5 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
+            </div>
+            <a class="open" href="#project/renderer" aria-label="Open case study: Software 3D Renderer"></a>
+          </article>
+
+          <article class="proj reveal" data-project="thermal">
+            <div class="projMedia"><div class="vis thermal" data-vis="thermal"></div></div>
+            <div class="projBody">
+              <div class="badgeRow"><span class="badge">Graphics</span><span class="badge neutral">Unity · HLSL · C#</span></div>
+              <h3>Thermal-Vision Post-Processing Shader</h3>
+              <p>A custom depth-based thermal-vision effect in HLSL — cold-to-hot color mapping with an adjustable max-distance range, Sobel-based edge outlining, and a procedural film-grain pass.</p>
+              <div class="links"><span class="btn link">Case study <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h9M8.5 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
+            </div>
+            <a class="open" href="#project/thermal" aria-label="Open case study: Thermal-Vision Post-Processing Shader"></a>
+          </article>
+
+          <article class="proj reveal" data-project="worm">
+            <div class="projMedia"><div class="vis diagram" data-vis="worm"></div></div>
+            <div class="projBody">
+              <div class="badgeRow"><span class="badge">Security</span><span class="badge neutral">IDA Pro · x86 Assembly</span></div>
+              <h3>Malware Reverse Engineering: PE Worm Analysis</h3>
+              <p>Fully annotated x86 IDA disassembly of Windows PE file-infecting worms, documenting infection, encryption, and evasion behavior.</p>
+              <div class="links"><span class="btn link">Case study <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h9M8.5 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
+            </div>
+            <a class="open" href="#project/worm" aria-label="Open case study: PE Worm Analysis"></a>
+          </article>
+
+          <article class="proj wide reveal" data-project="vol">
+            <div class="projMedia"><img src="assets/projects/realized-vol-equity.png" width="900" height="450" alt="Equity curves over the 2022–2025 test period: buy-and-hold SPY versus the regression signal, growth of $1." loading="lazy" decoding="async"></div>
+            <div class="projBody">
+              <div class="badgeRow"><span class="badge">Quantitative</span><span class="badge neutral">Python · pandas · statsmodels</span></div>
+              <h3>Realized Volatility &amp; SPY Returns</h3>
+              <p>Tested whether today’s realized volatility predicts next-day SPY returns. Found no standalone signal, but small mean-reversion effects when adding lagged factors.</p>
+              <div class="links">
+                <span class="btn link">Case study <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h9M8.5 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                <a class="btn link" href="https://github.com/ela57/Projects/blob/main/realized_vol_spy.ipynb" target="_blank" rel="noopener noreferrer">Notebook ↗</a>
+                <a class="btn link" href="https://github.com/ela57/Projects/blob/main/realized_volatility_writeup.pdf" target="_blank" rel="noopener noreferrer">Write-up ↗</a>
+              </div>
+            </div>
+            <a class="open" href="#project/vol" aria-label="Open case study: Realized Volatility and SPY Returns"></a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- CINEMATIC SHOWCASE: the rendering pipeline, step by step -->
+    <section class="showcase" id="showcase" aria-label="Featured project: the software rendering pipeline">
+      <div class="showcaseTrack" id="showcaseTrack">
+        <div class="showcaseSticky">
+          <div class="wrap">
+            <div class="showcaseCopy">
+              <span class="eyebrow">Inside the renderer</span>
+              <h2>From vertices to shaded pixels, with no graphics API.</h2>
+              <ol class="steps" id="steps">
+                <li class="step active" data-step="0"><span class="n">01</span><div><b>World, view, projection</b><small>Model vertices are transformed into camera space, then projected. The perspective divide maps them to normalized device coordinates.</small></div></li>
+                <li class="step" data-step="1"><span class="n">02</span><div><b>Wireframe</b><small>Projected vertices are connected into triangle edges — every face of the mesh, front and back.</small></div></li>
+                <li class="step" data-step="2"><span class="n">03</span><div><b>Backface culling and z-sorting</b><small>Triangles facing away from the camera are discarded. The rest are sorted by depth so nearer faces are drawn last.</small></div></li>
+                <li class="step" data-step="3"><span class="n">04</span><div><b>Diffuse lighting</b><small>Each face is shaded by the angle between its normal and the light direction.</small></div></li>
+              </ol>
+            </div>
+            <div class="showcaseStage">
+              <canvas id="showcaseCanvas" aria-hidden="true"></canvas>
+              <div class="readout" id="readout" aria-hidden="true"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="showcaseEnd">
+        <div class="wrap">
+          <p>Every stage above is implemented by hand in Python and NumPy, and drawn with Matplotlib.</p>
+          <a class="btn" href="#project/renderer">Read the case study</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ABOUT + EXPERIENCE -->
+    <section class="about" id="about">
+      <div class="wrap">
+        <div class="sectionHead reveal">
+          <span class="eyebrow">About</span>
+          <h2>Engineer in training, curious by default.</h2>
+        </div>
+        <div class="reveal">
+          <div class="aboutText">
+            <p>I’m a Computer Engineering major at Georgia Tech (graduating 2028), on the Cybersecurity / Distributed Systems &amp; Software Design thread. I’m interested in GPU and graphics programming, quantitative development and trading systems, and reverse engineering.</p>
+            <p>Outside of school, I’m into poker, basketball, pickleball, golf, rock climbing, and traveling.</p>
+          </div>
+
+          <div class="timeline" id="experience">
+            <article class="tl">
+              <time>Aug 2025 – Present</time>
+              <div>
+                <h3>Project Manager, GTSF Investment Committee — Quant Sector</h3>
+                <p class="org">Georgia Tech Student Foundation · Atlanta, GA</p>
+                <ul>
+                  <li>Developed a centralized portfolio controller in Python to coordinate capital allocation, rebalancing, and risk constraints</li>
+                  <li>Optimized trading scripts and the backtesting pipeline, enabling out-of-sample validation for strategy correctness and reproducibility</li>
+                  <li>Led integration and deployment of two independent trading strategies into a single production-ready system</li>
+                </ul>
+              </div>
+            </article>
+            <article class="tl">
+              <time>Class of 2028</time>
+              <div>
+                <h3>B.S. Computer Engineering</h3>
+                <p class="org">Georgia Institute of Technology · Cybersecurity / Distributed Systems &amp; Software Design thread</p>
+              </div>
+            </article>
+          </div>
+
+          <div id="skills">
+            <div class="tags" aria-label="Skills">
+              <span class="tag">Python</span><span class="tag">Java</span><span class="tag">C / C#</span><span class="tag">x86 Assembly</span>
+              <span class="tag">Unity / HLSL</span><span class="tag">IDA Pro</span><span class="tag">Data Analysis</span><span class="tag">Statistics</span>
+              <span class="tag">Financial Modeling</span><span class="tag">Reverse Engineering</span><span class="tag">Research</span><span class="tag">Writing</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="contact" id="contact">
+      <div class="wrap">
+        <div class="card reveal">
+          <div>
+            <span class="eyebrow">Contact</span>
+            <h2>Let’s build something.</h2>
+            <p>Open to internships, research, and interesting engineering problems. The fastest way to reach me is email.</p>
+          </div>
+          <div class="contactLinks">
+            <a href="mailto:ethanlam52@gmail.com"><span>Email</span><span>ethanlam52@gmail.com</span></a>
+            <a href="https://github.com/ela57" target="_blank" rel="noopener noreferrer"><span>GitHub</span><span>github.com/ela57</span></a>
+            <a href="https://www.linkedin.com/in/ethanlam7/" target="_blank" rel="noopener noreferrer"><span>LinkedIn</span><span>linkedin.com/in/ethanlam7</span></a>
+          </div>
+        </div>
+      </div>
+    </section>
   </main>
+
   <footer>
     <div class="wrap footerRow">
       <div>© <span id="year"></span> Ethan Lam</div>
-      <div style="display:flex; gap:10px; flex-wrap:wrap;">
-        <a href="https://github.com/ela57">GitHub</a>
-        <a href="https://www.linkedin.com/in/ethanlam7/">LinkedIn</a>
-        <a href="mailto:ethanlam52@gmail.com">Email</a>
-      </div>
+      <div><a href="https://github.com/ela57">GitHub</a><a href="https://www.linkedin.com/in/ethanlam7/">LinkedIn</a><a href="mailto:ethanlam52@gmail.com">Email</a></div>
     </div>
   </footer>
 
-  <script>
-    // Theme toggle — the initial theme is applied by the <head> script
-    // so there's no flash; this just handles the button.
-    const root = document.documentElement;
-    const btn = document.getElementById("themeBtn");
+  <!-- PROJECT DETAIL OVERLAY -->
+  <div class="detail" id="detail" role="dialog" aria-modal="true" aria-labelledby="detailTitle" hidden>
+    <div class="closeBar">
+      <button class="close" id="detailClose" type="button" aria-label="Close case study">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M4 4l10 10M14 4L4 14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div class="panel">
+      <div id="detailContent"></div>
+    </div>
+  </div>
 
-    function syncThemeBtn(){
-      const current = root.getAttribute("data-theme") || "dark";
-      const next = current === "dark" ? "Light" : "Dark";
-      btn.textContent = next;
-      btn.setAttribute("aria-label", "Switch to " + next.toLowerCase() + " mode");
-    }
+  <!-- Case-study templates -->
+  <template id="tpl-renderer">
+    <div class="detailMedia"><div class="vis" data-vis="renderer" data-interactive></div></div>
+    <div class="detailBody">
+      <div>
+        <span class="eyebrow">Graphics</span>
+        <h2 id="detailTitle">Software 3D Renderer</h2>
+        <p class="lead">A 3D renderer built entirely from scratch with no 3D graphics API. Everything from the transformation matrices to the final shaded triangles is computed in Python and NumPy, and drawn with Matplotlib.</p>
+        <h3>Pipeline</h3>
+        <ul>
+          <li>World, view, and projection transforms</li>
+          <li>Perspective divide into normalized device coordinates</li>
+          <li>Backface culling</li>
+          <li>NDC-space z-clipping and z-sorting (painter’s algorithm)</li>
+          <li>Diffuse lighting from a directional light</li>
+        </ul>
+        <h3>Interactive demonstration</h3>
+        <p>The viewer above re-implements the same pipeline in JavaScript so you can see each stage. Drag to rotate; toggle culling and lighting to see what each step contributes.</p>
+        <div class="demo" data-demo="renderer">
+          <div class="controls">
+            <label class="toggle"><input type="checkbox" data-opt="cull" checked> Backface culling</label>
+            <label class="toggle"><input type="checkbox" data-opt="light" checked> Diffuse lighting</label>
+            <label class="toggle"><input type="checkbox" data-opt="wire" checked> Wireframe</label>
+            <label class="toggle"><input type="checkbox" data-opt="rotate" checked> Auto-rotate</label>
+          </div>
+          <p class="hint">Illustration of the technique for the web — the original renderer is written in Python.</p>
+        </div>
+      </div>
+      <aside>
+        <dl>
+          <div><dt>Stack</dt><dd>Python · NumPy · Matplotlib</dd></div>
+          <div><dt>Area</dt><dd>Graphics programming</dd></div>
+          <div><dt>Type</dt><dd>Personal project</dd></div>
+        </dl>
+      </aside>
+    </div>
+  </template>
 
-    btn.addEventListener("click", () => {
-      const current = root.getAttribute("data-theme") || "dark";
-      const next = current === "dark" ? "light" : "dark";
-      root.setAttribute("data-theme", next);
-      try{ localStorage.setItem("theme", next); }catch(e){}
-      syncThemeBtn();
-    });
-    syncThemeBtn();
+  <template id="tpl-thermal">
+    <div class="detailMedia"><div class="vis thermal" data-vis="thermal" data-interactive></div></div>
+    <div class="detailBody">
+      <div>
+        <span class="eyebrow">Graphics</span>
+        <h2 id="detailTitle">Thermal-Vision Post-Processing Shader</h2>
+        <p class="lead">A custom depth-based thermal-vision effect written in HLSL and exposed through a Unity PostProcessing volume, so it can be tuned from the editor like any built-in effect.</p>
+        <h3>How it works</h3>
+        <ul>
+          <li><b>Depth → heat.</b> Scene depth is remapped to a cold-to-hot color ramp. The max-distance range is adjustable, so objects beyond it clamp to the coldest color.</li>
+          <li><b>Edge outlining.</b> A Sobel operator over the depth buffer finds silhouettes and draws them as outlines.</li>
+          <li><b>Film grain.</b> A procedural grain pass adds the noise of a real thermal sensor.</li>
+        </ul>
+        <h3>Interactive demonstration</h3>
+        <p>Move the slider to change the max-distance range and watch the mapping of the scene change. Grain and outlines can be toggled independently.</p>
+        <div class="demo" data-demo="thermal">
+          <div class="controls">
+            <label>Max distance <input type="range" min="0.25" max="1" step="0.01" value="0.7" data-opt="range"> <output data-out="range">0.70</output></label>
+            <label class="toggle"><input type="checkbox" data-opt="edges" checked> Edges</label>
+            <label class="toggle"><input type="checkbox" data-opt="grain" checked> Grain</label>
+          </div>
+          <p class="hint">Browser illustration of the effect. The real shader runs on the GPU inside Unity.</p>
+        </div>
+      </div>
+      <aside>
+        <dl>
+          <div><dt>Stack</dt><dd>Unity · HLSL · C#</dd></div>
+          <div><dt>Area</dt><dd>GPU / graphics programming</dd></div>
+          <div><dt>Type</dt><dd>Personal project</dd></div>
+        </dl>
+      </aside>
+    </div>
+  </template>
 
-    // Footer year
-    document.getElementById("year").textContent = new Date().getFullYear();
-    /*
-    // Fake form submit (so the template feels alive)
-    function fakeSubmit(e){
-      e.preventDefault();
-      alert("Template form submitted (not actually sent). Hook this up to a form service to make it real.");
-      e.target.reset();
-      return false;
-    }
-    */
-  </script>
+  <template id="tpl-worm">
+    <div class="detailMedia"><div class="vis diagram" data-vis="worm"></div></div>
+    <div class="detailBody">
+      <div>
+        <span class="eyebrow">Security</span>
+        <h2 id="detailTitle">Malware Reverse Engineering: PE Worm Analysis</h2>
+        <p class="lead">Fully annotated x86 IDA disassembly of Windows PE file-infecting worms, documenting infection, encryption, and evasion behavior.</p>
+        <h3>What the analysis covers</h3>
+        <ul>
+          <li><b>Manual PE export-table parsing.</b> The samples resolve API addresses by walking the export table themselves rather than importing them, which keeps the import table clean.</li>
+          <li><b>XOR / rotate encryption schemes</b> used to hide the payload until runtime.</li>
+          <li><b>A polymorphic stub generator</b> that rewrites the decryption stub on each infection so the samples never share a fixed byte signature.</li>
+          <li><b>Logic bugs in the anti-VM and anti-debug checks</b>, found by tracing the evasion routines instruction by instruction.</li>
+        </ul>
+        <h3>Approach</h3>
+        <p>Static analysis in IDA Pro: identifying the entry stub, recovering the API-resolution routine, naming and typing every function, and annotating the disassembly so the infection flow in the diagram above reads top to bottom.</p>
+      </div>
+      <aside>
+        <dl>
+          <div><dt>Tools</dt><dd>IDA Pro · x86 Assembly</dd></div>
+          <div><dt>Area</dt><dd>Reverse engineering · Malware analysis</dd></div>
+          <div><dt>Target</dt><dd>Windows PE file-infecting worms</dd></div>
+        </dl>
+      </aside>
+    </div>
+  </template>
 
-  <script>
-    const els = document.querySelectorAll(".reveal");
+  <template id="tpl-vol">
+    <div class="detailMedia contain"><img src="assets/projects/realized-vol-equity.png" width="900" height="450" alt="Equity curves over the test period: buy-and-hold SPY versus the regression signal." decoding="async"></div>
+    <div class="detailBody">
+      <div>
+        <span class="eyebrow">Quantitative research</span>
+        <h2 id="detailTitle">Does realized volatility predict next-day SPY returns?</h2>
+        <p class="lead">A hypothesis-driven study on daily SPY data from 2000 onward: compute several realized-volatility estimators, test whether today’s volatility carries information about tomorrow’s return, and backtest the resulting signal out of sample.</p>
+        <div class="stats">
+          <div class="stat"><b>0.000</b><span>R² — next-day return on GK volatility alone</span></div>
+          <div class="stat"><b>−0.063</b><span>Lagged-return coefficient (p = 0.005)</span></div>
+          <div class="stat"><b>0.66</b><span>Signal Sharpe, test period (vs 0.55 buy-and-hold)</span></div>
+        </div>
+        <h3>Method</h3>
+        <ul>
+          <li>Realized volatility via four estimators: close-to-close, Parkinson, Garman–Klass, and Rogers–Satchell.</li>
+          <li>Correlation and quintile-bucket analysis of volatility against next-day returns.</li>
+          <li>OLS regressions with a time-based train / validation / test split, then adding lagged return and a volatility-of-volatility control.</li>
+          <li>A simple long/short signal from the fitted model, backtested on the held-out test period.</li>
+        </ul>
+        <h3>Findings</h3>
+        <ul>
+          <li>Volatility clusters and is predictable; next-day returns are not. Linear correlation between every estimator and next-day return is near zero.</li>
+          <li>Volatility alone has no explanatory power (R² = 0.000). Adding lagged return and volatility change lifts R² to 0.004, with a significant negative lagged-return coefficient — mild mean reversion.</li>
+          <li>Out of sample the signal reached a Sharpe of 0.66 against 0.55 for buy-and-hold, with ~49% average daily turnover, so transaction costs would matter in practice.</li>
+        </ul>
+        <figure class="figure">
+          <img src="assets/projects/realized-vol-rolling.png" width="900" height="450" alt="63-day rolling means of SPY return and four realized-volatility estimators, 2000–2025. The estimators move together, with peaks in 2008 and 2020." loading="lazy" decoding="async">
+          <figcaption>63-day rolling volatility — the four estimators track each other closely, spiking in 2008 and 2020.</figcaption>
+        </figure>
+      </div>
+      <aside>
+        <dl>
+          <div><dt>Stack</dt><dd>Python · pandas · statsmodels · yfinance</dd></div>
+          <div><dt>Data</dt><dd>SPY daily OHLCV, 2000 – 2025</dd></div>
+          <div><dt>Area</dt><dd>Quantitative research</dd></div>
+        </dl>
+        <div class="links">
+          <a class="btn" href="https://github.com/ela57/Projects/blob/main/realized_vol_spy.ipynb" target="_blank" rel="noopener noreferrer">Jupyter notebook ↗</a>
+          <a class="btn" href="https://github.com/ela57/Projects/blob/main/realized_volatility_writeup.pdf" target="_blank" rel="noopener noreferrer">Write-up (PDF) ↗</a>
+        </div>
+      </aside>
+    </div>
+  </template>
 
-    const io = new IntersectionObserver((entries) => {
-      // Stagger only the elements entering the viewport together,
-      // so far-down sections don't inherit a huge delay.
-      const batch = entries.filter((entry) => entry.isIntersecting);
-      batch.forEach((entry, i) => {
-        const el = entry.target;
-        const delay = 200 + i * 120;
-        el.style.setProperty("--d", delay + "ms");
-        el.classList.add("in");
-        io.unobserve(el);
+  <!-- Infection-flow diagram, mounted into [data-vis="worm"] -->
+  <template id="svg-worm">
+    <svg viewBox="0 0 520 300" role="img" aria-label="Infection flow of the analyzed PE worm: entry stub, manual export-table parsing, XOR/rotate decryption, anti-VM and anti-debug checks, polymorphic stub generation, and infection of new PE files.">
+      <defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5 0 10z" fill="rgba(23,25,29,.4)"/></marker></defs>
+      <g class="d" style="--i:0"><rect class="node" x="20" y="22" width="150" height="54" rx="12"/><text class="lbl" x="95" y="46" text-anchor="middle">Infected host PE</text><text class="sub" x="95" y="62" text-anchor="middle">entry point → worm stub</text></g>
+      <path class="edge" d="M170 49 H205"/>
+      <g class="d" style="--i:1"><rect class="node hot" x="205" y="22" width="150" height="54" rx="12"/><text class="lbl" x="280" y="46" text-anchor="middle">Resolve APIs</text><text class="sub" x="280" y="62" text-anchor="middle">manual export-table walk</text></g>
+      <path class="edge" d="M355 49 H390"/>
+      <g class="d" style="--i:2"><rect class="node hot" x="390" y="22" width="110" height="54" rx="12"/><text class="lbl" x="445" y="46" text-anchor="middle">Decrypt body</text><text class="sub" x="445" y="62" text-anchor="middle">XOR / rotate</text></g>
+      <path class="edge" d="M445 76 V110"/>
+      <g class="d" style="--i:3"><rect class="node" x="330" y="110" width="170" height="54" rx="12"/><text class="lbl" x="415" y="134" text-anchor="middle">Anti-VM / anti-debug</text><text class="sub" x="415" y="150" text-anchor="middle">environment checks</text></g>
+      <path class="edge bug" d="M330 137 H290"/>
+      <text class="tag" x="296" y="128">LOGIC BUGS</text>
+      <g class="d" style="--i:4"><rect class="node" x="130" y="110" width="160" height="54" rx="12"/><text class="lbl" x="210" y="134" text-anchor="middle">Enumerate targets</text><text class="sub" x="210" y="150" text-anchor="middle">scan for PE files</text></g>
+      <path class="edge" d="M210 164 V198"/>
+      <g class="d" style="--i:5"><rect class="node hot" x="110" y="198" width="200" height="54" rx="12"/><text class="lbl" x="210" y="222" text-anchor="middle">Polymorphic stub generator</text><text class="sub" x="210" y="238" text-anchor="middle">new decryptor per infection</text></g>
+      <path class="edge" d="M310 225 H360"/>
+      <g class="d" style="--i:6"><rect class="node" x="360" y="198" width="140" height="54" rx="12"/><text class="lbl" x="430" y="222" text-anchor="middle">Write to new PE</text><text class="sub" x="430" y="238" text-anchor="middle">re-encrypted payload</text></g>
+      <path class="edge" d="M430 198 V180 H515 V49 H500" opacity=".55"/>
+      <text class="sub" x="40" y="285">Flow recovered from annotated IDA Pro disassembly</text>
+    </svg>
+  </template>
 
-        // Once the reveal finishes, remove the delay and hand
-        // transitions back to the element's own CSS (hover states).
-        const done = () => {
-          el.style.removeProperty("--d");
-          el.classList.add("shown");
-        };
-        el.addEventListener("transitionend", done, { once: true });
-        setTimeout(done, delay + 950); // fallback if transitionend never fires
-      });
-    }, {
-      threshold: 0.15,
-      rootMargin: "0px 0px -80px 0px" // <-- delays reveal until deeper in view
-    });
-
-    els.forEach((el) => io.observe(el));
-  </script>
-
-<script>
-  const dot = document.getElementById("cursorDot");
-  const finePointer = window.matchMedia("(pointer: fine)");
-  const interactiveSelector = "a, button, input, textarea";
-
-  window.addEventListener("mousemove", (e) => {
-    if (!finePointer.matches) return; // skip on touch devices
-    dot.style.opacity = "1";
-    // translate(-50%,-50%) keeps the dot centered on the pointer
-    dot.style.transform = `translate(${e.clientX}px, ${e.clientY}px) translate(-50%, -50%)`;
-  });
-
-  document.addEventListener("mouseout", (e) => {
-    if (!e.relatedTarget) {
-      dot.style.opacity = "0"; // pointer left the window
-    }
-    if (e.target.closest(interactiveSelector)) {
-      document.body.classList.remove("cursor-hover");
-    }
-  });
-  document.addEventListener("mouseover", (e) => {
-    if (e.target.closest(interactiveSelector)) {
-      document.body.classList.add("cursor-hover");
-    }
-  });
-</script>
-
-
+  <script src="main.js" defer></script>
 </body>
 </html>
