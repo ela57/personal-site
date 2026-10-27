@@ -4,12 +4,12 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Ethan Lam — Computer Engineering, Georgia Tech</title>
-  <meta name="description" content="Ethan Lam — Computer Engineering at Georgia Tech ('28). A software 3D renderer, an HLSL thermal-vision shader, PE worm reverse engineering, and a realized-volatility study of SPY." />
+  <meta name="description" content="Ethan Lam — Computer Engineering at Georgia Tech ('28). A software 3D renderer, an HLSL thermal-vision shader, and a realized-volatility study of SPY." />
   <link rel="canonical" href="https://ethan-lam.com/" />
   <meta name="theme-color" content="#F2EFE7" />
   <meta property="og:type" content="website" />
   <meta property="og:title" content="Ethan Lam — Portfolio" />
-  <meta property="og:description" content="Ethan Lam — Computer Engineering at Georgia Tech ('28). GPU/graphics programming, quantitative systems, and security research." />
+  <meta property="og:description" content="Ethan Lam — Computer Engineering at Georgia Tech ('28). GPU/graphics programming and quantitative systems." />
   <meta property="og:url" content="https://ethan-lam.com/" />
   <meta property="og:image" content="https://ethan-lam.com/og-image.png" />
   <meta name="twitter:card" content="summary" />
@@ -43,9 +43,8 @@
       <p class="heroWho mono">Ethan Lam<br>Atlanta, GA</p>
 
       <h1 class="heroTitle" id="heroTitle">
-        <span class="hl hl1"><span class="hlIn">Graphics,<a class="ref" href="#work-renderer" aria-label="Projects 01 and 02">01·02</a></span></span>
-        <span class="hl hl2"><span class="hlIn">malware,<a class="ref" href="#work-worm" aria-label="Project 03">03</a></span></span>
-        <span class="hl hl3"><span class="hlIn">&amp;&nbsp;markets.<a class="ref" href="#work-vol" aria-label="Project 04">04</a></span></span>
+        <span class="hl hl1"><span class="hlIn">Graphics<a class="ref" href="#work-renderer" aria-label="Projects 01 and 02">01·02</a></span></span>
+        <span class="hl hl2"><span class="hlIn">&amp;&nbsp;markets.<a class="ref" href="#work-vol" aria-label="Project 03">03</a></span></span>
       </h1>
 
       <figure class="heroFig" aria-label="Figure 0: a wireframe icosahedron drawn by a JavaScript port of my software renderer">
@@ -54,14 +53,13 @@
       </figure>
 
       <div class="heroIntro">
-        <p>I’m Ethan, a computer engineering student at Georgia Tech. I like taking systems apart to see the mechanism: a 3D renderer with no graphics API, a thermal-vision shader in HLSL, file-infecting worms in IDA Pro, and whether volatility says anything about tomorrow’s SPY return. <span class="aside">(Mostly, it doesn’t.)</span></p>
+        <p>I’m Ethan, a computer engineering student at Georgia Tech. I like taking systems apart to see the mechanism: a 3D renderer with no graphics API, a thermal-vision shader in HLSL, and whether volatility says anything about tomorrow’s SPY return. <span class="aside">(Mostly, it doesn’t.)</span></p>
       </div>
 
       <ol class="index" aria-label="Project index">
         <li><a href="#work-renderer"><span class="n">01</span><span class="t">Software 3D renderer</span><span class="k">Graphics</span><span class="s">Python · NumPy · Matplotlib</span><span class="arr" aria-hidden="true">↘</span></a></li>
         <li><a href="#work-thermal"><span class="n">02</span><span class="t">Thermal-vision shader</span><span class="k">GPU</span><span class="s">Unity · HLSL · C#</span><span class="arr" aria-hidden="true">↘</span></a></li>
-        <li><a href="#work-worm"><span class="n">03</span><span class="t">PE worm analysis</span><span class="k">Security</span><span class="s">IDA Pro · x86</span><span class="arr" aria-hidden="true">↘</span></a></li>
-        <li><a href="#work-vol"><span class="n">04</span><span class="t">Realized volatility &amp; SPY</span><span class="k">Quant research</span><span class="s">pandas · statsmodels</span><span class="arr" aria-hidden="true">↘</span></a></li>
+        <li><a href="#work-vol"><span class="n">03</span><span class="t">Realized volatility &amp; SPY</span><span class="k">Quant research</span><span class="s">pandas · statsmodels</span><span class="arr" aria-hidden="true">↘</span></a></li>
       </ol>
     </section>
 
@@ -69,7 +67,7 @@
     <section class="work" id="projects" aria-labelledby="workTitle">
       <header class="secHead grid rule">
         <p class="sec mono"><span>§ 02</span> Selected work</p>
-        <h2 id="workTitle" class="secTitle">Four projects, each<br>opened up on its own page.</h2>
+        <h2 id="workTitle" class="secTitle">Three projects, each<br>opened up on its own page.</h2>
         <p class="secNote mono">Hover a figure to read its annotations.<br>Select it for the full case study.</p>
       </header>
 
@@ -115,27 +113,7 @@
         <a class="cover" href="#project/thermal" tabindex="-1" aria-hidden="true"></a>
       </article>
 
-      <!-- 03 — full-bleed dark schematic -->
-      <article class="proj proj--worm" id="work-worm" data-project="worm">
-        <div class="wormHead grid">
-          <p class="projNo" aria-hidden="true">03</p>
-          <h3 class="projTitle">Reading a worm, instruction by&nbsp;instruction</h3>
-          <p class="projDesc">Fully annotated x86 disassembly of Windows PE file-infecting worms in IDA Pro: how they find their APIs, hide their payload, dodge analysis, and mutate on every infection.</p>
-          <div class="wormMeta"><dl class="meta mono"><div><dt>Area</dt><dd>Reverse engineering</dd></div><div><dt>Tools</dt><dd>IDA Pro, x86 assembly</dd></div></dl><a class="more" href="#project/worm"><span>Read case study</span><span aria-hidden="true">→</span></a></div>
-        </div>
-        <figure class="plate plate--schematic" data-annotate="worm" style="--ar:520/300">
-          <div class="plateVis" data-vis="worm"></div>
-          <ol class="notes">
-            <li style="--lx:30%;--ly:4%" data-side="l" data-at=".538,.163"><b>1</b> Export table walked by hand — the import table stays clean</li>
-            <li style="--lx:63%;--ly:31%" data-side="r" data-at=".80,.457"><b>2</b> Logic bugs in the evasion checks</li>
-            <li style="--lx:3%;--ly:95%" data-side="r" data-at=".30,.75"><b>3</b> New decryptor per infection: no fixed byte signature</li>
-          </ol>
-          <figcaption class="mono"><span><b>Fig. 3</b> Infection flow, recovered from the annotated disassembly.</span><button class="annoBtn" type="button" aria-pressed="false">Annotate</button></figcaption>
-        </figure>
-        <a class="cover" href="#project/worm" tabindex="-1" aria-hidden="true"></a>
-      </article>
-
-      <!-- 04 — chart + oversized statistic -->
+      <!-- 03 — chart + oversized statistic -->
       <article class="proj proj--vol grid" id="work-vol" data-project="vol">
         <figure class="plate plate--paper" data-annotate="vol" style="--ar:768/418">
           <div class="plateVis">
@@ -145,17 +123,16 @@
             <li style="--lx:30%;--ly:84%" data-side="r" data-at=".44,.56"><b>1</b> Signal held up through the 2022 drawdown</li>
             <li style="--lx:62%;--ly:28%" data-side="l" data-at=".925,.13"><b>2</b> Sharpe 0.66 vs 0.55 buy-and-hold</li>
           </ol>
-          <figcaption class="mono"><span><b>Fig. 4</b> Growth of $1 on the held-out test period (from the notebook).</span><button class="annoBtn" type="button" aria-pressed="false">Annotate</button></figcaption>
+          <figcaption class="mono"><span><b>Fig. 3</b> Growth of $1 on the held-out test period (from the notebook).</span><button class="annoBtn" type="button" aria-pressed="false">Annotate</button></figcaption>
         </figure>
         <div class="projText">
-          <p class="projNo" aria-hidden="true">04</p>
+          <p class="projNo" aria-hidden="true">03</p>
           <p class="bigStat"><span class="mono">R² =</span>0.000</p>
           <h3 class="projTitle">Does today’s volatility predict tomorrow’s&nbsp;return?</h3>
           <p class="projDesc">Four realized-volatility estimators on SPY daily data from 2000. On its own, volatility explains none of the next day’s return; with lagged return added there’s a small, significant mean-reversion effect.</p>
           <dl class="meta mono"><div><dt>Area</dt><dd>Quant research</dd></div><div><dt>Stack</dt><dd>pandas, statsmodels, yfinance</dd></div></dl>
           <p class="more">
             <a href="#project/vol"><span>Read case study</span><span aria-hidden="true">→</span></a>
-            <a class="ext" href="https://github.com/ela57/Projects/blob/main/realized_vol_spy.ipynb" target="_blank" rel="noopener noreferrer">Notebook ↗</a>
           </p>
         </div>
         <a class="cover" href="#project/vol" tabindex="-1" aria-hidden="true"></a>
@@ -177,7 +154,7 @@
       <p class="sec mono"><span>§ 04</span> About</p>
       <h2 class="aboutTitle" id="aboutTitle">I want to know what the abstraction is&nbsp;hiding.</h2>
       <div class="aboutText">
-        <p>I study computer engineering at Georgia Tech, class of 2028, on the Cybersecurity and Distributed Systems &amp; Software Design threads. The projects I end up caring about sit where hardware, math and software meet — rendering pipelines, trading infrastructure, and disassembly of code that was never meant to be read.</p>
+        <p>I study computer engineering at Georgia Tech, class of 2028, on the Distributed Systems &amp; Software Design thread. The projects I end up caring about sit where hardware, math and software meet — rendering pipelines and trading infrastructure.</p>
         <p>Outside of class: poker, basketball, pickleball, golf, rock climbing, and travelling when I get the chance.</p>
       </div>
 
@@ -205,9 +182,9 @@
       </div>
 
       <dl class="toolbox" id="skills">
-        <div><dt class="mono">Languages</dt><dd>Python, Java, C, C#, x86 assembly, HLSL</dd></div>
-        <div><dt class="mono">Tools</dt><dd>Unity, IDA Pro, NumPy, pandas, statsmodels</dd></div>
-        <div><dt class="mono">Practice</dt><dd>Reverse engineering, statistics, data analysis, financial modelling, research writing</dd></div>
+        <div><dt class="mono">Languages</dt><dd>Python, Java, C, C#, HLSL</dd></div>
+        <div><dt class="mono">Tools</dt><dd>Unity, NumPy, pandas, statsmodels</dd></div>
+        <div><dt class="mono">Practice</dt><dd>Statistics, data analysis, financial modelling, research writing</dd></div>
       </dl>
     </section>
 
@@ -217,7 +194,6 @@
       <h2 class="contactTitle" id="contactTitle">Internships, research, or a question about one of these projects — email is the fastest way to reach&nbsp;me.</h2>
       <a class="email" href="mailto:ethanlam52@gmail.com"><span>ethanlam52</span><span>@gmail.com</span></a>
       <ul class="elsewhere mono">
-        <li><a href="https://github.com/ela57" target="_blank" rel="noopener noreferrer">GitHub ↗</a></li>
         <li><a href="https://www.linkedin.com/in/ethanlam7/" target="_blank" rel="noopener noreferrer">LinkedIn ↗</a></li>
         <li><a href="mailto:ethanlam52@gmail.com?subject=R%C3%A9sum%C3%A9%20request">Résumé, on request</a></li>
       </ul>
@@ -303,42 +279,15 @@
     </div>
   </template>
 
-  <template id="tpl-worm">
-    <header class="csHead grid">
-      <p class="sec mono"><span>03</span> Reverse engineering · Malware analysis</p>
-      <h2 class="csTitle" id="detailTitle">Reading a worm, instruction by&nbsp;instruction</h2>
-    </header>
-    <figure class="plate plate--schematic csMedia" style="--ar:520/300"><div class="plateVis" data-vis="worm"></div></figure>
-    <div class="csBody grid">
-      <aside class="csMeta mono">
-        <dl><div><dt>Tools</dt><dd>IDA Pro · x86 assembly</dd></div><div><dt>Target</dt><dd>Windows PE file-infecting worms</dd></div><div><dt>Method</dt><dd>Static analysis</dd></div></dl>
-      </aside>
-      <div class="csText">
-        <p class="csLead">A fully annotated x86 IDA disassembly of Windows PE file-infecting worms, documenting how they infect, encrypt and evade.</p>
-        <h3><span class="mono">A</span> Approach</h3>
-        <p>Static analysis in IDA Pro: find the entry stub, recover the API-resolution routine, name and type every function, and annotate the disassembly until the infection flow above reads top to bottom.</p>
-        <h3><span class="mono">B</span> What the samples do</h3>
-        <ol class="steps">
-          <li><b>Manual PE export-table parsing.</b> API addresses are resolved by walking the export table directly instead of importing them, which keeps the import table clean.</li>
-          <li><b>XOR / rotate encryption</b> hides the payload until runtime.</li>
-          <li><b>A polymorphic stub generator</b> rewrites the decryption stub on each infection, so infected files never share a fixed byte signature.</li>
-        </ol>
-        <h3><span class="mono">C</span> What broke</h3>
-        <p>Tracing the anti-VM and anti-debug routines instruction by instruction turned up logic bugs in the checks themselves.</p>
-      </div>
-    </div>
-  </template>
-
   <template id="tpl-vol">
     <header class="csHead grid">
-      <p class="sec mono"><span>04</span> Quantitative research</p>
+      <p class="sec mono"><span>03</span> Quantitative research</p>
       <h2 class="csTitle" id="detailTitle">Does today’s volatility predict tomorrow’s&nbsp;return?</h2>
     </header>
     <figure class="plate plate--paper csMedia" style="--ar:768/418"><div class="plateVis"><picture><source srcset="assets/projects/realized-vol-equity.webp" type="image/webp"><img src="assets/projects/realized-vol-equity.png" width="768" height="418" alt="Equity curves over the test period: buy-and-hold SPY versus the regression signal." decoding="async"></picture></div></figure>
     <div class="csBody grid">
       <aside class="csMeta mono">
         <dl><div><dt>Stack</dt><dd>Python · pandas · statsmodels · yfinance</dd></div><div><dt>Data</dt><dd>SPY daily OHLCV, 2000–2025</dd></div><div><dt>Area</dt><dd>Quantitative research</dd></div></dl>
-        <p class="csLinks"><a href="https://github.com/ela57/Projects/blob/main/realized_vol_spy.ipynb" target="_blank" rel="noopener noreferrer">Jupyter notebook ↗</a><a href="https://github.com/ela57/Projects/blob/main/realized_volatility_writeup.pdf" target="_blank" rel="noopener noreferrer">Write-up (PDF) ↗</a></p>
       </aside>
       <div class="csText">
         <p class="csLead">A hypothesis-driven study on daily SPY data from 2000 onward: compute several realized-volatility estimators, test whether today’s volatility carries information about tomorrow’s return, and backtest the resulting signal out of sample.</p>
@@ -358,35 +307,12 @@
         <p>Volatility clusters and is predictable; next-day returns are not. Correlation between every estimator and next-day return is near zero, and volatility alone has no explanatory power (R² = 0.000). Adding lagged return and volatility change lifts R² to 0.004, with a significant negative lagged-return coefficient — mild mean reversion.</p>
         <figure class="inFig">
           <picture><source srcset="assets/projects/realized-vol-rolling.webp" type="image/webp"><img src="assets/projects/realized-vol-rolling.png" width="749" height="407" alt="63-day rolling means of SPY return and four realized-volatility estimators, 2000–2025. The estimators move together, with peaks in 2008 and 2020." loading="lazy" decoding="async"></picture>
-          <figcaption class="mono"><b>Fig. 4b</b> 63-day rolling volatility. The four estimators track each other closely, spiking in 2008 and 2020.</figcaption>
+          <figcaption class="mono"><b>Fig. 3b</b> 63-day rolling volatility. The four estimators track each other closely, spiking in 2008 and 2020.</figcaption>
         </figure>
         <h3><span class="mono">C</span> Outcome, and the catch</h3>
         <p>Out of sample the signal reached a Sharpe of 0.66 against 0.55 for buy-and-hold — but with about 49% average daily turnover, so transaction costs would matter in practice.</p>
       </div>
     </div>
-  </template>
-
-  <!-- Infection-flow schematic, mounted into [data-vis="worm"] -->
-  <template id="svg-worm">
-    <svg viewBox="0 0 520 300" role="img" aria-label="Infection flow of the analyzed PE worm: entry stub, manual export-table parsing, XOR/rotate decryption, anti-VM and anti-debug checks, target enumeration, polymorphic stub generation, and infection of new PE files.">
-      <defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 1L9 5 0 9" fill="none" stroke="currentColor" stroke-width="1.4"/></marker></defs>
-      <g class="d" style="--i:0"><rect class="node" x="20" y="22" width="150" height="54"/><text class="idx" x="26" y="33">A</text><text class="lbl" x="95" y="48" text-anchor="middle">Infected host PE</text><text class="sub" x="95" y="63" text-anchor="middle">entry point → worm stub</text></g>
-      <path class="edge" d="M170 49 H203"/>
-      <g class="d" style="--i:1"><rect class="node hot" x="205" y="22" width="150" height="54"/><text class="idx" x="211" y="33">B</text><text class="lbl" x="280" y="48" text-anchor="middle">Resolve APIs</text><text class="sub" x="280" y="63" text-anchor="middle">manual export-table walk</text></g>
-      <path class="edge" d="M355 49 H388"/>
-      <g class="d" style="--i:2"><rect class="node hot" x="390" y="22" width="110" height="54"/><text class="idx" x="396" y="33">C</text><text class="lbl" x="445" y="48" text-anchor="middle">Decrypt body</text><text class="sub" x="445" y="63" text-anchor="middle">XOR / rotate</text></g>
-      <path class="edge" d="M445 76 V108"/>
-      <g class="d" style="--i:3"><rect class="node" x="330" y="110" width="170" height="54"/><text class="idx" x="336" y="121">D</text><text class="lbl" x="415" y="136" text-anchor="middle">Anti-VM / anti-debug</text><text class="sub" x="415" y="151" text-anchor="middle">environment checks</text></g>
-      <path class="edge bug" d="M330 137 H292"/>
-      <text class="tag" x="294" y="129">BUGS</text>
-      <g class="d" style="--i:4"><rect class="node" x="130" y="110" width="160" height="54"/><text class="idx" x="136" y="121">E</text><text class="lbl" x="210" y="136" text-anchor="middle">Enumerate targets</text><text class="sub" x="210" y="151" text-anchor="middle">scan for PE files</text></g>
-      <path class="edge" d="M210 164 V196"/>
-      <g class="d" style="--i:5"><rect class="node hot" x="110" y="198" width="200" height="54"/><text class="idx" x="116" y="209">F</text><text class="lbl" x="210" y="224" text-anchor="middle">Polymorphic stub generator</text><text class="sub" x="210" y="239" text-anchor="middle">new decryptor per infection</text></g>
-      <path class="edge" d="M310 225 H358"/>
-      <g class="d" style="--i:6"><rect class="node" x="360" y="198" width="140" height="54"/><text class="idx" x="366" y="209">G</text><text class="lbl" x="430" y="224" text-anchor="middle">Write to new PE</text><text class="sub" x="430" y="239" text-anchor="middle">re-encrypted payload</text></g>
-      <path class="edge loop" d="M430 252 V272 H20 V100 H40"/>
-      <text class="sub" x="40" y="267">repeat for each new host</text>
-    </svg>
   </template>
 
   <!-- Interactive renderer bench, mounted into [data-bench] -->
@@ -398,7 +324,7 @@
           <li><button type="button" data-stage="0" aria-pressed="false"><span class="mono">01</span> Vertices<small>world → view → projection → ÷ z</small></button></li>
           <li><button type="button" data-stage="1" aria-pressed="false"><span class="mono">02</span> Wireframe<small>every edge, front and back</small></button></li>
           <li><button type="button" data-stage="2" aria-pressed="false"><span class="mono">03</span> Fill<small>flat faces, culling + sort</small></button></li>
-          <li><button type="button" data-stage="3" aria-pressed="true"><span class="mono">04</span> Shade<small>diffuse: max(0, n·l)</small></button></li>
+          <li><button type="button" data-stage="3" aria-pressed="true"><span class="mono">03</span> Shade<small>diffuse: max(0, n·l)</small></button></li>
         </ol>
         <div class="benchControls mono">
           <label class="check"><input type="checkbox" data-opt="cull" checked> Backface culling</label>

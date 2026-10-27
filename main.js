@@ -345,10 +345,6 @@
           $$('input[type="checkbox"][data-opt]', demo).forEach(inp => inp.addEventListener("change", () => t.set({ [inp.dataset.opt]: inp.checked })));
         }
         if (fig && fig.dataset.annotate) setupAnnotations(fig);
-      } else if (kind === "worm") {
-        el.classList.add("diagram");
-        el.appendChild($("#svg-worm").content.cloneNode(true));
-        if (fig && fig.dataset.annotate) setupAnnotations(fig);
       }
     });
     $$(".plate[data-annotate]:not([data-vis-host])", root).forEach(fig => {
@@ -359,8 +355,8 @@
   mountVisuals(document);
 
   /* ---------------- Interaction B: case-study overlay (hash routed) ---------------- */
-  const ORDER = ["renderer", "thermal", "worm", "vol"];
-  const TITLES = { renderer: "Software 3D renderer", thermal: "Thermal-vision shader", worm: "PE worm analysis", vol: "Realized volatility & SPY" };
+  const ORDER = ["renderer", "thermal", "vol"];
+  const TITLES = { renderer: "Software 3D renderer", thermal: "Thermal-vision shader", vol: "Realized volatility & SPY" };
   const detail = $("#detail"), content = $("#detailContent"), closeBtn = $("#detailClose");
   const countEl = $("#detailCount"), nextEl = $("#detailNext");
   const backdropEls = Array.from(document.body.children).filter(el => el !== detail && el.tagName !== "TEMPLATE" && el.tagName !== "SCRIPT");
@@ -442,7 +438,7 @@
   }
   function route() {
     const m = location.hash.match(/^#project\/([a-z0-9-]+)$/);
-    if (m) { pushedEntry = true; openDetail(m[1]); }
+    if (m && ORDER.includes(m[1])) { pushedEntry = true; openDetail(m[1]); }
     else if (openSlug) { pushedEntry = false; closeDetail(); }
   }
   document.addEventListener("click", e => {
