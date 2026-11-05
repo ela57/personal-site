@@ -94,11 +94,11 @@ a svg{width:24px;height:24px;flex:none;fill:none;stroke:currentColor;stroke-widt
 .cover{position:absolute;inset:0;z-index:1}
 .ticket .more,.ticket button,.ticket [data-vis]{position:relative;z-index:2}
 .annoBtn{border:1px solid currentColor;padding:5px 9px;font-size:12px}
-.notes{list-style:none;position:absolute;inset:0;pointer-events:none;font-size:12px;color:var(--ink-2);z-index:3}
-.notes li{position:absolute;left:var(--lx);top:var(--ly);max-width:150px}
+.notes{list-style:none;position:absolute;inset:0 0 auto;height:var(--plate-height,100%);pointer-events:none;font-size:12px;color:var(--ink-2);z-index:3}
+.notes li{position:absolute;left:var(--lx);top:var(--ly);width:150px;max-width:150px}
 .notes li[data-side=l]{transform:translateX(-100%);text-align:right}
 .notes b{font-weight:700;color:var(--blue);margin-right:.4em}
-.annoSvg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:2;color:var(--ink)}
+.annoSvg{position:absolute;inset:0;width:100%;height:var(--plate-height,100%);pointer-events:none;z-index:2;color:var(--ink)}
 .annoSvg path{stroke:currentColor;stroke-width:1;fill:none}
 .annoSvg .ring{stroke:currentColor;fill:none;stroke-width:1}
 .annoSvg .dot{fill:currentColor}
@@ -281,7 +281,12 @@ a svg{width:24px;height:24px;flex:none;fill:none;stroke:currentColor;stroke-widt
   .ticket{padding:20px 18px 0}.ticketTop{padding-bottom:18px;margin-bottom:18px;gap:12px}.ticket h3{font-size:38px}.projectNumber{font-size:44px}
   .ticketBottom{padding:16px 0;font-size:16px}.ticketStack{font-size:12px}.ticket .more{font-size:13px}
   .rendererTicket{margin-bottom:28px}
-  .plateVis{aspect-ratio:1/1}.plate figcaption{font-size:12px;gap:8px}.plate:not(.annotated) .notes{display:none}.notes li{max-width:100px}.annoBtn{font-size:12px}
+  .plateVis{aspect-ratio:1/1}.plate figcaption{font-size:12px;gap:8px}.plate:not(.annotated) .notes{display:none}.annoBtn{font-size:12px}
+  .plate[data-annotate]{display:flex;flex-direction:column}
+  .notes,.plate--dark .notes{position:static;height:auto;order:1;list-style:decimal;padding:4px 0 16px 20px;color:var(--ink-2)}
+  .notes li,.notes li[data-side=l]{position:static;width:auto;max-width:none;transform:none;text-align:left}
+  .notes li+li{margin-top:8px}.notes b{display:none}
+  .annoSvg path{display:none}.plate--dark .annoSvg text{fill:var(--ink)}
   .benchSec,.chipScene{padding-top:44px}
   .bench{padding:16px}.benchSide,.benchStage{grid-column:1/-1}.benchStage{grid-row:1}.stages{display:grid;grid-template-columns:1fr 1fr;gap:16px}.stages button{font-size:18px}.stages small{display:none}
   .benchReadout{grid-template-columns:1fr 1fr}.benchHeading{margin-bottom:24px;gap:16px}

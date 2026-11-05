@@ -234,6 +234,7 @@ import("./lab/chips/chips.js").then(({ mountChips }) => mountChips(document.quer
     const layout = () => {
       const W = vis.clientWidth, H = vis.clientHeight;
       if (!W) return;
+      fig.style.setProperty("--plate-height", `${H}px`);
       svg.setAttribute("width", W); svg.setAttribute("height", H);
       const small = innerWidth < 720;
       parts.forEach(pt => {
@@ -245,8 +246,9 @@ import("./lab/chips/chips.js").then(({ mountChips }) => mountChips(document.quer
         if (small) return;
         const lx = parseFloat(getComputedStyle(pt.li).getPropertyValue("--lx")) / 100 * W;
         const ly = parseFloat(getComputedStyle(pt.li).getPropertyValue("--ly")) / 100 * H;
-        const sh = pt.li.dataset.side === "l" ? 16 : -16;
-        pt.p.setAttribute("d", `M${tx.toFixed(1)} ${ty.toFixed(1)} L${(lx + sh).toFixed(1)} ${ly.toFixed(1)} H${lx.toFixed(1)}`);
+        const end = pt.li.dataset.side === "l" ? lx - pt.li.offsetWidth - 12 : lx + pt.li.offsetWidth + 12;
+        const sh = pt.li.dataset.side === "l" ? -16 : 16;
+        pt.p.setAttribute("d", `M${tx.toFixed(1)} ${ty.toFixed(1)} L${(end + sh).toFixed(1)} ${ly.toFixed(1)} H${end.toFixed(1)}`);
       });
     };
     new ResizeObserver(layout).observe(vis);
