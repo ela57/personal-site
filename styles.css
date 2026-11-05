@@ -281,7 +281,7 @@ a svg{width:24px;height:24px;flex:none;fill:none;stroke:currentColor;stroke-widt
   .ticket{padding:20px 18px 0}.ticketTop{padding-bottom:18px;margin-bottom:18px;gap:12px}.ticket h3{font-size:38px}.projectNumber{font-size:44px}
   .ticketBottom{padding:16px 0;font-size:16px}.ticketStack{font-size:12px}.ticket .more{font-size:13px}
   .rendererTicket{margin-bottom:28px}
-  .plateVis{aspect-ratio:1/1}.plate figcaption{font-size:12px;gap:8px}.notes{display:none}.notes li{max-width:100px}.annoBtn{font-size:12px}
+  .plateVis{aspect-ratio:1/1}.plate figcaption{font-size:12px;gap:8px}.plate:not(.annotated) .notes{display:none}.notes li{max-width:100px}.annoBtn{font-size:12px}
   .benchSec,.chipScene{padding-top:44px}
   .bench{padding:16px}.benchSide,.benchStage{grid-column:1/-1}.benchStage{grid-row:1}.stages{display:grid;grid-template-columns:1fr 1fr;gap:16px}.stages button{font-size:18px}.stages small{display:none}
   .benchReadout{grid-template-columns:1fr 1fr}.benchHeading{margin-bottom:24px;gap:16px}
