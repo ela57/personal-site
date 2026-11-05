@@ -21,15 +21,12 @@ export function mountPreviews(root) {
     ctx.fillStyle="#ECE7DA";ctx.font='12px Archivo, Arial, sans-serif';ctx.fillText(rows[0][0],20,height-14);ctx.textAlign='right';ctx.fillText(rows.at(-1)[0],width-20,height-14);
     canvas.setAttribute("aria-label",prices?"SPY adjusted prices with 20 and 100-day SMAs, 2005–2026":"Strategy (amber) versus buy-and-hold (ivory), 2005–2026, rebased to one, net of costs");
   }
-  async function load() {
-    loaded=true;
+  async function loadChess() {
     try {
-      const [{ Chess }, { puzzles }, { pieceSVG }, { backtest }, response] = await Promise.all([
-        import("../vendor/chess.js"), import("./chess/puzzles.js"), import("./chess/board.js"), import("./strategy/engine.js"),
-        fetch(new URL("./strategy/data/spy.json",import.meta.url),{signal:controller.signal})
+      const [{ Chess }, { puzzles }, { pieceSVG }] = await Promise.all([
+        import("../vendor/chess.js"), import("./chess/puzzles.js"), import("./chess/board.js")
       ]);
-      if(!response.ok)throw new Error("Preview prices could not load.");
-      const payload=await response.json();if(disposed)return;
+      if(disposed)return;
       const puzzle=puzzles[0];let game=new Chess(puzzle.fen),ply=0;
       const render=()=>{board.innerHTML=game.board().flat().map((piece,i)=>`<span class="previewSquare ${(Math.floor(i/8)+i%8)%2?'dark':''}">${piece?pieceSVG(piece):''}</span>`).join("");};render();
       moveButton.addEventListener("click",()=>{
@@ -38,11 +35,24 @@ export function mountPreviews(root) {
         const step=()=>{if(disposed)return;game.move(puzzle.solution[ply++]);render();if(ply<puzzle.solution.length)timer=setTimeout(step,400);else{moveButton.disabled=false;moveButton.textContent="Reset preview";root.querySelector("[data-preview-chess-status]").textContent=`${puzzle.title} · checkmate`;}};
         step();
       },opts);
+    }catch(error){if(!disposed){root.querySelector("[data-preview-chess-status]").textContent="Preview unavailable. Open chess to try again.";moveButton.disabled=true;}}
+  }
+  async function loadStrategy() {
+    try {
+      const [{ backtest }, response] = await Promise.all([
+        import("./strategy/engine.js"), fetch(new URL("./strategy/data/spy.json",import.meta.url),{signal:controller.signal})
+      ]);
+      if(!response.ok)throw new Error("Preview prices could not load.");
+      const payload=await response.json();if(disposed)return;
+      if(!payload.data?.length)throw new Error("No preview prices available.");
       const result=backtest(payload.data);chartData={rows:payload.data,result};
       const percent=v=>(v>=0?'+':'')+(v*100).toFixed(1)+'%';
       root.querySelector("[data-preview-result]").textContent=`Strategy ${percent(result.strategy.cumulative)} / Hold ${percent(result.buyHold.cumulative)} · net of costs`;
       toggle.addEventListener("click",()=>{prices=!prices;toggle.textContent=prices?"Show equity":"Show prices";draw();},opts);draw();
-    }catch(error){if(!disposed){root.querySelector("[data-preview-result]").textContent="Preview unavailable. Open the sandbox to try again.";moveButton.disabled=true;toggle.disabled=true;}}
+    }catch(error){if(!disposed){root.querySelector("[data-preview-result]").textContent="Preview unavailable. Open the sandbox to try again.";toggle.disabled=true;}}
+  }
+  function load() {
+    loaded=true;loadChess();loadStrategy();
   }
   const io=new IntersectionObserver(([entry])=>{visible=entry.isIntersecting;if(visible){if(!loaded)load();else draw();}});io.observe(root);
   const ro=new ResizeObserver(draw);ro.observe(canvas);
