@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 2,
+  "title": "Design System: The Trading Pit",
+  "extensions": {
+    "motion": [
+      {"name": "ticket-open", "value": "320ms cubic-bezier(.32,.72,0,1)", "purpose": "Open a routed case-study or Lab ticket."},
+      {"name": "ticket-close", "value": "200ms ease-in", "purpose": "Close a ticket before restoring focus."},
+      {"name": "reduced-ticket", "value": "150ms opacity", "purpose": "Reduced-motion ticket transition."}
+    ],
+    "breakpoints": [{"name": "compact", "value": "1100px"}, {"name": "stacked", "value": "719px"}]
+  },
+  "components": [],
+  "narrative": {
+    "northStar": "The Trading Pit",
+    "overview": "Historical SPY data, engineering project tickets and working Lab experiments on color-coded fields.",
+    "keyCharacteristics": ["Amber dot-matrix board", "Condensed Archivo identity", "Stock project tickets", "Green/red/blue disciplines"],
+    "dos": ["Use real bundled prices and existing project facts", "Keep modules lazy and bfcache-safe", "Use dark-backed amber focus indicators"],
+    "donts": ["No decorative gradients, glass or glow", "No scroll-reveal fades", "No invented metrics or dates", "No additional font families"]
+  }
+}
