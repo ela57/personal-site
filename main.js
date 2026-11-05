@@ -1,6 +1,6 @@
-/* Ethan Lam — "The Engineering Notebook". Vanilla JS, no dependencies.
-   nav · hero · reveals · renderer (hero wireframe, plate, bench) · thermal · annotations · case-study overlay */
-import("./lab/hero-type.js").then(({ mountHeroType }) => mountHeroType(document.querySelector(".hero")));
+import("./lab/hero-type.js").then(({ mountHeroType }) => mountHeroType(document.querySelector(".badge")));
+import("./lab/board/board.js").then(({ mountBoard }) => mountBoard(document.querySelector("[data-board]")));
+import("./lab/previews.js").then(({ mountPreviews }) => mountPreviews(document.querySelector("#lab")));
 import("./lab/chips/chips.js").then(({ mountChips }) => mountChips(document.querySelector("#experiments")));
 
 (() => {
@@ -10,7 +10,7 @@ import("./lab/chips/chips.js").then(({ mountChips }) => mountChips(document.quer
   const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)");
   const motionOK = () => !reduceMotion.matches;
   const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
-  const PAPER = [233, 229, 218], INK = [21, 21, 19], BLUE = [29, 68, 240];
+  const PAPER = [228, 220, 198], INK = [22, 23, 26], BLUE = [35, 64, 142];
   const mix = (a, b, t) => `rgb(${a.map((c, i) => Math.round(c + (b[i] - c) * t)).join(",")})`;
 
   const yearEl = $("#year"); if (yearEl) yearEl.textContent = new Date().getFullYear();
@@ -32,16 +32,7 @@ import("./lab/chips/chips.js").then(({ mountChips }) => mountChips(document.quer
   }), { rootMargin: "-45% 0px -50% 0px" });
   // The last section can be too short to reach the observer band; at the end of the page it's current.
   addEventListener("scroll", () => { if (atBottom()) setCurrent("contact"); }, { passive: true });
-  ["top", "projects", "bench", "lab", "about", "contact"].forEach(id => { const el = document.getElementById(id); if (el) sectionIO.observe(el); });
-
-  /* ---------------- Entrances ---------------- */
-  $$(".index li").forEach((li, i) => li.style.setProperty("--i", i));
-  requestAnimationFrame(() => requestAnimationFrame(() => $(".hero").classList.add("in")));
-  const revealIO = new IntersectionObserver((entries, io) => entries.forEach(en => {
-    if (!en.isIntersecting) return;
-    en.target.classList.add("in"); io.unobserve(en.target);
-  }), { threshold: 0.15, rootMargin: "0px 0px -8% 0px" });
-  $$(".rule, .proj, .contact").forEach(el => revealIO.observe(el));
+  ["top", "projects", "bench", "quant", "lab", "contact"].forEach(id => { const el = document.getElementById(id); if (el) sectionIO.observe(el); });
 
   /* ---------------- Software renderer (Canvas 2D) ----------------
      Same pipeline as the Python project: model → world → view → projection →
@@ -92,7 +83,7 @@ import("./lab/chips/chips.js").then(({ mountChips }) => mountChips(document.quer
         ctx.save(); ctx.setLineDash([4, 4]); ctx.strokeStyle = "rgba(21,21,19,.28)"; ctx.lineWidth = 1;
         ctx.strokeRect(w / 2 - size / 2 + .5, h / 2 - size / 2 + .5, size, size);
         ctx.setLineDash([]); ctx.beginPath(); ctx.moveTo(w / 2 - 6, h / 2); ctx.lineTo(w / 2 + 6, h / 2); ctx.moveTo(w / 2, h / 2 - 6); ctx.lineTo(w / 2, h / 2 + 6); ctx.stroke();
-        ctx.fillStyle = "rgba(21,21,19,.5)"; ctx.font = "11px 'IBM Plex Mono', monospace";
+        ctx.fillStyle = "#535349"; ctx.font = "12px Archivo, Arial, sans-serif";
         ctx.fillText("(−1, −1)", w / 2 - size / 2 + 6, h / 2 + size / 2 - 8);
         const lbl = "(1, 1)"; ctx.fillText(lbl, w / 2 + size / 2 - ctx.measureText(lbl).width - 6, h / 2 - size / 2 + 16);
         ctx.restore();
@@ -210,7 +201,8 @@ import("./lab/chips/chips.js").then(({ mountChips }) => mountChips(document.quer
         </defs>
         ${polys}
         ${state.grain ? `<rect width="320" height="200" filter="url(#${id}n)" style="mix-blend-mode:overlay" />` : ""}
-        <text x="8" y="192" font-size="7" font-family="'IBM Plex Mono',monospace" fill="rgba(255,255,255,.75)">MAX DIST ${state.range.toFixed(2)}</text>
+        <rect x="4" y="178" width="85" height="18" fill="#14161A"/>
+        <text x="8" y="191" font-size="10" font-family="Archivo,Arial,sans-serif" fill="#ECE7DA">MAX DIST ${state.range.toFixed(2)}</text>
       </svg>`;
     };
     render();
@@ -321,7 +313,7 @@ import("./lab/chips/chips.js").then(({ mountChips }) => mountChips(document.quer
         let anno = null;
         const r = createRenderer(c, kind === "wire"
           ? { stage: 1, dots: true, scale: 0.4, speed: 0.16 }
-          : { stage: 3, scale: el.hasAttribute("data-big") ? 0.4 : 0.34, drag: el.hasAttribute("data-big"),
+          : { stage: 3, scale: el.hasAttribute("data-big") ? 0.6 : 0.5, drag: el.hasAttribute("data-big"),
               onFrame: f => {
                 if (!anno) return;
                 const vis = f.faces.filter(x => x.facing);
@@ -399,57 +391,39 @@ import("./lab/chips/chips.js").then(({ mountChips }) => mountChips(document.quer
     mountVisuals(content);
     return true;
   }
-  const withTransition = (fn, a, b) => {
-    if (!(motionOK() && document.startViewTransition && a && b)) { fn(); return; }
-    a.style.viewTransitionName = "project-media";
-    const vt = document.startViewTransition(() => { a.style.viewTransitionName = ""; b.style.viewTransitionName = "project-media"; fn(); });
-    vt.finished.finally(() => { a.style.viewTransitionName = ""; b.style.viewTransitionName = ""; });
-  };
+  let closeTimer = 0;
 
   function openDetail(slug, { trigger = null } = {}) {
     if (openSlug === slug) return;
-    const wasOpen = !!openSlug, card = cardFor(slug);
+    clearTimeout(closeTimer); detail.classList.remove("closing");
     const show = () => {
       if (!fillDetail(slug)) return;
       openSlug = slug;
       detail.hidden = false; detail.scrollTop = 0;
       document.body.classList.add("noscroll"); setInert(true);
       detail.classList.remove("entering"); void detail.offsetWidth; detail.classList.add("entering");
-      clearTimeout(enterTimer); enterTimer = setTimeout(() => detail.classList.remove("entering"), 1600);
+      clearTimeout(enterTimer); enterTimer = setTimeout(() => detail.classList.remove("entering"), 320);
       closeBtn.focus({ preventScroll: true });
     };
     if (trigger) returnFocus = trigger;
-    const fromCard = !wasOpen && trigger && card && card.contains(trigger);
     if (!$(`#tpl-${slug}`)) return;
-    if (fromCard && motionOK() && document.startViewTransition) {
-      const media = $(".plateVis", card);
-      media.style.viewTransitionName = "project-media";
-      const vt = document.startViewTransition(() => {
-        media.style.viewTransitionName = ""; show();
-        const t = $(".csMedia .plateVis", content); if (t) t.style.viewTransitionName = "project-media";
-      });
-      vt.finished.finally(() => { media.style.viewTransitionName = ""; const t = $(".csMedia .plateVis", content); if (t) t.style.viewTransitionName = ""; });
-    } else show();
+    show();
   }
 
   function closeDetail() {
     if (!openSlug) return;
     const slug = openSlug; openSlug = null;
+    clearTimeout(enterTimer); detail.classList.remove("entering"); detail.classList.add("closing");
     const card = cardFor(slug);
     const finish = () => {
-      detail.hidden = true; detail.classList.remove("entering");
+      detail.hidden = true; detail.classList.remove("entering", "closing");
       document.body.classList.remove("noscroll"); setInert(false);
       cleanup(); content.replaceChildren();
       const target = returnFocus && returnFocus.isConnected ? returnFocus : card ? $("a.more, .more a", card) : $(`a[href="#lab/${slug.slice(4)}"]`);
       target && target.focus({ preventScroll: true });
       returnFocus = null;
     };
-    const from = $(".csMedia .plateVis", content), to = card && $(".plateVis", card);
-    const r = to && to.getBoundingClientRect();
-    const onScreen = r && r.bottom > 0 && r.top < innerHeight;
-    if (onScreen) withTransition(finish, from, to);
-    else if (motionOK() && document.startViewTransition) document.startViewTransition(finish);
-    else finish();
+    closeTimer = setTimeout(finish, motionOK() ? 200 : 150);
   }
   function requestClose() {
     if (!openSlug) return;
@@ -476,7 +450,7 @@ import("./lab/chips/chips.js").then(({ mountChips }) => mountChips(document.quer
   });
   closeBtn.addEventListener("click", requestClose);
   addEventListener("keydown", e => {
-    if (!openSlug) return;
+    if (detail.hidden) return;
     if (e.key === "Escape") { requestClose(); return; }
     if (e.key !== "Tab") return;
     const els = focusables(); if (!els.length) return;

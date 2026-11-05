@@ -12,7 +12,7 @@ const drawings = {
   k: '<path d="M22 4h4v4h4v4h-4v4h-4v-4h-4V8h4zM17 18h14l3 7-6 10h-8l-6-10z"/><path d="M18 17h12" fill="none"/>'
 };
 const names = { p: "pawn", r: "rook", n: "knight", b: "bishop", q: "queen", k: "king" };
-function pieceSVG(piece) {
+export function pieceSVG(piece) {
   return `<svg viewBox="0 0 48 48" aria-hidden="true" class="chessPiece ${piece.color === "w" ? "pieceWhite" : "pieceBlack"}">${drawings[piece.type]}<path d="M13 36h22v5H13z"/></svg>`;
 }
 

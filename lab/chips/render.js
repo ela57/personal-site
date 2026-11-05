@@ -1,8 +1,8 @@
 const palette = [
-  { face: "#252521", rim: "#11110F", inlay: "#F2EFE7" },
-  { face: "#E9E5DA", rim: "#BDB6A5", inlay: "#3B3A36" },
-  { face: "#8E1F1F", rim: "#5C1616", inlay: "#F2EFE7" },
-  { face: "#3F5E4A", rim: "#263C2E", inlay: "#F2EFE7" }
+  { face: "#252521", rim: "#11110F", inlay: "#E4DCC6" },
+  { face: "#E4DCC6", rim: "#BDB6A5", inlay: "#16171A" },
+  { face: "#B3261E", rim: "#5C1616", inlay: "#E4DCC6" },
+  { face: "#2F6B4F", rim: "#263C2E", inlay: "#E4DCC6" }
 ];
 
 function face(ctx, chip, y, rim) {
@@ -24,8 +24,8 @@ function face(ctx, chip, y, rim) {
 
 export function drawScene(ctx, width, height, chips) {
   ctx.clearRect(0, 0, width, height);
-  ctx.fillStyle = "#E9E5DA"; ctx.fillRect(0, 0, width, height);
-  ctx.strokeStyle = "rgba(21,21,19,.16)"; ctx.lineWidth = 1;
+  ctx.fillStyle = "#14161A"; ctx.fillRect(0, 0, width, height);
+  ctx.strokeStyle = "#656354"; ctx.lineWidth = 1;
   ctx.beginPath(); ctx.moveTo(0, height - 25); ctx.lineTo(width, height - 25); ctx.stroke();
   const sorted = [...chips].sort((a, b) => a.position.y - b.position.y);
   for (const chip of sorted) {

@@ -6,7 +6,7 @@
   <title>Ethan Lam — Computer Engineering, Georgia Tech</title>
   <meta name="description" content="Ethan Lam — Computer Engineering at Georgia Tech ('28). A software 3D renderer, an HLSL thermal-vision shader, and a realized-volatility study of SPY." />
   <link rel="canonical" href="https://ethan-lam.com/" />
-  <meta name="theme-color" content="#F2EFE7" />
+  <meta name="theme-color" content="#14161A" />
   <meta property="og:type" content="website" />
   <meta property="og:title" content="Ethan Lam — Portfolio" />
   <meta property="og:description" content="Ethan Lam — Computer Engineering at Georgia Tech ('28). GPU/graphics programming and quantitative systems." />
@@ -16,228 +16,91 @@
   <link rel="icon" type="image/png" href="/favicon.png">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
   <link rel="preload" href="assets/fonts/archivo-var.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="assets/fonts/source-serif-4-var.woff2" as="font" type="font/woff2" crossorigin>
-  <script>document.documentElement.classList.add("js");</script>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
-
   <header class="nav" id="nav">
     <a class="brand" href="#top" aria-label="Ethan Lam — back to top">Ethan Lam</a>
-    <p class="navMeta" aria-hidden="true">Computer Engineering · Georgia Tech ’28</p>
-    <nav aria-label="Primary">
-      <ul class="navLinks">
-        <li><a href="#projects" data-section="projects">Work</a></li>
-        <li><a href="#lab" data-section="lab">Lab</a></li>
-        <li><a href="#about" data-section="about">About</a></li>
-        <li><a href="#contact" data-section="contact">Contact</a></li>
-        <li><a href="mailto:ethanlam52@gmail.com?subject=R%C3%A9sum%C3%A9%20request" title="Résumé available on request by email">Résumé</a></li>
-      </ul>
-    </nav>
+    <nav aria-label="Primary"><ul class="navLinks"><li><a href="#projects" data-section="projects">Graphics</a></li><li><a href="#quant" data-section="quant">Quant</a></li><li><a href="#lab" data-section="lab">Lab</a></li><li><a href="#contact" data-section="contact">Contact</a></li></ul></nav>
   </header>
-
   <main id="main">
-    <!-- § 01 — HERO / INDEX -->
-    <section class="hero grid" id="top" aria-labelledby="heroTitle">
-      <p class="sec mono"><span>§ 01</span> Index</p>
-      <p class="heroWho mono">Atlanta, GA</p>
-
-      <h1 class="heroTitle" id="heroTitle" aria-label="Ethan Lam">
-        <span class="hl hl1" aria-hidden="true"><span class="hlIn"><span class="heroLetter">E</span><span class="heroLetter">t</span><span class="heroLetter">h</span><span class="heroLetter">a</span><span class="heroLetter">n</span></span></span>
-        <span class="hl hl2" aria-hidden="true"><span class="hlIn"><span class="heroLetter">L</span><span class="heroLetter">a</span><span class="heroLetter">m</span></span></span>
-      </h1>
-
-      <figure class="heroFig" aria-label="Figure 0: a wireframe icosahedron drawn by a JavaScript port of my software renderer">
-        <div class="heroCanvas" data-vis="wire"></div>
-        <figcaption class="mono"><b>Fig. 0</b> 12 vertices, 20 faces, projected by hand. Drag to turn it.</figcaption>
-      </figure>
-
-      <div class="heroIntro">
-        <p>I’m Ethan, a computer engineering student at Georgia Tech. I like taking systems apart to see the mechanism: a 3D renderer with no graphics API, a thermal-vision shader in HLSL, and whether volatility says anything about tomorrow’s SPY return. <span class="aside">(Mostly, it doesn’t.)</span></p>
-        <nav class="heroRefs mono" aria-label="Featured projects"><a href="#work-renderer" aria-label="Graphics projects 01 and 02">01·02 ↘</a><a href="#work-vol" aria-label="Markets project 03">03 ↘</a></nav>
+    <section class="hero" id="top" aria-label="Ethan Lam and historical SPY price board">
+      <div class="priceBoard" data-board>
+        <canvas tabindex="0" aria-label="Historical SPY adjusted prices, 20 and 100-day moving averages. Drag horizontally to scrub dates; arrow keys step one day, Home and End jump to endpoints."></canvas>
+        <p class="srOnly" data-board-readout aria-live="polite" aria-atomic="true">Loading bundled SPY prices…</p>
+        <div class="boardFoot"><p><span class="legend price"></span> SPY · historical <span class="legend fast"></span> SMA 20 <span class="legend slow"></span> SMA 100</p><p>Drag to scrub · ← → one session</p><p>Buy / sell flags · next-close fills</p></div>
       </div>
-
-      <ol class="index" aria-label="Project index">
-        <li><a href="#work-renderer"><span class="n">01</span><span class="t">Software 3D renderer</span><span class="k">Graphics</span><span class="s">Python · NumPy · Matplotlib</span><span class="arr" aria-hidden="true">↘</span></a></li>
-        <li><a href="#work-thermal"><span class="n">02</span><span class="t">Thermal-vision shader</span><span class="k">GPU</span><span class="s">Unity · HLSL · C#</span><span class="arr" aria-hidden="true">↘</span></a></li>
-        <li><a href="#work-vol"><span class="n">03</span><span class="t">Realized volatility &amp; SPY</span><span class="k">Quant research</span><span class="s">pandas · statsmodels</span><span class="arr" aria-hidden="true">↘</span></a></li>
-      </ol>
+      <div class="identity">
+        <div class="badge">
+          <h1 aria-label="Ethan Lam"><span class="badgeCode" aria-hidden="true"><span class="heroLetter">E</span><span class="heroLetter">L</span><span class="heroLetter">M</span></span><span class="badgeName">Ethan Lam</span></h1>
+          <p>Georgia Tech · Computer Engineering ’28<br>GTSF · Quant sector project manager</p>
+        </div>
+        <nav class="stubs" aria-label="Project tickets">
+          <a href="#project/renderer"><span class="stubNum">01</span><h2>Renderer</h2><p>Python · NumPy<br>Matplotlib</p><span class="ticketAction">Open ticket <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h16m-6-6 6 6-6 6"/></svg></span></a>
+          <a href="#project/thermal"><span class="stubNum">02</span><h2>Shader</h2><p>Unity · HLSL · C#<br>Depth → heat</p><span class="ticketAction">Open ticket <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h16m-6-6 6 6-6 6"/></svg></span></a>
+          <a href="#project/vol"><span class="stubNum">03</span><h2>Volatility</h2><p>SPY · 2000–2025<br>pandas · statsmodels</p><span class="ticketAction">Open ticket <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h16m-6-6 6 6-6 6"/></svg></span></a>
+        </nav>
+      </div>
+      <p class="boardSource">Historical, not live. Yahoo Finance adjusted close (splits + dividends) · retrieved 2026-10-27 via yfinance. <a href="#lab/strategy">Inspect the model</a></p>
     </section>
 
-    <!-- § 02 — SELECTED WORK -->
-    <section class="work" id="projects" aria-labelledby="workTitle">
-      <header class="secHead grid rule">
-        <p class="sec mono"><span>§ 02</span> Selected work</p>
-        <h2 id="workTitle" class="secTitle">Three projects, each<br>opened up on its own page.</h2>
-        <p class="secNote mono">Hover a figure to read its annotations.<br>Select it for the full case study.</p>
-      </header>
-
-      <!-- 01 — wide spread, visual left -->
-      <article class="proj proj--renderer grid" id="work-renderer" data-project="renderer">
-        <figure class="plate plate--light" data-annotate="renderer" style="--ar:16/10">
-          <div class="plateVis" data-vis="renderer"></div>
-          <ol class="notes">
-            <li style="--lx:5%;--ly:10%" data-side="r" data-key="vertex"><b>1</b> Perspective divide: <i>x/z, y/z</i> → normalized device coordinates</li>
-            <li style="--lx:95%;--ly:16%" data-side="l" data-key="lit"><b>2</b> Diffuse shading: brightness = max(0, <i>n·l</i>)</li>
-            <li style="--lx:95%;--ly:88%" data-side="l" data-key="far"><b>3</b> Painter’s order: farthest faces drawn first · <span data-live="culled">10</span> back faces culled</li>
-          </ol>
-          <figcaption class="mono"><span><b>Fig. 1</b> Shaded output, culled and depth-sorted.</span><button class="annoBtn" type="button" aria-pressed="false">Annotate</button></figcaption>
+    <section class="field graphics" id="projects" aria-labelledby="graphicsTitle">
+      <header class="fieldHead"><h2 id="graphicsTitle">Graphics</h2><p>From vertices to pixels.<br>Every stage, exposed.</p></header>
+      <article class="proj ticket rendererTicket" id="work-renderer" data-project="renderer">
+        <div class="ticketTop"><h3>A renderer.<br>No graphics API.</h3><span class="projectNumber">01</span></div>
+        <figure class="plate" data-annotate="renderer">
+          <div class="plateVis" data-vis="renderer" data-big></div>
+          <ol class="notes"><li style="--lx:6%;--ly:14%" data-side="r" data-key="vertex"><b>1</b> Perspective divide: x/z, y/z</li><li style="--lx:94%;--ly:28%" data-side="l" data-key="lit"><b>2</b> Diffuse light: max(0, n·l)</li><li style="--lx:94%;--ly:84%" data-side="l" data-key="far"><b>3</b> <span data-live="culled">10</span> back faces culled</li></ol>
+          <figcaption><span>Live JS port · drag to rotate</span><button class="annoBtn" type="button" aria-pressed="false">Annotate</button></figcaption>
         </figure>
-        <div class="projText">
-          <p class="projNo" aria-hidden="true">01</p>
-          <h3 class="projTitle">A renderer with no graphics&nbsp;API</h3>
-          <p class="projDesc">Every stage of the pipeline written by hand in Python and NumPy — transforms, perspective divide, backface culling, NDC-space clipping, depth sorting and diffuse light — then drawn with Matplotlib.</p>
-          <dl class="meta mono"><div><dt>Area</dt><dd>Graphics</dd></div><div><dt>Stack</dt><dd>Python, NumPy, Matplotlib</dd></div><div><dt>Type</dt><dd>Personal project</dd></div></dl>
-          <a class="more" href="#project/renderer"><span>Read case study</span><span aria-hidden="true">→</span></a>
-        </div>
+        <div class="ticketBottom"><p>Transforms, perspective divide, culling, clipping, depth sorting and diffuse light. Written by hand in Python.</p><a class="more" href="#project/renderer">Open renderer ticket <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h16m-6-6 6 6-6 6"/></svg></a></div>
+        <p class="ticketStack">Python / NumPy / Matplotlib</p>
         <a class="cover" href="#project/renderer" tabindex="-1" aria-hidden="true"></a>
       </article>
-
-      <!-- 02 — narrow text left, visual offset right and lower -->
-      <article class="proj proj--thermal grid" id="work-thermal" data-project="thermal">
-        <div class="projText">
-          <p class="projNo" aria-hidden="true">02</p>
-          <h3 class="projTitle">Seeing depth as&nbsp;heat</h3>
-          <p class="projDesc">A depth-based thermal-vision post-process in HLSL, exposed as a Unity PostProcessing volume so it tunes from the editor like a built-in effect.</p>
-          <dl class="meta mono"><div><dt>Area</dt><dd>GPU programming</dd></div><div><dt>Stack</dt><dd>Unity, HLSL, C#</dd></div></dl>
-          <a class="more" href="#project/thermal"><span>Read case study</span><span aria-hidden="true">→</span></a>
-        </div>
-        <figure class="plate plate--dark" data-annotate="thermal" style="--ar:16/10">
+      <article class="proj ticket shaderTicket" id="work-thermal" data-project="thermal">
+        <div class="ticketTop"><h3>Depth,<br>seen as heat.</h3><span class="projectNumber">02</span></div>
+        <figure class="plate plate--dark" data-annotate="thermal">
           <div class="plateVis" data-vis="thermal"></div>
-          <ol class="notes">
-            <li style="--lx:4%;--ly:9%" data-side="r" data-at=".62,.16"><b>1</b> Past max distance: clamped to the coldest colour</li>
-            <li style="--lx:96%;--ly:36%" data-side="l" data-at=".725,.31"><b>2</b> Sobel operator on the depth buffer → outlines</li>
-            <li style="--lx:4%;--ly:52%" data-side="r" data-at=".46,.83"><b>3</b> Nearest surface → hot end of the ramp</li>
-          </ol>
-          <figcaption class="mono"><span><b>Fig. 2</b> Browser illustration of the effect.</span><button class="annoBtn" type="button" aria-pressed="false">Annotate</button></figcaption>
+          <ol class="notes"><li style="--lx:6%;--ly:14%" data-side="r" data-at=".62,.16"><b>1</b> Far surfaces → cold</li><li style="--lx:94%;--ly:38%" data-side="l" data-at=".725,.31"><b>2</b> Sobel edge outlines</li></ol>
+          <figcaption><span>Browser illustration of the Unity effect</span><button class="annoBtn" type="button" aria-pressed="false">Annotate</button></figcaption>
         </figure>
+        <div class="ticketBottom"><p>A thermal-vision post-process. Depth becomes heat; silhouettes emerge through a Sobel filter and procedural grain.</p><a class="more" href="#project/thermal">Open shader ticket <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h16m-6-6 6 6-6 6"/></svg></a></div>
+        <p class="ticketStack">Unity / HLSL / C#</p>
         <a class="cover" href="#project/thermal" tabindex="-1" aria-hidden="true"></a>
       </article>
+      <section class="benchSec" id="bench" aria-labelledby="benchTitle"><header class="benchHeading"><h3 id="benchTitle">Take the pipeline apart.</h3><p>Cull. Sort. Shade. Change one thing and watch what breaks.</p></header><div class="benchMount" data-bench></div></section>
+    </section>
 
-      <!-- 03 — chart + oversized statistic -->
-      <article class="proj proj--vol grid" id="work-vol" data-project="vol">
-        <figure class="plate plate--paper" data-annotate="vol" style="--ar:768/418">
-          <div class="plateVis">
-            <picture><source srcset="assets/projects/realized-vol-equity.webp" type="image/webp"><img src="assets/projects/realized-vol-equity.png" width="768" height="418" alt="Equity curves over the 2022–2025 test period: buy-and-hold SPY versus the regression signal, growth of $1." loading="lazy" decoding="async"></picture>
-          </div>
-          <ol class="notes">
-            <li style="--lx:30%;--ly:84%" data-side="r" data-at=".44,.56"><b>1</b> Signal held up through the 2022 drawdown</li>
-            <li style="--lx:62%;--ly:28%" data-side="l" data-at=".925,.13"><b>2</b> Sharpe 0.66 vs 0.55 buy-and-hold</li>
-          </ol>
-          <figcaption class="mono"><span><b>Fig. 3</b> Growth of $1 on the held-out test period (from the notebook).</span><button class="annoBtn" type="button" aria-pressed="false">Annotate</button></figcaption>
-        </figure>
-        <div class="projText">
-          <p class="projNo" aria-hidden="true">03</p>
-          <p class="bigStat"><span class="mono">R² =</span>0.000</p>
-          <h3 class="projTitle">Does today’s volatility predict tomorrow’s&nbsp;return?</h3>
-          <p class="projDesc">Four realized-volatility estimators on SPY daily data from 2000. On its own, volatility explains none of the next day’s return; with lagged return added there’s a small, significant mean-reversion effect.</p>
-          <dl class="meta mono"><div><dt>Area</dt><dd>Quant research</dd></div><div><dt>Stack</dt><dd>pandas, statsmodels, yfinance</dd></div></dl>
-          <p class="more">
-            <a href="#project/vol"><span>Read case study</span><span aria-hidden="true">→</span></a>
-          </p>
-        </div>
+    <section class="field quant" id="quant" aria-labelledby="quantTitle">
+      <header class="fieldHead"><h2 id="quantTitle">Quant</h2><p>A hypothesis is not an edge.<br>Test it out of sample.</p></header>
+      <article class="proj ticket volTicket" id="work-vol" data-project="vol">
+        <div class="ticketTop"><h3>Can volatility predict<br>tomorrow’s return?</h3><span class="projectNumber">03</span></div>
+        <div class="volLayout"><figure class="plate"><div class="plateVis"><picture><source srcset="assets/projects/realized-vol-equity.webp" type="image/webp"><img src="assets/projects/realized-vol-equity.png" width="768" height="418" alt="Notebook equity curves, 2022–2025: buy-and-hold SPY versus the regression signal." loading="lazy"></picture></div><figcaption>Growth of $1 · held-out test period · from the notebook</figcaption></figure>
+        <div class="volFinding"><p class="resultValue">0.000</p><p>R²: next-day return on volatility alone.</p><p>Four estimators. SPY daily data from 2000. Volatility clusters; tomorrow’s returns resist prediction.</p></div></div>
+        <div class="ticketBottom"><p>Adding lagged return uncovers mild mean reversion. Signal Sharpe: 0.66, versus 0.55 buy-and-hold — before accounting for substantial turnover.</p><a class="more" href="#project/vol">Open research ticket <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h16m-6-6 6 6-6 6"/></svg></a></div>
+        <p class="ticketStack">2000–2025 / Python / pandas / statsmodels / yfinance</p>
         <a class="cover" href="#project/vol" tabindex="-1" aria-hidden="true"></a>
       </article>
+      <div class="role"><h3>Building the system<br>around the signal.</h3><div><h4>GTSF Investment Committee</h4><p>Quant sector project manager · Aug 2025–present</p><p>Built a central portfolio controller for allocation, rebalancing and risk constraints. Reworked the backtesting pipeline for reproducible, out-of-sample validation. Led the integration of two independent strategies.</p></div></div>
     </section>
 
-    <!-- § 03 — BENCH (interactive demonstration) -->
-    <section class="benchSec" id="bench" aria-labelledby="benchTitle">
-      <header class="secHead grid rule">
-        <p class="sec mono"><span>§ 03</span> Bench</p>
-        <h2 id="benchTitle" class="secTitle">The renderer, with the<br>lid&nbsp;off.</h2>
-        <p class="secLede">Step through the same pipeline as project 01. Turn off culling, then sorting, and watch visibility break — then work out why a convex mesh only needs one of them.</p>
-      </header>
-      <div class="benchMount" data-bench></div>
-    </section>
-
-    <section class="labSec" id="lab" aria-labelledby="labTitle">
-      <header class="secHead grid rule">
-        <p class="sec mono"><span>§ Lab</span> Experiments</p>
-        <h2 class="secTitle" id="labTitle">Think with your hands.</h2>
-        <p class="secNote mono">Small systems. Playable ideas.</p>
-      </header>
-      <ol class="labIndex">
-        <li class="labEntry"><a href="#lab/chess" class="grid"><span class="mono">01 / CHESS</span><h3>Find the forcing line.</h3><p>Twelve chess puzzles. A board, a few clues, and a move that changes everything.</p><span class="mono">Open experiment ↗</span></a></li>
-        <li class="labEntry"><a href="#lab/strategy" class="grid"><span class="mono">02 / STRATEGY SANDBOX</span><h3>Test the signal.</h3><p>A moving-average model. Historical prices, explicit assumptions, and the cost of being wrong.</p><span class="mono">Open experiment ↗</span></a></li>
-      </ol>
-    </section>
-
-    <section class="experimentsSec" id="experiments" aria-labelledby="experimentsTitle">
-      <header class="secHead grid rule">
-        <p class="sec mono"><span>§ Experiments</span> Chip waterfall</p>
-        <h2 class="secTitle" id="experimentsTitle">Let the chips fall.</h2>
-        <p class="secNote mono">A study in collisions and momentum.</p>
-      </header>
-      <figure class="chipPlate grid">
-        <canvas class="chipCanvas" aria-label="Decorative chip waterfall: ivory, charcoal, red and green rigid bodies fall and settle in a contained plate. Use the buttons to release, clear or replay the scene."></canvas>
-        <figcaption class="mono">Fig. — 2D rigid bodies (Matter.js), drawn in 2.5D</figcaption>
-        <div class="chipControls mono"><button type="button" data-chip-action="release">Release chips</button><button type="button" data-chip-action="reset">Reset</button><button type="button" data-chip-action="replay">Replay</button></div>
-        <p class="chipStatus mono" data-chip-status role="status">A small study in collisions and momentum.</p>
-      </figure>
-    </section>
-
-    <!-- § 04 — ABOUT -->
-    <section class="about grid rule" id="about" aria-labelledby="aboutTitle">
-      <p class="sec mono"><span>§ 04</span> About</p>
-      <h2 class="aboutTitle" id="aboutTitle">I want to know what the abstraction is&nbsp;hiding.</h2>
-      <div class="aboutText">
-        <p>I study computer engineering at Georgia Tech, class of 2028, on the Cybersecurity and Distributed Systems &amp; Software Design threads. The projects I end up caring about sit where hardware, math and software meet — rendering pipelines and trading infrastructure.</p>
-        <p>Outside of class: poker, basketball, pickleball, golf, rock climbing, and travelling when I get the chance.</p>
+    <section class="field labSec" id="lab" aria-labelledby="labTitle">
+      <header class="fieldHead"><h2 id="labTitle">Lab</h2><p>Less description.<br>More hands on.</p></header>
+      <div class="labPair">
+        <article class="labPreview chessPreview"><div class="labPreviewHead"><h3>Find the<br>forcing line.</h3><a href="#lab/chess">Open puzzles <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h16m-6-6 6 6-6 6"/></svg></a></div><div class="previewChess" data-preview-chess role="img" aria-label="Live preview of a beginner chess puzzle"></div><div class="previewFoot"><p data-preview-chess-status>12 puzzles · 3 difficulties</p><button type="button" data-preview-move>Play the line</button></div></article>
+        <article class="labPreview strategyPreview"><div class="labPreviewHead"><h3>Test the<br>signal.</h3><a href="#lab/strategy">Open sandbox <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h16m-6-6 6 6-6 6"/></svg></a></div><canvas class="previewChart" data-preview-chart role="img" aria-label="Live SPY moving-average strategy equity preview"></canvas><p class="previewResult" data-preview-result>Loading bundled SPY history…</p><div class="previewFoot"><p>20/100 SMA · 5 bps · next-close fills</p><button type="button" data-preview-toggle>Show prices</button></div><p class="previewDisclaimer">Educational historical simulation. Not investment advice.</p></article>
       </div>
-
-      <div class="ledger" id="experience">
-        <h3 class="ledgerHead mono">Experience</h3>
-        <div class="entry">
-          <p class="when mono">Aug 2025 –<br>present</p>
-          <div>
-            <h4>Project Manager, Quant Sector</h4>
-            <p class="org">GTSF Investment Committee · Georgia Tech Student Foundation</p>
-            <ul>
-              <li>Built a central portfolio controller in Python for capital allocation, rebalancing and risk constraints.</li>
-              <li>Reworked the trading scripts and backtesting pipeline so strategies are validated out of sample and reproducible.</li>
-              <li>Led the integration of two independent strategies into one production-ready system.</li>
-            </ul>
-          </div>
-        </div>
-        <div class="entry">
-          <p class="when mono">2028</p>
-          <div>
-            <h4>B.S. Computer Engineering</h4>
-            <p class="org">Georgia Institute of Technology</p>
-          </div>
-        </div>
-      </div>
-
-      <dl class="toolbox" id="skills">
-        <div><dt class="mono">Languages</dt><dd>Python, Java, C, C#, HLSL</dd></div>
-        <div><dt class="mono">Tools</dt><dd>Unity, NumPy, pandas, statsmodels</dd></div>
-        <div><dt class="mono">Practice</dt><dd>Statistics, data analysis, financial modelling, research writing</dd></div>
-      </dl>
+      <section id="experiments" class="chipScene" aria-labelledby="chipsTitle"><header class="chipHeading"><h3 id="chipsTitle">Let the chips fall.</h3><p>A study in collisions and momentum.</p></header><figure class="chipPlate grid"><canvas class="chipCanvas" aria-label="Decorative rigid-body chip waterfall. Release a wave, drag a chip, or replay the scene."></canvas><figcaption>Fig. — 2D rigid bodies (Matter.js), drawn in 2.5D</figcaption><div class="chipControls"><button type="button" data-chip-action="release">Release chips</button><button type="button" data-chip-action="reset">Reset</button><button type="button" data-chip-action="replay">Replay</button></div><p class="chipStatus" data-chip-status role="status">A small study in collisions and momentum.</p></figure></section>
     </section>
 
-    <!-- § 05 — CONTACT -->
-    <section class="contact grid rule" id="contact" aria-labelledby="contactTitle">
-      <p class="sec mono"><span>§ 05</span> Contact</p>
-      <h2 class="contactTitle" id="contactTitle">Internships, research, or a question about one of these projects — email is the fastest way to reach&nbsp;me.</h2>
-      <a class="email" href="mailto:ethanlam52@gmail.com"><span>ethanlam52</span><span>@gmail.com</span></a>
-      <ul class="elsewhere mono">
-        <li><a href="https://www.linkedin.com/in/ethanlam7/" target="_blank" rel="noopener noreferrer">LinkedIn ↗</a></li>
-        <li><a href="mailto:ethanlam52@gmail.com?subject=R%C3%A9sum%C3%A9%20request">Résumé, on request</a></li>
-      </ul>
-    </section>
+    <section class="contact" id="contact" aria-labelledby="contactTitle"><div class="contactHead"><h2 id="contactTitle">The clearing desk.</h2><p>Internships, research, or a question about the work.<br>Email is the fastest way to reach me.</p></div><a class="email" href="mailto:ethanlam52@gmail.com">ethanlam52<wbr>@gmail.com</a><ul class="elsewhere"><li><a href="https://www.linkedin.com/in/ethanlam7/" target="_blank" rel="noopener noreferrer">LinkedIn</a></li><li><a href="mailto:ethanlam52@gmail.com?subject=R%C3%A9sum%C3%A9%20request">Request résumé</a></li></ul></section>
   </main>
-
-  <footer class="foot mono">
-    <p>© <span id="year">2026</span> Ethan Lam</p>
-    <p>Set in Archivo, Source Serif 4 &amp; IBM Plex Mono. Static HTML, CSS and JS.</p>
-    <p><a href="#top">Back to top ↑</a></p>
-  </footer>
-
+  <footer class="foot"><p>© <span id="year">2026</span> Ethan Lam</p><p>Archivo · Static HTML / CSS / JS</p><a href="#top">Back to the board</a></footer>
   <!-- CASE STUDY (hash routed: #project/<slug>) -->
   <div class="detail" id="detail" role="dialog" aria-modal="true" aria-labelledby="detailTitle" hidden>
     <div class="detailBar mono">
-      <button class="back" id="detailClose" type="button"><span aria-hidden="true">←</span> Index</button>
+      <button class="back" id="detailClose" type="button"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M20 12H4m6-6-6 6 6 6"/></svg> Close ticket</button>
       <p class="detailCount" id="detailCount"></p>
       <a class="detailNext" id="detailNext" href="#"></a>
     </div>
@@ -247,7 +110,6 @@
   <!-- Case-study templates. Each fact here comes from the project itself. -->
   <template id="tpl-renderer">
     <header class="csHead grid">
-      <p class="sec mono"><span>01</span> Graphics · Personal project</p>
       <h2 class="csTitle" id="detailTitle">A renderer with no graphics&nbsp;API</h2>
     </header>
     <figure class="plate plate--light csMedia"><div class="plateVis" data-vis="renderer" data-big></div></figure>
@@ -257,9 +119,9 @@
       </aside>
       <div class="csText">
         <p class="csLead">A 3D renderer built from scratch without any 3D graphics API. Everything from the transformation matrices to the final shaded triangles is computed in Python and NumPy, then drawn with Matplotlib.</p>
-        <h3><span class="mono">A</span> Problem</h3>
+        <h3>Problem</h3>
         <p>Graphics APIs hide the pipeline behind a draw call. The goal was to write each stage myself, so that every transform, test and colour on screen is something I computed.</p>
-        <h3><span class="mono">B</span> Pipeline</h3>
+        <h3>Pipeline</h3>
         <ol class="steps">
           <li><b>World, view and projection transforms.</b> Model vertices move into camera space and are projected.</li>
           <li><b>Perspective divide.</b> Dividing by depth maps them into normalized device coordinates.</li>
@@ -267,9 +129,9 @@
           <li><b>NDC-space z-clipping and z-sorting.</b> Geometry outside the depth range is clipped; the rest is sorted and drawn far to near (painter’s algorithm).</li>
           <li><b>Diffuse lighting</b> from a directional light, per face.</li>
         </ol>
-        <h3><span class="mono">C</span> Tradeoffs in the design</h3>
+        <h3>Tradeoffs in the design</h3>
         <p>Painter’s algorithm sorts whole faces instead of keeping a per-pixel depth buffer. That fits an output made of filled polygons, but it can’t resolve faces that intersect or overlap in a cycle. Clipping after the perspective divide turns the depth test into a simple range comparison in NDC.</p>
-        <h3><span class="mono">D</span> Try the pipeline</h3>
+        <h3>Try the pipeline</h3>
         <p>The bench below re-implements the same stages in JavaScript and Canvas 2D. It is an illustration for the web; the original renderer is Python.</p>
       </div>
     </div>
@@ -278,7 +140,6 @@
 
   <template id="tpl-thermal">
     <header class="csHead grid">
-      <p class="sec mono"><span>02</span> GPU programming · Personal project</p>
       <h2 class="csTitle" id="detailTitle">Seeing depth as&nbsp;heat</h2>
     </header>
     <figure class="plate plate--dark csMedia" style="--ar:16/10"><div class="plateVis" data-vis="thermal" data-interactive></div></figure>
@@ -288,15 +149,15 @@
       </aside>
       <div class="csText">
         <p class="csLead">A custom depth-based thermal-vision effect written in HLSL and exposed through a Unity PostProcessing volume, so it can be tuned from the editor like any built-in effect.</p>
-        <h3><span class="mono">A</span> How it works</h3>
+        <h3>How it works</h3>
         <ol class="steps">
           <li><b>Depth → heat.</b> Scene depth is remapped onto a cold-to-hot colour ramp. The max-distance range is adjustable; anything beyond it clamps to the coldest colour.</li>
           <li><b>Edge outlining.</b> A Sobel operator over the depth buffer finds silhouettes and draws them as outlines.</li>
           <li><b>Film grain.</b> A procedural grain pass adds the noise of a real thermal sensor.</li>
         </ol>
-        <h3><span class="mono">B</span> Why depth</h3>
+        <h3>Why depth</h3>
         <p>Because heat is derived from the depth buffer, the effect is a pure screen-space pass: it needs no per-object temperature data and works on any scene it is applied to.</p>
-        <h3><span class="mono">C</span> Try it</h3>
+        <h3>Try it</h3>
         <div class="controls mono" data-demo="thermal">
           <label class="range">Max distance <input type="range" min="0.25" max="1" step="0.01" value="0.7" data-opt="range"> <output data-out="range">0.70</output></label>
           <label class="check"><input type="checkbox" data-opt="edges" checked> Edges</label>
@@ -309,7 +170,6 @@
 
   <template id="tpl-vol">
     <header class="csHead grid">
-      <p class="sec mono"><span>03</span> Quantitative research</p>
       <h2 class="csTitle" id="detailTitle">Does today’s volatility predict tomorrow’s&nbsp;return?</h2>
     </header>
     <figure class="plate plate--paper csMedia" style="--ar:768/418"><div class="plateVis"><picture><source srcset="assets/projects/realized-vol-equity.webp" type="image/webp"><img src="assets/projects/realized-vol-equity.png" width="768" height="418" alt="Equity curves over the test period: buy-and-hold SPY versus the regression signal." decoding="async"></picture></div></figure>
@@ -324,20 +184,20 @@
           <div><dt>Lagged-return coefficient (p = 0.005)</dt><dd>−0.063</dd></div>
           <div><dt>Signal Sharpe on the test period (buy-and-hold 0.55)</dt><dd>0.66</dd></div>
         </dl>
-        <h3><span class="mono">A</span> Method</h3>
+        <h3>Method</h3>
         <ol class="steps">
           <li>Realized volatility from four estimators: close-to-close, Parkinson, Garman–Klass and Rogers–Satchell.</li>
           <li>Correlation and quintile-bucket analysis of volatility against next-day returns.</li>
           <li>OLS regressions with a time-based train / validation / test split, then adding lagged return and a volatility-of-volatility control.</li>
           <li>A simple long/short signal from the fitted model, backtested on the held-out test period.</li>
         </ol>
-        <h3><span class="mono">B</span> Findings</h3>
+        <h3>Findings</h3>
         <p>Volatility clusters and is predictable; next-day returns are not. Correlation between every estimator and next-day return is near zero, and volatility alone has no explanatory power (R² = 0.000). Adding lagged return and volatility change lifts R² to 0.004, with a significant negative lagged-return coefficient — mild mean reversion.</p>
         <figure class="inFig">
           <picture><source srcset="assets/projects/realized-vol-rolling.webp" type="image/webp"><img src="assets/projects/realized-vol-rolling.png" width="749" height="407" alt="63-day rolling means of SPY return and four realized-volatility estimators, 2000–2025. The estimators move together, with peaks in 2008 and 2020." loading="lazy" decoding="async"></picture>
           <figcaption class="mono"><b>Fig. 3b</b> 63-day rolling volatility. The four estimators track each other closely, spiking in 2008 and 2020.</figcaption>
         </figure>
-        <h3><span class="mono">C</span> Outcome, and the catch</h3>
+        <h3>Outcome, and the catch</h3>
         <p>Out of sample the signal reached a Sharpe of 0.66 against 0.55 for buy-and-hold — but with about 49% average daily turnover, so transaction costs would matter in practice.</p>
       </div>
     </div>
@@ -352,7 +212,7 @@
           <li><button type="button" data-stage="0" aria-pressed="false"><span class="mono">01</span> Vertices<small>world → view → projection → ÷ z</small></button></li>
           <li><button type="button" data-stage="1" aria-pressed="false"><span class="mono">02</span> Wireframe<small>every edge, front and back</small></button></li>
           <li><button type="button" data-stage="2" aria-pressed="false"><span class="mono">03</span> Fill<small>flat faces, culling + sort</small></button></li>
-          <li><button type="button" data-stage="3" aria-pressed="true"><span class="mono">03</span> Shade<small>diffuse: max(0, n·l)</small></button></li>
+          <li><button type="button" data-stage="3" aria-pressed="true"><span class="mono">04</span> Shade<small>diffuse: max(0, n·l)</small></button></li>
         </ol>
         <div class="benchControls mono">
           <label class="check"><input type="checkbox" data-opt="cull" checked> Backface culling</label>
@@ -376,11 +236,11 @@
   </template>
 
   <template id="tpl-lab-chess">
-    <header class="csHead grid"><p class="sec mono"><span>§ Lab / 01</span> Chess puzzles</p><h2 class="csTitle" id="detailTitle">Find the forcing line.</h2></header>
+    <header class="csHead grid"><h2 class="csTitle" id="detailTitle">Find the forcing line.</h2></header>
     <div class="chessMount" data-chess><p role="status">Loading the board…</p></div>
   </template>
   <template id="tpl-lab-strategy">
-    <header class="csHead grid"><p class="sec mono"><span>§ Lab / 02</span> Strategy sandbox</p><h2 class="csTitle" id="detailTitle">Test the signal.</h2></header>
+    <header class="csHead grid"><h2 class="csTitle" id="detailTitle">Test the signal.</h2></header>
     <div class="strategyMount" data-strategy><p role="status">Loading the sandbox…</p></div>
   </template>
   <script src="main.js" type="module"></script>

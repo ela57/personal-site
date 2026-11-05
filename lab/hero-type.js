@@ -1,14 +1,13 @@
 export function mountHeroType(hero) {
   if (!hero) return () => {};
   const reduced = matchMedia("(prefers-reduced-motion: reduce)");
-  const fine = matchMedia("(hover: hover) and (pointer: fine)");
   const controller = new AbortController();
   const options = { signal: controller.signal };
   const letters = [...hero.querySelectorAll(".heroLetter")].map(el => ({
     el, cx: 0, cy: 0, size: 1,
     value: [0, 0, 0], velocity: [0, 0, 0], target: [0, 0, 0]
   }));
-  let frame = 0, last = 0, visible = false, entered = false, pointer = null;
+  let frame = 0, last = 0, visible = false, pointer = null;
   const allowed = () => visible && !document.hidden && !reduced.matches;
 
   function reset() {
@@ -50,8 +49,8 @@ export function mountHeroType(hero) {
       const dy = pointer ? (s.cy - pointer.y) / s.size : 0;
       const distance = Math.hypot(dx, dy);
       const influence = pointer ? Math.max(0, 1 - distance / 1.25) : 0;
-      s.target = [dx / (distance || 1) * influence * .02,
-        dy / (distance || 1) * influence * .05, influence * .055];
+      s.target = [dx / (distance || 1) * influence * .008,
+        dy / (distance || 1) * influence * .018, influence * .025];
       for (let i = 0; i < 3; i++) {
         s.velocity[i] += (240 * (s.target[i] - s.value[i]) - 25 * s.velocity[i]) * dt;
         s.value[i] += s.velocity[i] * dt;
@@ -70,14 +69,6 @@ export function mountHeroType(hero) {
   function wake() {
     if (allowed() && !frame) frame = requestAnimationFrame(tick);
   }
-  function enter() {
-    if (entered || !allowed()) return;
-    entered = true;
-    if (!fine.matches) {
-      letters.forEach((s, i) => { s.value[1] = .045; s.velocity[1] = -.04 * (i + 1); });
-      wake();
-    }
-  }
   hero.addEventListener("pointermove", e => {
     if (!["mouse", "pen"].includes(e.pointerType) || !allowed()) return;
     pointer = { x: e.clientX + scrollX, y: e.clientY + scrollY };
@@ -88,13 +79,11 @@ export function mountHeroType(hero) {
     if (document.hidden) reset();
   }, options);
   reduced.addEventListener("change", reset, options);
-  fine.addEventListener("change", reset, options);
   const resize = new ResizeObserver(measure);
   resize.observe(hero);
   const observer = new IntersectionObserver(([entry]) => {
     visible = entry.isIntersecting;
     if (!visible) reset();
-    else enter();
   });
   observer.observe(hero);
   document.fonts.ready.then(() => { if (!controller.signal.aborted) measure(); });

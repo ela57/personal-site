@@ -30,9 +30,9 @@ export function mountStrategy(root) {
   const field = name => root.querySelector(`[name="${name}"]`);
   const status = root.querySelector("[data-status]");
   const source = root.querySelector("[data-source]");
-  const paper = "#F2EFE7", ink = "#151513", blue = "#1D44F0";
+  const paper = "#E4DCC6", ink = "#16171A", blue = "#23408E";
   const chartOptions = {
-    layout: { background: { color: paper }, textColor: "#686559", fontFamily: '"IBM Plex Mono", monospace', fontSize: 11, attributionLogo: false },
+    layout: { background: { color: paper }, textColor: "#535349", fontFamily: 'Archivo, Arial, sans-serif', fontSize: 11, attributionLogo: false },
     grid: { vertLines: { visible: false }, horzLines: { color: "rgba(21,21,19,.08)" } },
     rightPriceScale: { borderColor: "rgba(21,21,19,.16)" },
     timeScale: { borderColor: "rgba(21,21,19,.16)", timeVisible: false, minBarSpacing: 0.01 },
@@ -43,7 +43,7 @@ export function mountStrategy(root) {
   const equityChart = createChart(equityHost, { ...chartOptions, width: equityHost.clientWidth, height: 250 });
   equityChart.priceScale("right").applyOptions({ scaleMargins: { top: 0.25, bottom: 0.1 }, entireTextOnly: true });
   const line = (chart, color, title) => chart.addSeries(LineSeries, { color, title, lineWidth: 1, priceLineVisible: false, lastValueVisible: false, crosshairMarkerVisible: false });
-  const closeLine = line(priceChart, ink, "Price"), shortLine = line(priceChart, blue, "Short SMA"), longLine = line(priceChart, "#97835E", "Long SMA");
+  const closeLine = line(priceChart, ink, "Price"), shortLine = line(priceChart, blue, "Short SMA"), longLine = line(priceChart, "#9D3024", "Long SMA");
   const strategyLine = line(equityChart, blue, "Strategy"), holdLine = line(equityChart, ink, "Buy & hold");
   const markers = createSeriesMarkers(closeLine, []);
   const resize = new ResizeObserver(() => {
