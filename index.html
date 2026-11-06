@@ -106,15 +106,6 @@
           <dl class="meta mono"><div><dt>Area</dt><dd>GPU programming</dd></div><div><dt>Stack</dt><dd>Unity, HLSL, C#</dd></div></dl>
           <a class="more" href="#project/thermal"><span>Read case study</span><span aria-hidden="true">→</span></a>
         </div>
-        <figure class="plate plate--dark" data-annotate="thermal" style="--ar:16/10">
-          <div class="plateVis" data-vis="thermal"></div>
-          <ol class="notes">
-            <li style="--lx:4%;--ly:9%" data-side="r" data-at=".62,.16"><b>1</b> Past max distance: clamped to the coldest colour</li>
-            <li style="--lx:96%;--ly:36%" data-side="l" data-at=".725,.31"><b>2</b> Sobel operator on the depth buffer → outlines</li>
-            <li style="--lx:4%;--ly:52%" data-side="r" data-at=".46,.83"><b>3</b> Nearest surface → hot end of the ramp</li>
-          </ol>
-          <figcaption class="mono"><span><b>Fig. 2</b> Browser illustration of the effect.</span><button class="annoBtn" type="button" aria-pressed="false">Annotate</button></figcaption>
-        </figure>
         <a class="cover" href="#project/thermal" tabindex="-1" aria-hidden="true"></a>
       </article>
 
@@ -157,24 +148,11 @@
         <h2 class="secTitle" id="labTitle">Think with your hands.</h2>
         <p class="secNote mono">Small systems. Playable ideas.</p>
       </header>
-      <figure class="labCover illustration"><img src="assets/lab-cover.webp" srcset="assets/lab-cover-768.webp 768w, assets/lab-cover.webp 1536w" sizes="(max-width:719px) calc(100vw - 40px), 75vw" width="1536" height="1024" alt="Illustration of chess pieces and chips arranged as a still life." loading="lazy" decoding="async"><figcaption class="mono">Illustration</figcaption></figure>
+      <figure class="labCover illustration"><img src="assets/lab-cover.webp" srcset="assets/lab-cover-768.webp 768w, assets/lab-cover.webp 1536w" sizes="(max-width:719px) calc(100vw - 40px), 75vw" width="1536" height="1024" alt="Illustration of chess pieces on a dark tabletop." loading="lazy" decoding="async"><figcaption class="mono">Illustration</figcaption></figure>
       <ol class="labIndex">
         <li class="labEntry"><a href="#lab/chess" class="grid"><span class="mono">01 / CHESS</span><h3>Find the forcing line.</h3><p>Twelve chess puzzles. A board, a few clues, and a move that changes everything.</p><span class="mono">Open experiment ↗</span></a></li>
         <li class="labEntry"><a href="#lab/strategy" class="grid"><span class="mono">02 / STRATEGY SANDBOX</span><h3>Test the signal.</h3><p>A moving-average model. Historical prices, explicit assumptions, and the cost of being wrong.</p><span class="mono">Open experiment ↗</span></a></li>
       </ol>
-    </section>
-
-    <section class="experimentsSec" id="experiments" aria-labelledby="experimentsTitle">
-      <header class="secHead grid rule">
-        <h2 class="secTitle" id="experimentsTitle">Let the chips fall.</h2>
-        <p class="secNote mono">A study in collisions and momentum.</p>
-      </header>
-      <figure class="chipPlate grid">
-        <canvas class="chipCanvas" aria-label="Decorative chip waterfall: ivory, charcoal, red and green rigid bodies fall and settle in a contained plate. Use the buttons to release, clear or replay the scene."></canvas>
-        <figcaption class="mono">Fig. — 2D rigid bodies (Matter.js), drawn in 2.5D</figcaption>
-        <div class="chipControls mono"><button type="button" data-chip-action="release">Release chips</button><button type="button" data-chip-action="reset">Reset</button><button type="button" data-chip-action="replay">Replay</button></div>
-        <p class="chipStatus mono" data-chip-status role="status">A small study in collisions and momentum.</p>
-      </figure>
     </section>
 
     <!-- § 04 — ABOUT -->
@@ -257,7 +235,7 @@
       <p class="sec mono"><span>02</span> GPU programming · Personal project</p>
       <h2 class="csTitle" id="detailTitle">Seeing depth as&nbsp;heat</h2>
     </header>
-    <figure class="plate plate--dark csMedia" style="--ar:16/10"><div class="plateVis" data-vis="thermal" data-interactive></div></figure>
+    <figure class="illustration csMedia"><img src="assets/shader-cover.webp" srcset="assets/shader-cover-768.webp 768w, assets/shader-cover.webp 1536w" sizes="(max-width:719px) calc(100vw - 40px), calc(100vw - 96px)" width="1536" height="1024" alt="Illustration of a scene interpreted through thermal vision." loading="lazy" decoding="async"><figcaption class="mono">Illustration</figcaption></figure>
     <div class="csBody grid">
       <aside class="csMeta mono">
         <dl><div><dt>Stack</dt><dd>Unity · HLSL · C#</dd></div><div><dt>Area</dt><dd>GPU / graphics programming</dd></div><div><dt>Type</dt><dd>Personal project</dd></div></dl>
@@ -272,13 +250,6 @@
         </ol>
         <h3><span class="mono">B</span> Why depth</h3>
         <p>Because heat is derived from the depth buffer, the effect is a pure screen-space pass: it needs no per-object temperature data and works on any scene it is applied to.</p>
-        <h3><span class="mono">C</span> Try it</h3>
-        <div class="controls mono" data-demo="thermal">
-          <label class="range">Max distance <input type="range" min="0.25" max="1" step="0.01" value="0.7" data-opt="range"> <output data-out="range">0.70</output></label>
-          <label class="check"><input type="checkbox" data-opt="edges" checked> Edges</label>
-          <label class="check"><input type="checkbox" data-opt="grain" checked> Grain</label>
-        </div>
-        <p class="hint mono">Browser illustration with SVG. The real shader runs on the GPU inside Unity.</p>
       </div>
     </div>
   </template>
