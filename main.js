@@ -34,15 +34,6 @@ import("./lab/chips/chips.js").then(({ mountChips }) => mountChips(document.quer
   addEventListener("scroll", () => { if (atBottom()) setCurrent("contact"); }, { passive: true });
   ["top", "projects", "bench", "lab", "about", "contact"].forEach(id => { const el = document.getElementById(id); if (el) sectionIO.observe(el); });
 
-  /* ---------------- Entrances ---------------- */
-  $$(".index li").forEach((li, i) => li.style.setProperty("--i", i));
-  requestAnimationFrame(() => requestAnimationFrame(() => $(".hero").classList.add("in")));
-  const revealIO = new IntersectionObserver((entries, io) => entries.forEach(en => {
-    if (!en.isIntersecting) return;
-    en.target.classList.add("in"); io.unobserve(en.target);
-  }), { threshold: 0.15, rootMargin: "0px 0px -8% 0px" });
-  $$(".rule, .proj, .contact").forEach(el => revealIO.observe(el));
-
   /* ---------------- Software renderer (Canvas 2D) ----------------
      Same pipeline as the Python project: model → world → view → projection →
      perspective divide (NDC) → backface culling → painter's sort → diffuse. */
