@@ -493,6 +493,8 @@ input[type="range"]{ width:100%; margin:0; }
 
 @media (prefers-reduced-motion:reduce){
   .notes li,.annoSvg path,.annoSvg circle{ transition:none; }
+  .hero .index a .t,.hero .index a .arr{ transform:none; transition:none; }
+  .index a::before{ transition:none; }
 }
 
 /* Image-led front page ---------------------------------------------------- */
