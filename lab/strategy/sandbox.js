@@ -22,7 +22,7 @@ export function mountStrategy(root) {
     <div class="strategyActions mono"><button type="button" data-reset>Reset defaults</button><p role="status" aria-live="polite" data-status>Loading bundled prices…</p></div>
     <p class="strategySource mono" data-source></p>
     <section class="strategyChartSection" aria-labelledby="strategyPriceTitle"><header><h3 id="strategyPriceTitle">SPY · adjusted close &amp; moving averages</h3><p class="mono">Price / short SMA / long SMA · ▲ buy · ▼ sell</p></header><div class="strategyChart strategyPriceChart" role="img" aria-label="Daily price, moving averages and executed buy/sell markers"></div></section>
-    <section class="strategyChartSection" aria-labelledby="strategyEquityTitle"><header><h3 id="strategyEquityTitle">Equity · Strategy vs Buy &amp; hold</h3><p class="mono">Rebased to 1 at range start · net of costs · blue: Strategy · ink: Buy &amp; hold</p></header><div class="strategyChart strategyEquityChart" role="img" aria-label="Strategy and buy-and-hold equity curves"></div></section>
+    <section class="strategyChartSection" aria-labelledby="strategyEquityTitle"><header><h3 id="strategyEquityTitle">Equity · Strategy vs Buy &amp; hold</h3><p class="mono">Rebased to 1 at range start · net of costs · dawn: Strategy · mist: Buy &amp; hold</p></header><div class="strategyChart strategyEquityChart" role="img" aria-label="Strategy and buy-and-hold equity curves"></div></section>
     <p class="strategyAttribution mono">TradingView Lightweight Charts™<br>Copyright (с) 2025 TradingView, Inc. <a href="https://www.tradingview.com/" target="_blank" rel="noopener noreferrer">Charts by TradingView ↗</a></p>
     <section class="strategyResults"><div><h3>Performance / <span data-result-label>SPY</span></h3><table class="strategyMetrics mono"><caption class="srOnly">Strategy and buy-and-hold performance</caption><thead><tr><th scope="col">Metric</th><th scope="col">Strategy</th><th scope="col">Buy &amp; hold</th></tr></thead><tbody data-metrics></tbody></table></div>
     <div class="strategyMethod"><h3>Model notes</h3><p>Long when short SMA exceeds long SMA; otherwise flat. Signals on close, filled next close. No position during warm-up; date selection slices prices first, with warm-up taken from within the range.</p><p>Costs apply to traded notional on every entry and exit. Buy &amp; hold pays one entry cost at the first selected close. Open trades are marked to the last close, with entry cost only; no assumed liquidation cost.</p><p>Adjusted-price fills are a modelling convention, not executable quotes. Volatility uses sample daily standard deviation × √252; Sharpe uses mean daily return × 252 / annualized volatility, rf=0. Initial costs enter daily returns and drawdown. No cash interest, taxes or slippage beyond the selected cost.</p></div></section>
@@ -30,12 +30,12 @@ export function mountStrategy(root) {
   const field = name => root.querySelector(`[name="${name}"]`);
   const status = root.querySelector("[data-status]");
   const source = root.querySelector("[data-source]");
-  const paper = "#F2EFE7", ink = "#151513", blue = "#1D44F0";
+  const paper = "#17251E", ink = "#ECE7DC", blue = "#E3B677";
   const chartOptions = {
-    layout: { background: { color: paper }, textColor: "#686559", fontFamily: '"IBM Plex Mono", monospace', fontSize: 11, attributionLogo: false },
-    grid: { vertLines: { visible: false }, horzLines: { color: "rgba(21,21,19,.08)" } },
-    rightPriceScale: { borderColor: "rgba(21,21,19,.16)" },
-    timeScale: { borderColor: "rgba(21,21,19,.16)", timeVisible: false, minBarSpacing: 0.01 },
+    layout: { background: { color: paper }, textColor: "#DDD9CF", fontFamily: '"Archivo", sans-serif', fontSize: 13, attributionLogo: false },
+    grid: { vertLines: { visible: false }, horzLines: { color: "rgba(236,231,220,.12)" } },
+    rightPriceScale: { borderColor: "rgba(236,231,220,.18)" },
+    timeScale: { borderColor: "rgba(236,231,220,.18)", timeVisible: false, minBarSpacing: 0.01 },
     handleScroll: false, handleScale: false
   };
   const priceHost = root.querySelector(".strategyPriceChart"), equityHost = root.querySelector(".strategyEquityChart");
@@ -43,7 +43,7 @@ export function mountStrategy(root) {
   const equityChart = createChart(equityHost, { ...chartOptions, width: equityHost.clientWidth, height: 250 });
   equityChart.priceScale("right").applyOptions({ scaleMargins: { top: 0.25, bottom: 0.1 }, entireTextOnly: true });
   const line = (chart, color, title) => chart.addSeries(LineSeries, { color, title, lineWidth: 1, priceLineVisible: false, lastValueVisible: false, crosshairMarkerVisible: false });
-  const closeLine = line(priceChart, ink, "Price"), shortLine = line(priceChart, blue, "Short SMA"), longLine = line(priceChart, "#97835E", "Long SMA");
+  const closeLine = line(priceChart, ink, "Price"), shortLine = line(priceChart, blue, "Short SMA"), longLine = line(priceChart, "#A6BFAE", "Long SMA");
   const strategyLine = line(equityChart, blue, "Strategy"), holdLine = line(equityChart, ink, "Buy & hold");
   const markers = createSeriesMarkers(closeLine, []);
   const resize = new ResizeObserver(() => {

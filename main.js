@@ -1,7 +1,5 @@
-/* Ethan Lam — "The Engineering Notebook". Vanilla JS, no dependencies.
-   nav · hero · reveals · renderer (hero wireframe, plate, bench) · thermal · annotations · case-study overlay */
-import("./lab/hero-type.js").then(({ mountHeroType }) => mountHeroType(document.querySelector(".hero")));
-import("./lab/chips/chips.js").then(({ mountChips }) => mountChips(document.querySelector("#experiments")));
+/* Ethan Lam · navigation, project visuals, annotations and case-study overlays. */
+import("./lab/lake/lake.js").then(({ mountLake }) => mountLake());
 
 (() => {
   "use strict";
@@ -28,20 +26,11 @@ import("./lab/chips/chips.js").then(({ mountChips }) => mountChips(document.quer
   const atBottom = () => innerHeight + scrollY >= document.documentElement.scrollHeight - 2;
   const sectionIO = new IntersectionObserver(entries => entries.forEach(en => {
     if (!en.isIntersecting || atBottom()) return;
-    setCurrent(en.target.id === "bench" ? "projects" : en.target.id);
+    setCurrent(en.target.id);
   }), { rootMargin: "-45% 0px -50% 0px" });
   // The last section can be too short to reach the observer band; at the end of the page it's current.
   addEventListener("scroll", () => { if (atBottom()) setCurrent("contact"); }, { passive: true });
-  ["top", "projects", "bench", "lab", "about", "contact"].forEach(id => { const el = document.getElementById(id); if (el) sectionIO.observe(el); });
-
-  /* ---------------- Entrances ---------------- */
-  $$(".index li").forEach((li, i) => li.style.setProperty("--i", i));
-  requestAnimationFrame(() => requestAnimationFrame(() => $(".hero").classList.add("in")));
-  const revealIO = new IntersectionObserver((entries, io) => entries.forEach(en => {
-    if (!en.isIntersecting) return;
-    en.target.classList.add("in"); io.unobserve(en.target);
-  }), { threshold: 0.15, rootMargin: "0px 0px -8% 0px" });
-  $$(".rule, .proj, .contact").forEach(el => revealIO.observe(el));
+  ["top", "projects", "lab", "about", "contact"].forEach(id => { const el = document.getElementById(id); if (el) sectionIO.observe(el); });
 
   /* ---------------- Software renderer (Canvas 2D) ----------------
      Same pipeline as the Python project: model → world → view → projection →
@@ -92,7 +81,7 @@ import("./lab/chips/chips.js").then(({ mountChips }) => mountChips(document.quer
         ctx.save(); ctx.setLineDash([4, 4]); ctx.strokeStyle = "rgba(21,21,19,.28)"; ctx.lineWidth = 1;
         ctx.strokeRect(w / 2 - size / 2 + .5, h / 2 - size / 2 + .5, size, size);
         ctx.setLineDash([]); ctx.beginPath(); ctx.moveTo(w / 2 - 6, h / 2); ctx.lineTo(w / 2 + 6, h / 2); ctx.moveTo(w / 2, h / 2 - 6); ctx.lineTo(w / 2, h / 2 + 6); ctx.stroke();
-        ctx.fillStyle = "rgba(21,21,19,.5)"; ctx.font = "11px 'IBM Plex Mono', monospace";
+        ctx.fillStyle = "rgba(21,21,19,.5)"; ctx.font = "11px Archivo, sans-serif";
         ctx.fillText("(−1, −1)", w / 2 - size / 2 + 6, h / 2 + size / 2 - 8);
         const lbl = "(1, 1)"; ctx.fillText(lbl, w / 2 + size / 2 - ctx.measureText(lbl).width - 6, h / 2 - size / 2 + 16);
         ctx.restore();
@@ -210,7 +199,7 @@ import("./lab/chips/chips.js").then(({ mountChips }) => mountChips(document.quer
         </defs>
         ${polys}
         ${state.grain ? `<rect width="320" height="200" filter="url(#${id}n)" style="mix-blend-mode:overlay" />` : ""}
-        <text x="8" y="192" font-size="7" font-family="'IBM Plex Mono',monospace" fill="rgba(255,255,255,.75)">MAX DIST ${state.range.toFixed(2)}</text>
+        <text x="8" y="192" font-size="7" font-family="Archivo,sans-serif" fill="rgba(255,255,255,.75)">Max distance ${state.range.toFixed(2)}</text>
       </svg>`;
     };
     render();
@@ -313,15 +302,13 @@ import("./lab/chips/chips.js").then(({ mountChips }) => mountChips(document.quer
     $$("[data-vis]", root).forEach(el => {
       if (el.dataset.mounted) return; el.dataset.mounted = "1";
       const kind = el.dataset.vis, fig = el.closest(".plate");
-      if (kind === "wire" || kind === "renderer") {
+      if (kind === "renderer") {
         const c = document.createElement("canvas"); c.className = "rendererCanvas";
         c.setAttribute("role", "img");
-        c.setAttribute("aria-label", kind === "wire" ? "Wireframe icosahedron; front edges dark, back edges faint." : "Shaded icosahedron with backface culling, depth sorting and diffuse lighting.");
+        c.setAttribute("aria-label", "Shaded icosahedron with backface culling, depth sorting and diffuse lighting.");
         el.appendChild(c);
         let anno = null;
-        const r = createRenderer(c, kind === "wire"
-          ? { stage: 1, dots: true, scale: 0.4, speed: 0.16 }
-          : { stage: 3, scale: el.hasAttribute("data-big") ? 0.4 : 0.34, drag: el.hasAttribute("data-big"),
+        const r = createRenderer(c, { stage: 3, scale: el.hasAttribute("data-big") ? 0.4 : 0.34, drag: el.hasAttribute("data-big"),
               onFrame: f => {
                 if (!anno) return;
                 const vis = f.faces.filter(x => x.facing);
