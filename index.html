@@ -50,8 +50,8 @@
     <section class="hero" id="top" aria-labelledby="heroTitle">
       <div class="heroCopy">
         <h1 class="heroTitle" id="heroTitle">Ethan Lam</h1>
-        <div class="heroWords" aria-hidden="true"><span class="heroWord is-active">Observe.</span><span class="heroWord">Take apart.</span><span class="heroWord">Rebuild.</span></div>
-        <p class="sr-only">Observe, take apart, rebuild.</p>
+        <div class="heroWords" aria-hidden="true"><span class="heroLead">I like to build</span> <span class="cycle" data-cycle><span class="cycleWord is-active">renderers.</span><span class="cycleWord">shaders.</span><span class="cycleWord">backtests.</span><span class="cycleWord">chess puzzles.</span></span></div>
+        <p class="sr-only">I like to build renderers, shaders, backtests and chess puzzles.</p>
         <p class="heroFact">Computer engineering · Georgia Tech ’28</p>
       </div>
       <a class="scrollCue" href="#projects"><span>Selected work</span><span class="scrollLine" aria-hidden="true"></span></a>
@@ -77,11 +77,30 @@
           <p class="projNo" aria-hidden="true">01</p>
           <h3 class="projTitle">A renderer with no graphics&nbsp;API</h3>
           <p class="projDesc">Every stage of the pipeline written by hand in Python and NumPy — transforms, perspective divide, backface culling, NDC-space clipping, depth sorting and diffuse light — then drawn with Matplotlib.</p>
+          <p class="projWhy"><b>Why.</b> A draw call hides a lot of decisions. Writing the pipeline from scratch makes every transform, visibility test and colour something I can account for.</p>
+          <p class="projLearn"><b>What surprised me.</b> Sorting whole faces is a useful fit for filled polygons, but it cannot resolve faces that intersect or overlap in a cycle.</p>
           <dl class="meta mono"><div><dt>Area</dt><dd>Graphics</dd></div><div><dt>Stack</dt><dd>Python, NumPy, Matplotlib</dd></div><div><dt>Type</dt><dd>Personal project</dd></div></dl>
           <a class="more" href="#project/renderer"><span>Read case study</span><span aria-hidden="true">→</span></a>
         </div>
         <a class="cover" href="#project/renderer" tabindex="-1" aria-hidden="true"></a>
       </article>
+
+      <section class="pipeline" aria-labelledby="pipelineTitle">
+        <p class="sec mono">Inside project 01</p>
+        <h2 id="pipelineTitle">The pipeline, one stage at a time</h2>
+        <div class="pipelineLayout">
+          <figure class="pipelineStage" role="img" aria-label="An icosahedron rendered through the five pipeline stages. Each stage is described in the adjacent text.">
+            <div class="pipelineCanvasStack"></div><figcaption class="pipelineCaption">01 / Projection &amp; perspective divide</figcaption>
+          </figure>
+          <ol class="pipelineSteps">
+            <li tabindex="0"><span class="mono">01 / From points to a picture</span><h3>Projection &amp; perspective divide</h3><p>World, view and projection transforms move vertices into camera space. Dividing by depth maps them into normalized device coordinates. A wireframe keeps the front and back edges visible.</p><img src="assets/pipeline-1.png" width="800" height="600" alt="Projected wireframe icosahedron, showing front and back edges." loading="lazy" decoding="async"></li>
+            <li tabindex="0"><span class="mono">02 / Keep the visible side</span><h3>Backface culling</h3><p>Triangles whose normal points away from the camera are discarded. On a convex mesh, the front faces do not overlap each other: culling alone can fix visibility.</p><img src="assets/pipeline-2.png" width="800" height="600" alt="Flat-filled front faces of the icosahedron with back faces removed." loading="lazy" decoding="async"></li>
+            <li tabindex="0"><span class="mono">03 / Define the depth range</span><h3>NDC clipping</h3><p>Geometry outside the depth range is clipped after the perspective divide. In normalized device coordinates, the depth test becomes a simple range comparison.</p><img src="assets/pipeline-3.png" width="800" height="600" alt="Icosahedron faces clipped to the normalized depth range, with the NDC frame outlined." loading="lazy" decoding="async"></li>
+            <li tabindex="0"><span class="mono">04 / Choose the draw order</span><h3>Painter’s depth sort</h3><p>The remaining faces are drawn far to near. The numbers show their drawing order. Sorting whole polygons fits the Matplotlib output, but is not a per-pixel depth buffer.</p><img src="assets/pipeline-4.png" width="800" height="600" alt="Clipped faces numbered in far-to-near painter’s order." loading="lazy" decoding="async"></li>
+            <li tabindex="0"><span class="mono">05 / Let the normal catch the light</span><h3>Diffuse shading</h3><p>A directional light supplies a per-face brightness: max(0, n·l). Geometry and light direction become the shaded triangles on the page.</p><img src="assets/pipeline-5.png" width="800" height="600" alt="Clipped icosahedron shaded with directional diffuse light." loading="lazy" decoding="async"></li>
+          </ol>
+        </div>
+      </section>
 
       <!-- 02 — narrow text left, visual offset right and lower -->
       <article class="proj proj--thermal grid" id="work-thermal" data-project="thermal">
@@ -89,6 +108,8 @@
           <p class="projNo" aria-hidden="true">02</p>
           <h3 class="projTitle">Seeing depth as&nbsp;heat</h3>
           <p class="projDesc">A depth-based thermal-vision post-process in HLSL, exposed as a Unity PostProcessing volume so it tunes from the editor like a built-in effect.</p>
+          <p class="projWhy"><b>Why.</b> Depth can drive a whole visual language: distant surfaces become cold, near surfaces become hot, and outlines help separate their silhouettes.</p>
+          <p class="projLearn"><b>What I learned.</b> The colour ramp is only part of the effect. A distance clamp, depth-buffer edges and grain all shape the final image.</p>
           <dl class="meta mono"><div><dt>Area</dt><dd>GPU programming</dd></div><div><dt>Stack</dt><dd>Unity, HLSL, C#</dd></div></dl>
           <a class="more" href="#project/thermal"><span>Read case study</span><span aria-hidden="true">→</span></a>
         </div>
@@ -108,8 +129,8 @@
             <picture><source srcset="assets/projects/realized-vol-equity.webp" type="image/webp"><img src="assets/projects/realized-vol-equity.png" width="768" height="418" alt="Equity curves over the 2022–2025 test period: buy-and-hold SPY versus the regression signal, growth of $1." loading="lazy" decoding="async"></picture>
           </div>
           <ol class="notes">
-            <li style="--lx:30%;--ly:84%" data-side="r" data-at=".44,.56"><b>1</b> Signal held up through the 2022 drawdown</li>
-            <li style="--lx:62%;--ly:28%" data-side="l" data-at=".925,.13"><b>2</b> Sharpe 0.66 vs 0.55 buy-and-hold</li>
+            <li style="--lx:38%;--ly:45%" data-side="r" data-at=".293,.682"><b>1</b> Signal held up through the 2022 drawdown</li>
+            <li style="--lx:76%;--ly:18%" data-side="l" data-at=".934,.110"><b>2</b> Sharpe 0.66 vs 0.55 buy-and-hold</li>
           </ol>
           <figcaption class="mono"><span><b>Fig. 3</b> Growth of $1 on the held-out test period (from the notebook).</span><button class="annoBtn" type="button" aria-pressed="false">Annotate</button></figcaption>
         </figure>
@@ -118,6 +139,8 @@
           <p class="bigStat"><span class="mono">R² =</span>0.000</p>
           <h3 class="projTitle">Does today’s volatility predict tomorrow’s&nbsp;return?</h3>
           <p class="projDesc">Four realized-volatility estimators on SPY daily data from 2000. On its own, volatility explains none of the next day’s return; with lagged return added there’s a small, significant mean-reversion effect.</p>
+          <p class="projWhy"><b>Why.</b> A plausible market story is not enough. A time-based train, validation and test split asks whether a fitted signal survives beyond the data that produced it.</p>
+          <p class="projLearn"><b>What surprised me.</b> Predictable volatility does not imply predictable next-day returns. Even the stronger test-period Sharpe comes with about 49% average daily turnover: costs matter.</p>
           <dl class="meta mono"><div><dt>Area</dt><dd>Quant research</dd></div><div><dt>Stack</dt><dd>pandas, statsmodels, yfinance</dd></div></dl>
           <p class="more">
             <a href="#project/vol"><span>Read case study</span><span aria-hidden="true">→</span></a>
@@ -130,25 +153,29 @@
     <section class="labSec" id="lab" aria-labelledby="labTitle">
       <header class="secHead grid rule">
         <p class="sec mono">Experiments</p>
-        <h2 class="secTitle" id="labTitle">Think with your hands.</h2>
+        <h2 class="secTitle" id="labTitle"><span aria-hidden="true">Think with your <span class="cycle" data-cycle><span class="cycleWord is-active">hands.</span><span class="cycleWord">moves.</span><span class="cycleWord">numbers.</span></span></span><span class="sr-only">Think with your hands, moves and numbers.</span></h2>
         <p class="secNote mono">Small systems. Playable ideas.</p>
       </header>
-      <ol class="labIndex">
-        <li class="labEntry"><a href="#lab/chess" class="grid"><span class="mono">01 / Chess</span><h3>Find the forcing line.</h3><p>Twelve chess puzzles. A board, a few clues, and a move that changes everything.</p><span class="mono">Open experiment ↗</span></a></li>
-        <li class="labEntry"><a href="#lab/strategy" class="grid"><span class="mono">02 / Strategy sandbox</span><h3>Test the signal.</h3><p>A moving-average model. Historical prices, explicit assumptions, and the cost of being wrong.</p><span class="mono">Open experiment ↗</span></a></li>
-      </ol>
-      <figure class="labCover plate plate--light">
-        <a class="plateVis" href="#lab/chess" aria-label="Open chess puzzles">
-          <picture><source type="image/webp" srcset="assets/lab-cover-768.webp 768w, assets/lab-cover.webp 1536w" sizes="(max-width:719px) 100vw, 55vw"><img src="assets/lab-cover.webp" width="1536" height="1024" alt="Chess pieces beside a stack of poker chips on a dark tabletop." loading="lazy" decoding="async"></picture>
-        </a>
-        <figcaption class="mono">Illustration · Small systems, playable ideas</figcaption>
-      </figure>
+      <div class="gamePanels">
+        <a class="gamePanel" href="#lab/chess"><span class="mono">Interactive · 01 / Chess</span><img class="gameMini" src="assets/chess-preview.svg" width="320" height="320" alt="The first puzzle: White rook e1 and king g1; Black king g8 and pawns f7, g7, h7. White to move." loading="lazy" decoding="async"><h3>Find the forcing line.</h3><p>Twelve chess puzzles. A board, a few clues, and a move that changes everything.</p><span class="gameAction">Play the puzzles →</span></a>
+        <a class="gamePanel" href="#lab/strategy"><span class="mono">Interactive · 02 / Strategy sandbox</span><img class="gameMini" src="assets/strategy-preview.svg" width="640" height="320" alt="Bundled SPY adjusted closes in mist, with 20-day moving average in dawn gold and 100-day moving average in green." loading="lazy" decoding="async"><h3>Test the signal.</h3><p>A moving-average model. Historical prices, explicit assumptions, and the cost of being wrong.</p><span class="gameAction">Open the sandbox →</span></a>
+      </div>
+      <noscript><div class="approach"><section id="lab/chess"><h3>The locked back rank</h3><p>White to move in the board above. The three pawns deny the king an escape square. The rook owns the eighth rank. Answer: Re8#. Enable JavaScript to play all twelve puzzles.</p></section><section id="lab/strategy"><h3>Moving averages, explicit assumptions</h3><p>The chart above shows the bundled SPY prices and two moving averages. Enable JavaScript to change the windows, test transaction costs and inspect the trades.</p></section></div></noscript>
+    </section>
+
+    <section class="approach rule" id="approach" aria-labelledby="approachTitle">
+      <p class="sec mono">Approach</p><h2 id="approachTitle">Make the mechanism visible.</h2>
+      <div class="approachPieces">
+        <article><h3>Start below the library</h3><p>The renderer starts where a graphics API would usually take over: transforms, projection and visibility. The thermal shader takes another route through the image, using depth to choose colour and find edges. In both, the interesting part is the mechanism behind the output.</p></article>
+        <article><h3>Measure before believing</h3><p>The SPY study separates a convincing hypothesis from an out-of-sample result. Volatility can cluster without explaining tomorrow’s return. Turnover is another reminder to look past the headline statistic and ask what a signal would cost to trade.</p></article>
+        <article><h3>Make it playable</h3><p>The renderer bench lets a pipeline become a set of controls. Chess puzzles turn a position into a decision, while the strategy sandbox makes windows and trading costs explicit. A small system is easier to question when there is something to try.</p></article>
+      </div>
     </section>
 
     <!-- About -->
     <section class="about grid rule" id="about" aria-labelledby="aboutTitle">
       <p class="sec mono">About</p>
-      <h2 class="aboutTitle" id="aboutTitle">I want to know what the abstraction is&nbsp;hiding.</h2>
+      <h2 class="aboutTitle" id="aboutTitle">Most of what I build starts with one question: how does this actually work?</h2>
       <div class="aboutText">
         <p>I study computer engineering at Georgia Tech, class of 2028, on the Cybersecurity and Distributed Systems &amp; Software Design threads. The projects I end up caring about sit where hardware, math and software meet — rendering pipelines and trading infrastructure.</p>
         <p>Outside of class: poker, basketball, pickleball, golf, rock climbing, and travelling when I get the chance.</p>
@@ -188,6 +215,7 @@
     <section class="contact grid rule" id="contact" aria-labelledby="contactTitle">
       <p class="sec mono">Contact</p>
       <h2 class="contactTitle" id="contactTitle">Internships, research, or a question about one of these projects — email is the fastest way to reach&nbsp;me.</h2>
+      <p class="contactHello"><span aria-hidden="true">Say <span class="cycle" data-cycle><span class="cycleWord is-active">hello.</span><span class="cycleWord">hi.</span><span class="cycleWord">something.</span></span></span><span class="sr-only">Say hello, hi, or something.</span></p>
       <a class="email" href="mailto:ethanlam52@gmail.com"><span>ethanlam52</span><span>@gmail.com</span></a>
       <ul class="elsewhere mono">
         <li><a href="https://www.linkedin.com/in/ethanlam7/" target="_blank" rel="noopener noreferrer">LinkedIn ↗</a></li>
@@ -200,6 +228,7 @@
     <p>© <span id="year">2026</span> Ethan Lam</p>
     <p>Set in Source Serif 4 &amp; Archivo. Photograph generated for this site.</p>
     <p><a href="#top">Back to top ↑</a></p>
+    <p><button id="wordMotion" type="button" aria-pressed="false" hidden>Pause word effects</button></p>
   </footer>
 
   <!-- CASE STUDY (hash routed: #project/<slug>) -->
