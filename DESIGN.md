@@ -11,7 +11,9 @@ below the shoreline, and stops for reduced motion, hidden tabs, or an opaque vei
 - One 12-column grid: wide paper renderer plate left; narrow thermal text left
   and lower dark plate right; nearly full-width real volatility chart, oversized
   R² figure and supporting column below. Keep annotations and explicit links.
-- Lab is a quiet two-row list. About is quieter prose, experience, education,
+- Renderer and thermal previews use responsive linked illustrations; their live
+  visuals and annotations remain in the case studies. Volatility keeps its chart.
+- Lab is a quiet two-row list with a companion illustration. About is quieter prose, experience, education,
   and a three-row toolbox. Contact uses a large serif email link.
 - Overlays and controls use a deep-green reading surface with mist text; image
   plates remain paper. Scrolled nav uses a 90% forest band and a mist hairline.

@@ -408,7 +408,7 @@ import("./lab/lake/lake.js").then(({ mountLake }) => mountLake());
     if (trigger) returnFocus = trigger;
     const fromCard = !wasOpen && trigger && card && card.contains(trigger);
     if (!$(`#tpl-${slug}`)) return;
-    if (fromCard && motionOK() && document.startViewTransition) {
+    if (fromCard && $(".plate[data-annotate] .plateVis", card) && motionOK() && document.startViewTransition) {
       const media = $(".plateVis", card);
       media.style.viewTransitionName = "project-media";
       const vt = document.startViewTransition(() => {
@@ -431,7 +431,7 @@ import("./lab/lake/lake.js").then(({ mountLake }) => mountLake());
       target && target.focus({ preventScroll: true });
       returnFocus = null;
     };
-    const from = $(".csMedia .plateVis", content), to = card && $(".plateVis", card);
+    const from = $(".csMedia .plateVis", content), to = card && $(".plate[data-annotate] .plateVis", card);
     const r = to && to.getBoundingClientRect();
     const onScreen = r && r.bottom > 0 && r.top < innerHeight;
     if (onScreen) withTransition(finish, from, to);

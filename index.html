@@ -67,14 +67,11 @@
 
       <!-- 01 — wide spread, visual left -->
       <article class="proj proj--renderer grid" id="work-renderer" data-project="renderer">
-        <figure class="plate plate--light" data-annotate="renderer" style="--ar:16/10">
-          <div class="plateVis" data-vis="renderer"></div>
-          <ol class="notes">
-            <li style="--lx:5%;--ly:10%" data-side="r" data-key="vertex"><b>1</b> Perspective divide: <i>x/z, y/z</i> → normalized device coordinates</li>
-            <li style="--lx:95%;--ly:16%" data-side="l" data-key="lit"><b>2</b> Diffuse shading: brightness = max(0, <i>n·l</i>)</li>
-            <li style="--lx:95%;--ly:88%" data-side="l" data-key="far"><b>3</b> Painter’s order: farthest faces drawn first · <span data-live="culled">10</span> back faces culled</li>
-          </ol>
-          <figcaption class="mono"><span><b>Fig. 1</b> Shaded output, culled and depth-sorted.</span><button class="annoBtn" type="button" aria-pressed="false">Annotate</button></figcaption>
+        <figure class="plate plate--light" style="--ar:3/2">
+          <a class="plateVis" href="#project/renderer" aria-label="Open software renderer case study">
+            <picture><source type="image/webp" srcset="assets/renderer-cover-768.webp 768w, assets/renderer-cover.webp 1536w" sizes="(max-width:1099px) 100vw, 62vw"><img src="assets/renderer-cover.webp" width="1536" height="1024" alt="Illustrated exploded rendering pipeline, with geometry and shaded output arranged across four panels." loading="lazy" decoding="async"></picture>
+          </a>
+          <figcaption class="mono">Illustration · Software rendering pipeline</figcaption>
         </figure>
         <div class="projText">
           <p class="projNo" aria-hidden="true">01</p>
@@ -95,14 +92,11 @@
           <dl class="meta mono"><div><dt>Area</dt><dd>GPU programming</dd></div><div><dt>Stack</dt><dd>Unity, HLSL, C#</dd></div></dl>
           <a class="more" href="#project/thermal"><span>Read case study</span><span aria-hidden="true">→</span></a>
         </div>
-        <figure class="plate plate--dark" data-annotate="thermal" style="--ar:16/10">
-          <div class="plateVis" data-vis="thermal"></div>
-          <ol class="notes">
-            <li style="--lx:4%;--ly:9%" data-side="r" data-at=".62,.16"><b>1</b> Past max distance: clamped to the coldest colour</li>
-            <li style="--lx:96%;--ly:36%" data-side="l" data-at=".725,.31"><b>2</b> Sobel operator on the depth buffer → outlines</li>
-            <li style="--lx:4%;--ly:52%" data-side="r" data-at=".46,.83"><b>3</b> Nearest surface → hot end of the ramp</li>
-          </ol>
-          <figcaption class="mono"><span><b>Fig. 2</b> Browser illustration of the effect.</span><button class="annoBtn" type="button" aria-pressed="false">Annotate</button></figcaption>
+        <figure class="plate plate--dark" style="--ar:3/2">
+          <a class="plateVis" href="#project/thermal" aria-label="Open thermal-vision shader case study">
+            <picture><source type="image/webp" srcset="assets/shader-cover-768.webp 768w, assets/shader-cover.webp 1536w" sizes="(max-width:719px) 100vw, 54vw"><img src="assets/shader-cover.webp" width="1536" height="1024" alt="Illustrated scene viewed through a thermal colour ramp, with warm foreground forms and cool distant geometry." loading="lazy" decoding="async"></picture>
+          </a>
+          <figcaption class="mono">Illustration · Thermal vision</figcaption>
         </figure>
         <a class="cover" href="#project/thermal" tabindex="-1" aria-hidden="true"></a>
       </article>
@@ -143,6 +137,12 @@
         <li class="labEntry"><a href="#lab/chess" class="grid"><span class="mono">01 / Chess</span><h3>Find the forcing line.</h3><p>Twelve chess puzzles. A board, a few clues, and a move that changes everything.</p><span class="mono">Open experiment ↗</span></a></li>
         <li class="labEntry"><a href="#lab/strategy" class="grid"><span class="mono">02 / Strategy sandbox</span><h3>Test the signal.</h3><p>A moving-average model. Historical prices, explicit assumptions, and the cost of being wrong.</p><span class="mono">Open experiment ↗</span></a></li>
       </ol>
+      <figure class="labCover plate plate--light">
+        <a class="plateVis" href="#lab/chess" aria-label="Open chess puzzles">
+          <picture><source type="image/webp" srcset="assets/lab-cover-768.webp 768w, assets/lab-cover.webp 1536w" sizes="(max-width:719px) 100vw, 55vw"><img src="assets/lab-cover.webp" width="1536" height="1024" alt="Chess pieces beside a stack of poker chips on a dark tabletop." loading="lazy" decoding="async"></picture>
+        </a>
+        <figcaption class="mono">Illustration · Small systems, playable ideas</figcaption>
+      </figure>
     </section>
 
     <!-- About -->
@@ -218,7 +218,15 @@
       <p class="sec mono"><span>01</span> Graphics · Personal project</p>
       <h2 class="csTitle" id="detailTitle">A renderer with no graphics&nbsp;API</h2>
     </header>
-    <figure class="plate plate--light csMedia"><div class="plateVis" data-vis="renderer" data-big></div></figure>
+    <figure class="plate plate--light csMedia" data-annotate="renderer" style="--ar:16/10">
+      <div class="plateVis" data-vis="renderer" data-big></div>
+      <ol class="notes">
+        <li style="--lx:5%;--ly:10%" data-side="r" data-key="vertex"><b>1</b> Perspective divide: <i>x/z, y/z</i> → normalized device coordinates</li>
+        <li style="--lx:95%;--ly:16%" data-side="l" data-key="lit"><b>2</b> Diffuse shading: brightness = max(0, <i>n·l</i>)</li>
+        <li style="--lx:95%;--ly:88%" data-side="l" data-key="far"><b>3</b> Painter’s order: farthest faces drawn first · <span data-live="culled">10</span> back faces culled</li>
+      </ol>
+      <figcaption class="mono"><span><b>Fig. 1</b> Shaded output, culled and depth-sorted.</span><button class="annoBtn" type="button" aria-pressed="false">Annotate</button></figcaption>
+    </figure>
     <div class="csBody grid">
       <aside class="csMeta mono">
         <dl><div><dt>Stack</dt><dd>Python · NumPy · Matplotlib</dd></div><div><dt>Area</dt><dd>Graphics programming</dd></div><div><dt>Type</dt><dd>Personal project</dd></div></dl>
@@ -249,7 +257,15 @@
       <p class="sec mono"><span>02</span> GPU programming · Personal project</p>
       <h2 class="csTitle" id="detailTitle">Seeing depth as&nbsp;heat</h2>
     </header>
-    <figure class="plate plate--dark csMedia" style="--ar:16/10"><div class="plateVis" data-vis="thermal" data-interactive></div></figure>
+    <figure class="plate plate--dark csMedia" data-annotate="thermal" style="--ar:16/10">
+      <div class="plateVis" data-vis="thermal" data-interactive></div>
+      <ol class="notes">
+        <li style="--lx:4%;--ly:9%" data-side="r" data-at=".62,.16"><b>1</b> Past max distance: clamped to the coldest colour</li>
+        <li style="--lx:96%;--ly:36%" data-side="l" data-at=".725,.31"><b>2</b> Sobel operator on the depth buffer → outlines</li>
+        <li style="--lx:4%;--ly:52%" data-side="r" data-at=".46,.83"><b>3</b> Nearest surface → hot end of the ramp</li>
+      </ol>
+      <figcaption class="mono"><span><b>Fig. 2</b> Browser illustration of the effect.</span><button class="annoBtn" type="button" aria-pressed="false">Annotate</button></figcaption>
+    </figure>
     <div class="csBody grid">
       <aside class="csMeta mono">
         <dl><div><dt>Stack</dt><dd>Unity · HLSL · C#</dd></div><div><dt>Area</dt><dd>GPU / graphics programming</dd></div><div><dt>Type</dt><dd>Personal project</dd></div></dl>
