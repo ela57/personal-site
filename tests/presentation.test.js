@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { imagePoint } from '../lab/lake/annotations.js';
-import { revealInterval } from '../lab/words.js';
+import { revealInterval, cycleTiming } from '../lab/words.js';
 import { clipDepth, pipelineModes } from '../lab/pipeline.js';
 import { fenSquares, chessPreview, strategyPreview } from '../lab/previews.js';
 import { puzzles } from '../lab/chess/puzzles.js';
@@ -24,6 +24,20 @@ test('heading character spacing is 35ms with a 700ms total cap', () => {
   assert.equal(revealInterval(10), 35);
   assert.equal(revealInterval(0), 35);
   assert.ok(revealInterval(150) * 149 + 120 <= 700);
+});
+
+test('only the hero uses the faster readable cycle; other and unspecified cycles keep their timing', () => {
+  assert.deepEqual(cycleTiming('hero'), { hold: 1400, step: 20, fade: 60, gap: 185 });
+  for (const variant of [undefined, '', 'lab', 'contact']) {
+    assert.deepEqual(cycleTiming(variant), { hold: 2600, step: 40, fade: 120, gap: 370 });
+  }
+});
+
+test('only the NDC demonstration cuts away the shape; the first stage has a solid wireframe base', () => {
+  assert.deepEqual(pipelineModes.map(mode => mode.clip), [false, false, true, false, false]);
+  assert.equal(pipelineModes[0].solidWireframe, true);
+  assert.equal(pipelineModes[3].orderLabels, true);
+  assert.equal(pipelineModes[4].stage, 3);
 });
 
 test('depth clipping preserves visible triangles and clips both NDC planes', () => {

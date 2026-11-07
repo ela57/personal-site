@@ -1,9 +1,9 @@
 export const pipelineModes = [
-  { stage: 1, cull: false, sort: false, clip: false, orderLabels: false },
+  { stage: 1, cull: false, sort: false, clip: false, orderLabels: false, solidWireframe: true },
   { stage: 2, cull: true, sort: false, clip: false, orderLabels: false },
   { stage: 2, cull: true, sort: false, clip: true, orderLabels: false },
-  { stage: 2, cull: true, sort: true, clip: true, orderLabels: true },
-  { stage: 3, cull: true, sort: true, clip: true, orderLabels: false },
+  { stage: 2, cull: true, sort: true, clip: false, orderLabels: true },
+  { stage: 3, cull: true, sort: true, clip: false, orderLabels: false },
 ];
 
 export function clipDepth(points, near, far) {

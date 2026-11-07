@@ -122,6 +122,10 @@ import("./lab/lake/lake.js").then(({ mountLake }) => mountLake());
           ctx.strokeStyle = s.stage >= 3 ? "rgba(242,239,231,.55)" : "rgba(21,21,19,.55)"; ctx.lineWidth = 1; ctx.stroke();
         });
       } else if (s.stage === 1) {
+        if (s.solidWireframe) {
+          ctx.fillStyle = mix(PAPER, BLUE, .18);
+          all.filter(f => f.facing).forEach(f => { path(f); ctx.fill(); });
+        }
         all.forEach(f => {
           path(f);
           ctx.strokeStyle = f.facing ? "rgba(21,21,19,.82)" : "rgba(21,21,19,.22)";

@@ -627,7 +627,7 @@ html:not(.js) .nav{ background:var(--mist); }
 .projNo{ font:500 14px/1.5 var(--text); letter-spacing:0; color:var(--ink-3); }
 .proj--thermal .projText{ grid-column:1/5; padding-top:0; }
 .proj--thermal .plate{ grid-column:6/13; margin-top:90px; }
-.proj--vol .plate{ grid-column:1/12; grid-row:1; margin-top:0; }
+.proj--vol .plate{ grid-column:1/-1; grid-row:1; margin-top:0; width:100%; max-width:820px; justify-self:center; }
 .proj--vol .projText{ display:grid; grid-template-columns:repeat(11,minmax(0,1fr)); gap:20px var(--gap); grid-column:1/12; grid-row:2; padding:40px 0 0; }
 .proj--vol .projNo{ grid-column:1/5; }
 .proj--vol .bigStat{ grid-column:1/6; grid-row:2/5; margin:0; font:400 clamp(80px, 10.5vw, 150px)/1 var(--display); letter-spacing:-.055em; flex-wrap:wrap; }
@@ -718,7 +718,7 @@ html:not(.js) .nav{ background:var(--mist); }
 .foot p:has(#wordMotion){ grid-column:1/-1; }
 .cycleWord{ grid-area:1/1; visibility:hidden; white-space:pre; }
 .cycleWord.is-active{ visibility:visible; }
-.wordChar{ transition:opacity 120ms linear; }
+.wordChar{ transition:opacity var(--word-fade, 120ms) linear; }
 .reveal-ready .revealChar{ opacity:0; transition:opacity 120ms steps(1,end); }
 .reveal-ready.is-revealed .revealChar{ opacity:1; }
 .contactHello{ grid-column:4/13; margin-top:26px; font:400 italic clamp(28px, 4vw, 48px)/1.15 var(--display); }
@@ -764,6 +764,7 @@ html:not(.js) .nav{ background:var(--mist); }
 .pipeline:not(.is-enhanced) .pipelineSteps{ grid-column:1/-1; display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:32px; }
 @media (max-width:719px){
   .contactHello{ grid-column:1/-1; }
+  .proj--vol .plate{ width:auto; max-width:none; justify-self:stretch; }
   .gamePanels,.approachPieces{ grid-template-columns:minmax(0,1fr); }
   .gamePanel .gameMini{ height:230px; }
   .pipelineLayout{ display:block; margin-top:32px; }

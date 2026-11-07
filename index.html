@@ -50,7 +50,7 @@
     <section class="hero" id="top" aria-labelledby="heroTitle">
       <div class="heroCopy">
         <h1 class="heroTitle" id="heroTitle">Ethan Lam</h1>
-        <div class="heroWords" aria-hidden="true"><span class="heroLead">I like to build</span> <span class="cycle" data-cycle><span class="cycleWord is-active">renderers.</span><span class="cycleWord">shaders.</span><span class="cycleWord">backtests.</span><span class="cycleWord">chess puzzles.</span></span></div>
+        <div class="heroWords" aria-hidden="true"><span class="heroLead">I like to build</span> <span class="cycle" data-cycle="hero"><span class="cycleWord is-active">renderers.</span><span class="cycleWord">shaders.</span><span class="cycleWord">backtests.</span><span class="cycleWord">chess puzzles.</span></span></div>
         <p class="sr-only">I like to build renderers, shaders, backtests and chess puzzles.</p>
         <p class="heroFact">Computer engineering · Georgia Tech ’28</p>
       </div>
@@ -67,11 +67,11 @@
 
       <!-- 01 — wide spread, visual left -->
       <article class="proj proj--renderer grid" id="work-renderer" data-project="renderer">
-        <figure class="plate plate--light" style="--ar:3/2">
+        <figure class="plate plate--light" style="--ar:4/3">
           <a class="plateVis" href="#project/renderer" aria-label="Open software renderer case study">
-            <picture><source type="image/webp" srcset="assets/renderer-cover-768.webp 768w, assets/renderer-cover.webp 1536w" sizes="(max-width:1099px) 100vw, 62vw"><img src="assets/renderer-cover.webp" width="1536" height="1024" alt="Illustrated exploded rendering pipeline, with geometry and shaded output arranged across four panels." loading="lazy" decoding="async"></picture>
+            <picture><img src="assets/pipeline-5.png" width="800" height="600" alt="A closed icosahedron with triangular faces and directional diffuse shading." loading="lazy" decoding="async"></picture>
           </a>
-          <figcaption class="mono">Illustration · Software rendering pipeline</figcaption>
+          <figcaption class="mono">Browser illustration · Solid shaded output</figcaption>
         </figure>
         <div class="projText">
           <p class="projNo" aria-hidden="true">01</p>
@@ -93,11 +93,11 @@
             <div class="pipelineCanvasStack"></div><figcaption class="pipelineCaption">01 / Projection &amp; perspective divide</figcaption>
           </figure>
           <ol class="pipelineSteps">
-            <li tabindex="0"><span class="mono">01 / From points to a picture</span><h3>Projection &amp; perspective divide</h3><p>World, view and projection transforms move vertices into camera space. Dividing by depth maps them into normalized device coordinates. A wireframe keeps the front and back edges visible.</p><img src="assets/pipeline-1.png" width="800" height="600" alt="Projected wireframe icosahedron, showing front and back edges." loading="lazy" decoding="async"></li>
+            <li tabindex="0"><span class="mono">01 / From points to a picture</span><h3>Projection &amp; perspective divide</h3><p>World, view and projection transforms move vertices into camera space. Dividing by depth maps them into normalized device coordinates. Wireframe edges over a solid shape keep the front and back edges visible.</p><img src="assets/pipeline-1.png" width="800" height="600" alt="Solid icosahedron with projected front and back wireframe edges." loading="lazy" decoding="async"></li>
             <li tabindex="0"><span class="mono">02 / Keep the visible side</span><h3>Backface culling</h3><p>Triangles whose normal points away from the camera are discarded. On a convex mesh, the front faces do not overlap each other: culling alone can fix visibility.</p><img src="assets/pipeline-2.png" width="800" height="600" alt="Flat-filled front faces of the icosahedron with back faces removed." loading="lazy" decoding="async"></li>
-            <li tabindex="0"><span class="mono">03 / Define the depth range</span><h3>NDC clipping</h3><p>Geometry outside the depth range is clipped after the perspective divide. In normalized device coordinates, the depth test becomes a simple range comparison.</p><img src="assets/pipeline-3.png" width="800" height="600" alt="Icosahedron faces clipped to the normalized depth range, with the NDC frame outlined." loading="lazy" decoding="async"></li>
-            <li tabindex="0"><span class="mono">04 / Choose the draw order</span><h3>Painter’s depth sort</h3><p>The remaining faces are drawn far to near. The numbers show their drawing order. Sorting whole polygons fits the Matplotlib output, but is not a per-pixel depth buffer.</p><img src="assets/pipeline-4.png" width="800" height="600" alt="Clipped faces numbered in far-to-near painter’s order." loading="lazy" decoding="async"></li>
-            <li tabindex="0"><span class="mono">05 / Let the normal catch the light</span><h3>Diffuse shading</h3><p>A directional light supplies a per-face brightness: max(0, n·l). Geometry and light direction become the shaded triangles on the page.</p><img src="assets/pipeline-5.png" width="800" height="600" alt="Clipped icosahedron shaded with directional diffuse light." loading="lazy" decoding="async"></li>
+            <li tabindex="0"><span class="mono">03 / Define the depth range</span><h3>NDC clipping</h3><p>Geometry outside the depth range is removed in this cutaway. The original Python renderer clips in NDC; this browser illustration clips in view space before projecting, so the cut edges stay geometrically consistent.</p><img src="assets/pipeline-3.png" width="800" height="600" alt="Icosahedron cut away at the depth boundary, with the NDC frame outlined." loading="lazy" decoding="async"></li>
+            <li tabindex="0"><span class="mono">04 / Choose the draw order</span><h3>Painter’s depth sort</h3><p>The full shape returns here. Visible faces are drawn far to near; the numbers show their drawing order. Sorting whole polygons fits the Matplotlib output, but is not a per-pixel depth buffer.</p><img src="assets/pipeline-4.png" width="800" height="600" alt="Closed icosahedron with faces numbered in far-to-near painter’s order." loading="lazy" decoding="async"></li>
+            <li tabindex="0"><span class="mono">05 / Let the normal catch the light</span><h3>Diffuse shading</h3><p>A directional light supplies a per-face brightness: max(0, n·l). Geometry and light direction become the shaded triangles on the page.</p><img src="assets/pipeline-5.png" width="800" height="600" alt="Closed icosahedron shaded with directional diffuse light." loading="lazy" decoding="async"></li>
           </ol>
         </div>
       </section>
