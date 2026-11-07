@@ -6,7 +6,7 @@
   <title>Ethan Lam — Computer Engineering, Georgia Tech</title>
   <meta name="description" content="Ethan Lam — Computer Engineering at Georgia Tech ('28). A software 3D renderer, an HLSL thermal-vision shader, and a realized-volatility study of SPY." />
   <link rel="canonical" href="https://ethan-lam.com/" />
-  <meta name="theme-color" content="#F2EFE7" />
+  <meta name="theme-color" content="#0F1A15" />
   <meta property="og:type" content="website" />
   <meta property="og:title" content="Ethan Lam — Portfolio" />
   <meta property="og:description" content="Ethan Lam — Computer Engineering at Georgia Tech ('28). GPU/graphics programming and quantitative systems." />
@@ -22,69 +22,56 @@
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
+  <div class="env" aria-hidden="true">
+    <div class="envScene">
+      <picture>
+        <source media="(max-aspect-ratio: 4/5)" type="image/avif" srcset="assets/hero/lake-portrait-640.avif 640w, assets/hero/lake-portrait-1024.avif 1024w" sizes="100vw">
+        <source media="(max-aspect-ratio: 4/5)" type="image/webp" srcset="assets/hero/lake-portrait-640.webp 640w, assets/hero/lake-portrait-1024.webp 1024w" sizes="100vw">
+        <source type="image/avif" srcset="assets/hero/lake-768.avif 768w, assets/hero/lake-1280.avif 1280w, assets/hero/lake-1536.avif 1536w" sizes="100vw">
+        <img id="lakeImage" src="assets/hero/lake-1536.webp" srcset="assets/hero/lake-768.webp 768w, assets/hero/lake-1280.webp 1280w, assets/hero/lake-1536.webp 1536w" sizes="100vw" width="1536" height="1024" alt="" fetchpriority="high" decoding="async">
+      </picture>
+    </div>
+    <div class="veil"></div>
+  </div>
 
   <header class="nav" id="nav">
     <a class="brand" href="#top" aria-label="Ethan Lam — back to top">Ethan Lam</a>
-    <p class="navMeta" aria-hidden="true">Computer Engineering · Georgia Tech ’28</p>
     <nav aria-label="Primary">
       <ul class="navLinks">
         <li><a href="#projects" data-section="projects">Work</a></li>
         <li><a href="#lab" data-section="lab">Lab</a></li>
         <li><a href="#about" data-section="about">About</a></li>
         <li><a href="#contact" data-section="contact">Contact</a></li>
-        <li><a href="mailto:ethanlam52@gmail.com?subject=R%C3%A9sum%C3%A9%20request" title="Résumé available on request by email">Résumé</a></li>
       </ul>
     </nav>
   </header>
 
   <main id="main">
-    <!-- § 01 — HERO / INDEX -->
-    <section class="hero grid" id="top" aria-labelledby="heroTitle">
-      <figure class="heroDesk illustration">
-        <img src="assets/hero-desk.webp" srcset="assets/hero-desk-768.webp 768w, assets/hero-desk.webp 1536w" sizes="(max-width:719px) calc(100vw - 40px), calc(100vw - 96px)" width="1536" height="1024" alt="Illustration of a draftsman's desk with graphite icosahedron construction lines." fetchpriority="high" decoding="async">
-        <figcaption class="mono">Illustration</figcaption>
-      </figure>
-
-      <h1 class="heroTitle" id="heroTitle" aria-label="Ethan Lam">
-        <span class="hl hl1" aria-hidden="true"><span class="hlIn"><span class="heroLetter">E</span><span class="heroLetter">t</span><span class="heroLetter">h</span><span class="heroLetter">a</span><span class="heroLetter">n</span></span></span>
-        <span class="hl hl2" aria-hidden="true"><span class="hlIn"><span class="heroLetter">L</span><span class="heroLetter">a</span><span class="heroLetter">m</span></span></span>
-      </h1>
-
-      <figure class="heroFig" aria-label="Figure 0: a wireframe icosahedron drawn by a JavaScript port of my software renderer">
-        <div class="heroCanvas" data-vis="wire"></div>
-        <figcaption class="mono"><b>Fig. 0</b> 12 vertices, 20 faces, projected by hand. Drag to turn it.</figcaption>
-      </figure>
-
-      <div class="heroIntro">
-        <p>I’m Ethan, a computer engineering student at Georgia Tech. I like taking systems apart to see the mechanism — and making the invisible visible.</p>
-        <nav class="heroRefs mono" aria-label="Featured projects"><a href="#projects">Explore the work ↓</a><a href="#lab">Play in the Lab ↗</a></nav>
+    <section class="hero" id="top" aria-labelledby="heroTitle">
+      <div class="heroCopy">
+        <h1 class="heroTitle" id="heroTitle">Ethan Lam</h1>
+        <div class="heroWords" aria-hidden="true"><span class="heroWord is-active">Observe.</span><span class="heroWord">Take apart.</span><span class="heroWord">Rebuild.</span></div>
+        <p class="sr-only">Observe, take apart, rebuild.</p>
+        <p class="heroFact">Computer engineering · Georgia Tech ’28</p>
       </div>
-
-      <ol class="index" aria-label="Project index">
-        <li><a href="#work-renderer"><span class="n">01</span><span class="t">Software 3D renderer</span><span class="k">Graphics</span><span class="s">Python · NumPy · Matplotlib</span><span class="arr" aria-hidden="true">↘</span></a></li>
-        <li><a href="#work-thermal"><span class="n">02</span><span class="t">Thermal-vision shader</span><span class="k">GPU</span><span class="s">Unity · HLSL · C#</span><span class="arr" aria-hidden="true">↘</span></a></li>
-        <li><a href="#work-vol"><span class="n">03</span><span class="t">Realized volatility &amp; SPY</span><span class="k">Research</span><span class="s">pandas · statsmodels</span><span class="arr" aria-hidden="true">↘</span></a></li>
-      </ol>
+      <a class="scrollCue" href="#projects"><span>Selected work</span><span class="scrollLine" aria-hidden="true"></span></a>
     </section>
 
-    <!-- § 02 — SELECTED WORK -->
+    <!-- Selected work -->
     <section class="work" id="projects" aria-labelledby="workTitle">
       <header class="secHead grid rule">
-        <h2 id="workTitle" class="secTitle">From an idea<br>to an image.</h2>
-        <p class="secNote mono">Selected work.<br>Open a project to see how it works.</p>
+        <p class="sec mono">Selected work</p>
+        <h2 id="workTitle" class="secTitle">Selected work</h2>
+        <p class="secNote mono">Hover a figure to read its annotations.<br>Select it for the full case study.</p>
       </header>
 
       <!-- 01 — wide spread, visual left -->
       <article class="proj proj--renderer grid" id="work-renderer" data-project="renderer">
-        <figure class="projectCover illustration"><img src="assets/renderer-cover.webp" srcset="assets/renderer-cover-768.webp 768w, assets/renderer-cover.webp 1536w" sizes="(max-width:719px) calc(100vw - 40px), 72vw" width="1536" height="1024" alt="Illustration of an exploded software rendering pipeline across four panels." loading="lazy" decoding="async"><figcaption class="mono">Illustration</figcaption></figure>
-        <figure class="plate plate--light" data-annotate="renderer" style="--ar:16/10">
-          <a class="plateVis" data-vis="renderer" href="#project/renderer" aria-label="Open software renderer case study"></a>
-          <ol class="notes">
-            <li style="--lx:5%;--ly:10%" data-side="r" data-key="vertex"><b>1</b> Perspective divide: <i>x/z, y/z</i> → normalized device coordinates</li>
-            <li style="--lx:95%;--ly:16%" data-side="l" data-key="lit"><b>2</b> Diffuse shading: brightness = max(0, <i>n·l</i>)</li>
-            <li style="--lx:95%;--ly:88%" data-side="l" data-key="far"><b>3</b> Painter’s order: farthest faces drawn first · <span data-live="culled">10</span> back faces culled</li>
-          </ol>
-          <figcaption class="mono"><span><b>Fig. 1</b> Shaded output, culled and depth-sorted.</span><button class="annoBtn" type="button" aria-pressed="false">Annotate</button></figcaption>
+        <figure class="plate plate--light" style="--ar:3/2">
+          <a class="plateVis" href="#project/renderer" aria-label="Open software renderer case study">
+            <picture><source type="image/webp" srcset="assets/renderer-cover-768.webp 768w, assets/renderer-cover.webp 1536w" sizes="(max-width:1099px) 100vw, 62vw"><img src="assets/renderer-cover.webp" width="1536" height="1024" alt="Illustrated exploded rendering pipeline, with geometry and shaded output arranged across four panels." loading="lazy" decoding="async"></picture>
+          </a>
+          <figcaption class="mono">Illustration · Software rendering pipeline</figcaption>
         </figure>
         <div class="projText">
           <p class="projNo" aria-hidden="true">01</p>
@@ -98,7 +85,6 @@
 
       <!-- 02 — narrow text left, visual offset right and lower -->
       <article class="proj proj--thermal grid" id="work-thermal" data-project="thermal">
-        <figure class="projectCover illustration"><img src="assets/shader-cover.webp" srcset="assets/shader-cover-768.webp 768w, assets/shader-cover.webp 1536w" sizes="(max-width:719px) calc(100vw - 40px), 56vw" width="1536" height="1024" alt="Illustration of a scene interpreted through thermal vision." loading="lazy" decoding="async"><figcaption class="mono">Illustration</figcaption></figure>
         <div class="projText">
           <p class="projNo" aria-hidden="true">02</p>
           <h3 class="projTitle">Seeing depth as&nbsp;heat</h3>
@@ -106,6 +92,12 @@
           <dl class="meta mono"><div><dt>Area</dt><dd>GPU programming</dd></div><div><dt>Stack</dt><dd>Unity, HLSL, C#</dd></div></dl>
           <a class="more" href="#project/thermal"><span>Read case study</span><span aria-hidden="true">→</span></a>
         </div>
+        <figure class="plate plate--dark" style="--ar:3/2">
+          <a class="plateVis" href="#project/thermal" aria-label="Open thermal-vision shader case study">
+            <picture><source type="image/webp" srcset="assets/shader-cover-768.webp 768w, assets/shader-cover.webp 1536w" sizes="(max-width:719px) 100vw, 54vw"><img src="assets/shader-cover.webp" width="1536" height="1024" alt="Illustrated scene viewed through a thermal colour ramp, with warm foreground forms and cool distant geometry." loading="lazy" decoding="async"></picture>
+          </a>
+          <figcaption class="mono">Illustration · Thermal vision</figcaption>
+        </figure>
         <a class="cover" href="#project/thermal" tabindex="-1" aria-hidden="true"></a>
       </article>
 
@@ -123,8 +115,9 @@
         </figure>
         <div class="projText">
           <p class="projNo" aria-hidden="true">03</p>
-          <h3 class="projTitle">Looking for a signal.</h3>
-          <p class="projDesc">A notebook study of realized volatility, tested on SPY daily data. The chart is the held-out result; the case study opens up the method and its limitations.</p>
+          <p class="bigStat"><span class="mono">R² =</span>0.000</p>
+          <h3 class="projTitle">Does today’s volatility predict tomorrow’s&nbsp;return?</h3>
+          <p class="projDesc">Four realized-volatility estimators on SPY daily data from 2000. On its own, volatility explains none of the next day’s return; with lagged return added there’s a small, significant mean-reversion effect.</p>
           <dl class="meta mono"><div><dt>Area</dt><dd>Quant research</dd></div><div><dt>Stack</dt><dd>pandas, statsmodels, yfinance</dd></div></dl>
           <p class="more">
             <a href="#project/vol"><span>Read case study</span><span aria-hidden="true">→</span></a>
@@ -134,45 +127,66 @@
       </article>
     </section>
 
-    <!-- § 03 — BENCH (interactive demonstration) -->
-    <section class="benchSec" id="bench" aria-labelledby="benchTitle">
-      <header class="secHead grid rule">
-        <h2 id="benchTitle" class="secTitle">The renderer, with the<br>lid&nbsp;off.</h2>
-        <p class="secLede">Step through the same pipeline as project 01. Turn off culling, then sorting, and watch visibility break — then work out why a convex mesh only needs one of them.</p>
-      </header>
-      <div class="benchMount" data-bench></div>
-    </section>
-
     <section class="labSec" id="lab" aria-labelledby="labTitle">
       <header class="secHead grid rule">
+        <p class="sec mono">Experiments</p>
         <h2 class="secTitle" id="labTitle">Think with your hands.</h2>
         <p class="secNote mono">Small systems. Playable ideas.</p>
       </header>
-      <figure class="labCover illustration"><img src="assets/lab-cover.webp" srcset="assets/lab-cover-768.webp 768w, assets/lab-cover.webp 1536w" sizes="(max-width:719px) calc(100vw - 40px), 75vw" width="1536" height="1024" alt="Illustration of chess pieces on a dark tabletop." loading="lazy" decoding="async"><figcaption class="mono">Illustration</figcaption></figure>
       <ol class="labIndex">
-        <li class="labEntry"><a href="#lab/chess" class="grid"><span class="mono">01 / CHESS</span><h3>Find the forcing line.</h3><p>Twelve chess puzzles. A board, a few clues, and a move that changes everything.</p><span class="mono">Open experiment ↗</span></a></li>
-        <li class="labEntry"><a href="#lab/strategy" class="grid"><span class="mono">02 / STRATEGY SANDBOX</span><h3>Test the signal.</h3><p>A moving-average model. Historical prices, explicit assumptions, and the cost of being wrong.</p><span class="mono">Open experiment ↗</span></a></li>
+        <li class="labEntry"><a href="#lab/chess" class="grid"><span class="mono">01 / Chess</span><h3>Find the forcing line.</h3><p>Twelve chess puzzles. A board, a few clues, and a move that changes everything.</p><span class="mono">Open experiment ↗</span></a></li>
+        <li class="labEntry"><a href="#lab/strategy" class="grid"><span class="mono">02 / Strategy sandbox</span><h3>Test the signal.</h3><p>A moving-average model. Historical prices, explicit assumptions, and the cost of being wrong.</p><span class="mono">Open experiment ↗</span></a></li>
       </ol>
+      <figure class="labCover plate plate--light">
+        <a class="plateVis" href="#lab/chess" aria-label="Open chess puzzles">
+          <picture><source type="image/webp" srcset="assets/lab-cover-768.webp 768w, assets/lab-cover.webp 1536w" sizes="(max-width:719px) 100vw, 55vw"><img src="assets/lab-cover.webp" width="1536" height="1024" alt="Chess pieces beside a stack of poker chips on a dark tabletop." loading="lazy" decoding="async"></picture>
+        </a>
+        <figcaption class="mono">Illustration · Small systems, playable ideas</figcaption>
+      </figure>
     </section>
 
-    <!-- § 04 — ABOUT -->
+    <!-- About -->
     <section class="about grid rule" id="about" aria-labelledby="aboutTitle">
+      <p class="sec mono">About</p>
       <h2 class="aboutTitle" id="aboutTitle">I want to know what the abstraction is&nbsp;hiding.</h2>
       <div class="aboutText">
-        <p>I study computer engineering at Georgia Tech, class of 2028, on the Cybersecurity and Distributed Systems &amp; Software Design threads. The projects I end up caring about sit where hardware, math and software meet.</p>
-        <p>I’m also a quant sector project manager with the GTSF Investment Committee.</p>
+        <p>I study computer engineering at Georgia Tech, class of 2028, on the Cybersecurity and Distributed Systems &amp; Software Design threads. The projects I end up caring about sit where hardware, math and software meet — rendering pipelines and trading infrastructure.</p>
         <p>Outside of class: poker, basketball, pickleball, golf, rock climbing, and travelling when I get the chance.</p>
+      </div>
+
+      <div class="ledger" id="experience">
+        <h3 class="ledgerHead mono">Experience</h3>
+        <div class="entry">
+          <p class="when mono">Aug 2025 –<br>present</p>
+          <div>
+            <h4>Project Manager, Quant Sector</h4>
+            <p class="org">GTSF Investment Committee · Georgia Tech Student Foundation</p>
+            <ul>
+              <li>Built a central portfolio controller in Python for capital allocation, rebalancing and risk constraints.</li>
+              <li>Reworked the trading scripts and backtesting pipeline so strategies are validated out of sample and reproducible.</li>
+              <li>Led the integration of two independent strategies into one production-ready system.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="entry">
+          <p class="when mono">2028</p>
+          <div>
+            <h4>B.S. Computer Engineering</h4>
+            <p class="org">Georgia Institute of Technology</p>
+          </div>
+        </div>
       </div>
 
       <dl class="toolbox" id="skills">
         <div><dt class="mono">Languages</dt><dd>Python, Java, C, C#, HLSL</dd></div>
         <div><dt class="mono">Tools</dt><dd>Unity, NumPy, pandas, statsmodels</dd></div>
-        <div><dt class="mono">Practice</dt><dd>Statistics, data analysis, research writing</dd></div>
+        <div><dt class="mono">Practice</dt><dd>Statistics, data analysis, financial modelling, research writing</dd></div>
       </dl>
     </section>
 
-    <!-- § 05 — CONTACT -->
+    <!-- Contact -->
     <section class="contact grid rule" id="contact" aria-labelledby="contactTitle">
+      <p class="sec mono">Contact</p>
       <h2 class="contactTitle" id="contactTitle">Internships, research, or a question about one of these projects — email is the fastest way to reach&nbsp;me.</h2>
       <a class="email" href="mailto:ethanlam52@gmail.com"><span>ethanlam52</span><span>@gmail.com</span></a>
       <ul class="elsewhere mono">
@@ -184,7 +198,7 @@
 
   <footer class="foot mono">
     <p>© <span id="year">2026</span> Ethan Lam</p>
-    <p>Set in Archivo, Source Serif 4 &amp; IBM Plex Mono. Static HTML, CSS and JS.</p>
+    <p>Set in Source Serif 4 &amp; Archivo. Photograph generated for this site.</p>
     <p><a href="#top">Back to top ↑</a></p>
   </footer>
 
@@ -204,7 +218,15 @@
       <p class="sec mono"><span>01</span> Graphics · Personal project</p>
       <h2 class="csTitle" id="detailTitle">A renderer with no graphics&nbsp;API</h2>
     </header>
-    <figure class="plate plate--light csMedia"><div class="plateVis" data-vis="renderer" data-big></div></figure>
+    <figure class="plate plate--light csMedia" data-annotate="renderer" style="--ar:16/10">
+      <div class="plateVis" data-vis="renderer" data-big></div>
+      <ol class="notes">
+        <li style="--lx:5%;--ly:10%" data-side="r" data-key="vertex"><b>1</b> Perspective divide: <i>x/z, y/z</i> → normalized device coordinates</li>
+        <li style="--lx:95%;--ly:16%" data-side="l" data-key="lit"><b>2</b> Diffuse shading: brightness = max(0, <i>n·l</i>)</li>
+        <li style="--lx:95%;--ly:88%" data-side="l" data-key="far"><b>3</b> Painter’s order: farthest faces drawn first · <span data-live="culled">10</span> back faces culled</li>
+      </ol>
+      <figcaption class="mono"><span><b>Fig. 1</b> Shaded output, culled and depth-sorted.</span><button class="annoBtn" type="button" aria-pressed="false">Annotate</button></figcaption>
+    </figure>
     <div class="csBody grid">
       <aside class="csMeta mono">
         <dl><div><dt>Stack</dt><dd>Python · NumPy · Matplotlib</dd></div><div><dt>Area</dt><dd>Graphics programming</dd></div><div><dt>Type</dt><dd>Personal project</dd></div></dl>
@@ -235,7 +257,15 @@
       <p class="sec mono"><span>02</span> GPU programming · Personal project</p>
       <h2 class="csTitle" id="detailTitle">Seeing depth as&nbsp;heat</h2>
     </header>
-    <figure class="illustration csMedia"><img src="assets/shader-cover.webp" srcset="assets/shader-cover-768.webp 768w, assets/shader-cover.webp 1536w" sizes="(max-width:719px) calc(100vw - 40px), calc(100vw - 96px)" width="1536" height="1024" alt="Illustration of a scene interpreted through thermal vision." loading="lazy" decoding="async"><figcaption class="mono">Illustration</figcaption></figure>
+    <figure class="plate plate--dark csMedia" data-annotate="thermal" style="--ar:16/10">
+      <div class="plateVis" data-vis="thermal" data-interactive></div>
+      <ol class="notes">
+        <li style="--lx:4%;--ly:9%" data-side="r" data-at=".62,.16"><b>1</b> Past max distance: clamped to the coldest colour</li>
+        <li style="--lx:96%;--ly:36%" data-side="l" data-at=".725,.31"><b>2</b> Sobel operator on the depth buffer → outlines</li>
+        <li style="--lx:4%;--ly:52%" data-side="r" data-at=".46,.83"><b>3</b> Nearest surface → hot end of the ramp</li>
+      </ol>
+      <figcaption class="mono"><span><b>Fig. 2</b> Browser illustration of the effect.</span><button class="annoBtn" type="button" aria-pressed="false">Annotate</button></figcaption>
+    </figure>
     <div class="csBody grid">
       <aside class="csMeta mono">
         <dl><div><dt>Stack</dt><dd>Unity · HLSL · C#</dd></div><div><dt>Area</dt><dd>GPU / graphics programming</dd></div><div><dt>Type</dt><dd>Personal project</dd></div></dl>
@@ -250,6 +280,13 @@
         </ol>
         <h3><span class="mono">B</span> Why depth</h3>
         <p>Because heat is derived from the depth buffer, the effect is a pure screen-space pass: it needs no per-object temperature data and works on any scene it is applied to.</p>
+        <h3><span class="mono">C</span> Try it</h3>
+        <div class="controls mono" data-demo="thermal">
+          <label class="range">Max distance <input type="range" min="0.25" max="1" step="0.01" value="0.7" data-opt="range"> <output data-out="range">0.70</output></label>
+          <label class="check"><input type="checkbox" data-opt="edges" checked> Edges</label>
+          <label class="check"><input type="checkbox" data-opt="grain" checked> Grain</label>
+        </div>
+        <p class="hint mono">Browser illustration with SVG. The real shader runs on the GPU inside Unity.</p>
       </div>
     </div>
   </template>
@@ -323,11 +360,11 @@
   </template>
 
   <template id="tpl-lab-chess">
-    <header class="csHead grid"><p class="sec mono"><span>§ Lab / 01</span> Chess puzzles</p><h2 class="csTitle" id="detailTitle">Find the forcing line.</h2></header>
+    <header class="csHead grid"><p class="sec mono">Chess puzzles</p><h2 class="csTitle" id="detailTitle">Find the forcing line.</h2></header>
     <div class="chessMount" data-chess><p role="status">Loading the board…</p></div>
   </template>
   <template id="tpl-lab-strategy">
-    <header class="csHead grid"><p class="sec mono"><span>§ Lab / 02</span> Strategy sandbox</p><h2 class="csTitle" id="detailTitle">Test the signal.</h2></header>
+    <header class="csHead grid"><p class="sec mono">Strategy sandbox</p><h2 class="csTitle" id="detailTitle">Test the signal.</h2></header>
     <div class="strategyMount" data-strategy><p role="status">Loading the sandbox…</p></div>
   </template>
   <script src="main.js" type="module"></script>
