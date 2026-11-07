@@ -96,9 +96,13 @@ import("./lab/lake/lake.js").then(({ mountLake }) => mountLake());
         const n = normalize(cross(sub(b, a), sub(c, a)));
         const centroid = [(a[0]+b[0]+c[0])/3, (a[1]+b[1]+c[1])/3, (a[2]+b[2]+c[2])/3];
         const facing = dot(n, centroid) < 0;
-        const depthPoints = idx.map(i => [ndc[i][0], ndc[i][1], (view[i][2] - 3.45) / (4.95 - 3.45) * 2 - 1]);
+        const depthPoints = idx.map(i => [view[i][0], view[i][1], (view[i][2] - 3.45) / (4.95 - 3.45) * 2 - 1]);
         const clipped = s.clip ? clipDepth(depthPoints, -1, 1) : depthPoints;
-        const points = clipped.map(p => [w / 2 + p[0] * size / 2, h / 2 - p[1] * size / 2]);
+        const points = clipped.map(p => {
+          const z = 3.45 + (p[2] + 1) / 2 * (4.95 - 3.45);
+          const k = s.focal / z * norm * size / 2;
+          return [w / 2 + p[0] * k, h / 2 - p[1] * k];
+        });
         return { idx, points, order, n, z: centroid[2], facing, lit: clamp(dot(n, LIGHT), 0, 1),
           cx: points.reduce((sum, p) => sum + p[0], 0) / (points.length || 1), cy: points.reduce((sum, p) => sum + p[1], 0) / (points.length || 1) };
       });
