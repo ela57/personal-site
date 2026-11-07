@@ -1,4 +1,8 @@
 /* Ethan Lam · navigation, project visuals, annotations and case-study overlays. */
+import { imagePoint } from "./lab/lake/annotations.js";
+import { mountWords } from "./lab/words.js";
+import { clipDepth, mountPipeline } from "./lab/pipeline.js";
+mountWords();
 import("./lab/lake/lake.js").then(({ mountLake }) => mountLake());
 
 (() => {
@@ -92,17 +96,20 @@ import("./lab/lake/lake.js").then(({ mountLake }) => mountLake());
         const n = normalize(cross(sub(b, a), sub(c, a)));
         const centroid = [(a[0]+b[0]+c[0])/3, (a[1]+b[1]+c[1])/3, (a[2]+b[2]+c[2])/3];
         const facing = dot(n, centroid) < 0;
-        const sc = idx.map(i => screen[i]);
-        return { idx, order, n, z: centroid[2], facing, lit: clamp(dot(n, LIGHT), 0, 1),
-          cx: (sc[0][0]+sc[1][0]+sc[2][0])/3, cy: (sc[0][1]+sc[1][1]+sc[2][1])/3 };
+        const depthPoints = idx.map(i => [ndc[i][0], ndc[i][1], (view[i][2] - 3.45) / (4.95 - 3.45) * 2 - 1]);
+        const clipped = s.clip ? clipDepth(depthPoints, -1, 1) : depthPoints;
+        const points = clipped.map(p => [w / 2 + p[0] * size / 2, h / 2 - p[1] * size / 2]);
+        return { idx, points, order, n, z: centroid[2], facing, lit: clamp(dot(n, LIGHT), 0, 1),
+          cx: points.reduce((sum, p) => sum + p[0], 0) / (points.length || 1), cy: points.reduce((sum, p) => sum + p[1], 0) / (points.length || 1) };
       });
       let faces = all;
       const culled = s.stage >= 2 && s.cull ? all.filter(f => !f.facing).length : 0;
       if (s.stage >= 2 && s.cull) faces = all.filter(f => f.facing);
+      faces = faces.filter(f => f.points.length >= 3);
       if (s.stage >= 2 && s.sort) faces = faces.slice().sort((p, q) => q.z - p.z);
 
       ctx.lineJoin = "round"; ctx.lineCap = "round";
-      const path = f => { const [i, j, m] = f.idx; ctx.beginPath(); ctx.moveTo(screen[i][0], screen[i][1]); ctx.lineTo(screen[j][0], screen[j][1]); ctx.lineTo(screen[m][0], screen[m][1]); ctx.closePath(); };
+      const path = f => { ctx.beginPath(); f.points.forEach((p, i) => i ? ctx.lineTo(...p) : ctx.moveTo(...p)); ctx.closePath(); };
       if (s.stage >= 2) {
         faces.forEach(f => {
           path(f);
@@ -122,6 +129,11 @@ import("./lab/lake/lake.js").then(({ mountLake }) => mountLake());
           ctx.beginPath(); ctx.arc(p[0], p[1], clamp(13 / p[2], 1.8, 4), 0, Math.PI * 2);
           ctx.fillStyle = `rgb(${BLUE.join(",")})`; ctx.fill();
         });
+      }
+      if (s.orderLabels) {
+        ctx.font = "12px Archivo, sans-serif"; ctx.textAlign = "center"; ctx.fillStyle = "#13201B";
+        faces.forEach((face, i) => ctx.fillText(String(i + 1), face.cx, face.cy));
+        ctx.textAlign = "start";
       }
       if (s.onFrame) s.onFrame({ w, h, screen, view, faces: all, drawn: s.stage >= 2 ? faces.length : 0, culled, state: s });
     }
@@ -229,24 +241,34 @@ import("./lab/lake/lake.js").then(({ mountLake }) => mountLake());
       return { li, p, ring, c, t, at: (li.dataset.at || ".5,.5").split(",").map(Number), key: li.dataset.key };
     });
     const layout = () => {
-      const W = vis.clientWidth, H = vis.clientHeight;
+      const frame = vis.getBoundingClientRect(), bounds = fig.getBoundingClientRect();
+      const W = frame.width, H = frame.height;
       if (!W) return;
-      svg.setAttribute("width", W); svg.setAttribute("height", H);
+      svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+      svg.style.cssText = `left:${frame.left - bounds.left}px;top:${frame.top - bounds.top}px;width:${W}px;height:${H}px;aspect-ratio:auto`;
       const small = innerWidth < 720;
+      const legend = $(".notes", fig);
+      legend.style.height = small ? "" : `${H}px`;
+      const image = $("img,canvas,svg", vis);
+      const imageBounds = image ? image.getBoundingClientRect() : frame;
       parts.forEach(pt => {
-        const at = (pt.key && live[pt.key]) || [pt.at[0] * W, pt.at[1] * H];
+        const target = pt.key && live[pt.key];
+        const at = target ? [target[0] + imageBounds.left - frame.left, target[1] + imageBounds.top - frame.top] : imagePoint(pt.at, imageBounds, frame);
         const [tx, ty] = at;
         pt.c.setAttribute("cx", tx); pt.c.setAttribute("cy", ty); pt.ring.setAttribute("cx", tx); pt.ring.setAttribute("cy", ty);
         pt.c.setAttribute("r", small ? 9 : 3);
         pt.t.setAttribute("x", tx); pt.t.setAttribute("y", ty);
         if (small) return;
-        const lx = parseFloat(getComputedStyle(pt.li).getPropertyValue("--lx")) / 100 * W;
-        const ly = parseFloat(getComputedStyle(pt.li).getPropertyValue("--ly")) / 100 * H;
-        const sh = pt.li.dataset.side === "l" ? 16 : -16;
-        pt.p.setAttribute("d", `M${tx.toFixed(1)} ${ty.toFixed(1)} L${(lx + sh).toFixed(1)} ${ly.toFixed(1)} H${lx.toFixed(1)}`);
+        const label = pt.li.getBoundingClientRect();
+        const lx = (pt.li.dataset.side === "l" ? label.right : label.left) - frame.left;
+        const ly = label.top + label.height / 2 - frame.top;
+        pt.p.setAttribute("d", `M${tx.toFixed(1)} ${ty.toFixed(1)} L${lx.toFixed(1)} ${ly.toFixed(1)}`);
       });
     };
-    new ResizeObserver(layout).observe(vis);
+    const observer = new ResizeObserver(layout); observer.observe(vis);
+    $("img", vis)?.addEventListener("load", layout, { once: true });
+    const oldCleanup = fig._cleanup;
+    fig._cleanup = () => { observer.disconnect(); oldCleanup?.(); };
     let pinned = false, hovered = false;
     const api = {
       layout, live, onChange: null,
@@ -343,6 +365,7 @@ import("./lab/lake/lake.js").then(({ mountLake }) => mountLake());
     $$("[data-bench]", root).forEach(mountBench);
   }
   mountVisuals(document);
+  mountPipeline(createRenderer);
 
   /* ---------------- Interaction B: case-study overlay (hash routed) ---------------- */
   const ORDER = ["renderer", "thermal", "vol"];
@@ -357,7 +380,7 @@ import("./lab/lake/lake.js").then(({ mountLake }) => mountLake());
   let labCleanup = null, labVersion = 0;
   const cleanup = () => {
     labVersion++; labCleanup?.(); labCleanup = null;
-    $$("[data-vis], [data-bench]", content).forEach(el => el._cleanup && el._cleanup());
+    $$("[data-vis], [data-bench], [data-annotate]", content).forEach(el => el._cleanup && el._cleanup());
   };
 
   function fillDetail(slug) {

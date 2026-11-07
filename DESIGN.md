@@ -13,12 +13,20 @@ below the shoreline, and stops for reduced motion, hidden tabs, or an opaque vei
   R² figure and supporting column below. Keep annotations and explicit links.
 - Renderer and thermal previews use responsive linked illustrations; their live
   visuals and annotations remain in the case studies. Volatility keeps its chart.
-- Lab is a quiet two-row list with a companion illustration. About is quieter prose, experience, education,
+- Lab uses two large linked playable panels, with a real first-puzzle board and
+  bundled SPY / moving-average preview. Approach connects the projects' methods.
+  About is quieter prose, experience, education,
   and a three-row toolbox. Contact uses a large serif email link.
 - Overlays and controls use a deep-green reading surface with mist text; image
   plates remain paper. Scrolled nav uses a 90% forest band and a mist hairline.
 - Fine-pointer image hover: at most 1.02 scale, 300ms ease-out. Honor reduced
   motion, 44px nav targets, visible focus, and no horizontal page overflow.
+- Reusable selectable character effects: stable-width word cycles and once-only
+  heading reveals (35ms/character, under 700ms). Pause control, static reduced-motion
+  and no-JS text. Hero: “I like to build” with four real project subjects.
+- The renderer pipeline progresses through five sticky, crossfading modes, with
+  focusable steps. Reduced motion and no JS show static figures beside each step.
+  Chart annotations map to actual image bounds inside a paper mat; no chart zoom.
 
 Static HTML, CSS and vanilla JS only. Local responsive AVIF/WebP images and fonts.
 The photograph was generated for this site.
