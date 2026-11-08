@@ -145,3 +145,25 @@ The browser reported no console/page errors, no 390px/820px horizontal overflow,
 and a stable cycle box across word changes. `npm test` retained all 47 passes;
 `node --test journey/art.test.js` adds three passing presentation/post-process
 checks without changing the existing test suite.
+
+## Five-stage labs
+
+`content/labs.js` defines the stages and references audited projects. Add an entry
+and, for a live system, a module exporting a mount function that returns an
+idempotent cleanup callback. Encounter mounts are read-only; Experiment mounts
+provide controls. Understand and Reflect reuse the Encounter system. Inspect
+accepts runtime source excerpts (`path`, inclusive `start` / `end`), ordered
+pipeline steps, and/or a local SVG image (`diagram.path` / `diagram.alt`).
+
+`lab-presenter.js` is lab-agnostic. Its modal owns focus and internal scrolling;
+the world renderer and journey navigation are suspended until it closes. Routes
+are `#/lab/<id>/<stage>`. Open and stage changes push history. Back traverses the
+stages to the originating station; Exit/Esc unwinds this lab's history entries.
+Deep links render the project's mapped station first and return there on Exit.
+Adding a definition automatically adds its journey “Enter lab” action. Chess
+retains its existing direct-view link until its five-stage definition is ready.
+
+Strategy mounts share the existing sandbox and engine, with unique heading IDs,
+abortable fetches, disconnected observers and repeat-safe teardown. Its engine
+is unchanged. Schema/routing tests run as part of `npm test`; source ranges are
+checked against the real repository files.

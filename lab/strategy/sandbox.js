@@ -5,8 +5,13 @@ import { simulateGBM, simulation } from "./simulated.js";
 const defaults = { short: 20, long: 100, costBps: 5 };
 const percent = value => (value * 100).toFixed(2) + "%";
 const price = value => value.toFixed(2);
+const mounts = new WeakMap();
+let instance = 0;
 
-export function mountStrategy(root) {
+export function mountStrategy(root, { readOnly = false } = {}) {
+  mounts.get(root)?.();
+  const id = `strategy-${++instance}`;
+  let disposed = false;
   const controller = new AbortController(), opts = { signal: controller.signal };
   let spy = null, dataset = "spy", timer = 0, result = null;
   const simulated = simulateGBM();
@@ -21,13 +26,19 @@ export function mountStrategy(root) {
     </div>
     <div class="strategyActions mono"><button type="button" data-reset>Reset defaults</button><p role="status" aria-live="polite" data-status>Loading bundled prices…</p></div>
     <p class="strategySource mono" data-source></p>
-    <section class="strategyChartSection" aria-labelledby="strategyPriceTitle"><header><h3 id="strategyPriceTitle">SPY · adjusted close &amp; moving averages</h3><p class="mono">Price / short SMA / long SMA · ▲ buy · ▼ sell</p></header><div class="strategyChart strategyPriceChart" role="img" aria-label="Daily price, moving averages and executed buy/sell markers"></div></section>
-    <section class="strategyChartSection" aria-labelledby="strategyEquityTitle"><header><h3 id="strategyEquityTitle">Equity · Strategy vs Buy &amp; hold</h3><p class="mono">Rebased to 1 at range start · net of costs · dawn: Strategy · mist: Buy &amp; hold</p></header><div class="strategyChart strategyEquityChart" role="img" aria-label="Strategy and buy-and-hold equity curves"></div></section>
+    <section class="strategyChartSection" aria-labelledby="${id}-price"><header><h3 id="${id}-price" data-price-title>SPY · adjusted close &amp; moving averages</h3><p class="mono">Price / short SMA / long SMA · ▲ buy · ▼ sell</p></header><div class="strategyChart strategyPriceChart" role="img" aria-label="Daily price, moving averages and executed buy/sell markers"></div></section>
+    <section class="strategyChartSection" aria-labelledby="${id}-equity"><header><h3 id="${id}-equity" data-equity-title>Equity · Strategy vs Buy &amp; hold</h3><p class="mono">Rebased to 1 at range start · net of costs · dawn: Strategy · mist: Buy &amp; hold</p></header><div class="strategyChart strategyEquityChart" role="img" aria-label="Strategy and buy-and-hold equity curves"></div></section>
     <p class="strategyAttribution mono">TradingView Lightweight Charts™<br>Copyright (с) 2025 TradingView, Inc. <a href="https://www.tradingview.com/" target="_blank" rel="noopener noreferrer">Charts by TradingView ↗</a></p>
     <section class="strategyResults"><div><h3>Performance / <span data-result-label>SPY</span></h3><table class="strategyMetrics mono"><caption class="srOnly">Strategy and buy-and-hold performance</caption><thead><tr><th scope="col">Metric</th><th scope="col">Strategy</th><th scope="col">Buy &amp; hold</th></tr></thead><tbody data-metrics></tbody></table></div>
     <div class="strategyMethod"><h3>Model notes</h3><p>Long when short SMA exceeds long SMA; otherwise flat. Signals on close, filled next close. No position during warm-up; date selection slices prices first, with warm-up taken from within the range.</p><p>Costs apply to traded notional on every entry and exit. Buy &amp; hold pays one entry cost at the first selected close. Open trades are marked to the last close, with entry cost only; no assumed liquidation cost.</p><p>Adjusted-price fills are a modelling convention, not executable quotes. Volatility uses sample daily standard deviation × √252; Sharpe uses mean daily return × 252 / annualized volatility, rf=0. Initial costs enter daily returns and drawdown. No cash interest, taxes or slippage beyond the selected cost.</p></div></section>
     <section class="strategyTrades"><header><h3>Trade ledger / <span data-trade-count>0</span></h3><p class="mono">Prices in dataset units · holding days are calendar days · net of costs</p></header><div class="strategyTableScroll" tabindex="0" role="region" aria-label="Scrollable trade ledger"><table class="mono"><thead><tr><th scope="col">Entry date</th><th scope="col">Entry price</th><th scope="col">Exit date</th><th scope="col">Exit price</th><th scope="col">Net return</th><th scope="col">Days</th></tr></thead><tbody data-trades></tbody></table></div></section>`;
   const field = name => root.querySelector(`[name="${name}"]`);
+  root.dataset.readOnly = String(readOnly);
+  if (readOnly) {
+    root.querySelector('.strategyControls').hidden = true;
+    root.querySelector('[data-reset]').hidden = true;
+    root.querySelectorAll('input,select').forEach(field => { field.disabled = true; });
+  }
   const status = root.querySelector("[data-status]");
   const source = root.querySelector("[data-source]");
   const paper = "#17251E", ink = "#ECE7DC", blue = "#E3B677";
@@ -47,6 +58,7 @@ export function mountStrategy(root) {
   const strategyLine = line(equityChart, blue, "Strategy"), holdLine = line(equityChart, ink, "Buy & hold");
   const markers = createSeriesMarkers(closeLine, []);
   const resize = new ResizeObserver(() => {
+    if (disposed) return;
     priceChart.resize(priceHost.clientWidth, 310); equityChart.resize(equityHost.clientWidth, 250);
     priceChart.timeScale().fitContent(); equityChart.timeScale().fitContent();
   });
@@ -61,8 +73,8 @@ export function mountStrategy(root) {
   }
   function describe() {
     const label = dataset === "simulated" ? "Simulated" : "SPY";
-    root.querySelector("#strategyPriceTitle").textContent = `${label} · ${dataset === "spy" ? "adjusted close" : "GBM price"} & moving averages`;
-    root.querySelector("#strategyEquityTitle").textContent = `${label} equity · Strategy vs Buy & hold`;
+    root.querySelector('[data-price-title]').textContent = `${label} · ${dataset === "spy" ? "adjusted close" : "GBM price"} & moving averages`;
+    root.querySelector('[data-equity-title]').textContent = `${label} equity · Strategy vs Buy & hold`;
     root.querySelector("[data-result-label]").textContent = label;
     if (dataset === "simulated") source.textContent = `Simulated · GBM, not market data. Mulberry32 seed ${simulation.seed}; annual drift ${(simulation.drift * 100).toFixed(0)}%, volatility ${simulation.volatility * 100}%; dt=1/252, initial 100, ${simulation.days} weekday observations (no holiday calendar).`;
     else {
@@ -122,7 +134,14 @@ export function mountStrategy(root) {
     if (dataset === "spy") { setDates(); compute(); }
   }).catch(error => {
     if (controller.signal.aborted) return;
-    status.textContent = `${error.message} You can still choose Simulated.`;
+    status.textContent = `${error.message} ${readOnly ? 'Use Experiment to choose Simulated.' : 'You can still choose Simulated.'}`;
   });
-  return () => { controller.abort(); clearTimeout(timer); resize.disconnect(); markers.detach(); priceChart.remove(); equityChart.remove(); root.replaceChildren(); };
+  const cleanup = () => {
+    if (disposed) return;
+    disposed = true;
+    controller.abort(); clearTimeout(timer); resize.disconnect(); markers.detach(); priceChart.remove(); equityChart.remove(); root.replaceChildren();
+    if (mounts.get(root) === cleanup) mounts.delete(root);
+  };
+  mounts.set(root, cleanup);
+  return cleanup;
 }

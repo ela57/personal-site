@@ -29,11 +29,11 @@ header nav { gap: 22px; }
 .contact-links { display: flex; flex-wrap: wrap; gap: 12px; font-size: 12px; line-height: 2; }
 .keys { position: fixed; z-index: 4; left: 0; bottom: 0; margin: 0; padding: 14px 20px; width: var(--panel-width); font-size: 10px; line-height: 1.4; background: #13201b; }
 .has-world { padding-bottom: 0; }
-.has-world #world { left: var(--panel-width); top: var(--header-height); }
+.has-world #world { inset: 0; }
 .has-world .scroll-track { padding: 0; }
-.has-world .scroll-track::before { content: ''; position: fixed; left: 0; top: var(--header-height); bottom: 0; width: var(--panel-width); background: #13201b; }
+.has-world .scroll-track::before { display: none; }
 .has-world .station { height: 500svh; min-height: 0; padding: 0; }
-.has-world .station-panel { position: fixed; z-index: 2; top: var(--header-height); left: 0; bottom: 40px; width: var(--panel-width); padding: 24px; overflow-y: auto; overscroll-behavior: contain; transition: opacity 180ms linear, visibility 180ms linear; }
+.has-world .station-panel { position: fixed; z-index: 2; top: var(--header-height); left: 0; bottom: 40px; width: var(--panel-width); padding: 24px; overflow-y: auto; overscroll-behavior: contain; background: linear-gradient(90deg,#102019ed,#102019df 80%,#102019c9); backdrop-filter: blur(10px); transition: opacity 180ms linear, visibility 180ms linear; }
 .has-world .station:not(.is-active) .station-panel { opacity: 0; visibility: hidden; pointer-events: none; }
 #debug { z-index: 5; top: calc(var(--header-height) + 10px); font-size: 11px; }
 @media(max-width:1000px) {
@@ -48,7 +48,7 @@ header nav { gap: 22px; }
   #location { display: block; padding: 6px 0 2px; font-size: 11px; }
   .stations { display: grid; grid-template-columns: repeat(3,1fr); gap: 0; }
   .stations a { min-height: 28px; font-size: 11px; justify-content: center; }
-  .has-world #world { left: 0; bottom: var(--sheet-height); }
+  .has-world #world { inset: 0; }
   .has-world .scroll-track::before { display: none; }
   .has-world .station-panel { top: auto; bottom: 28px; width: 100%; height: calc(var(--sheet-height) - 28px); border-top: 1px solid #73836d; padding: 16px 20px; }
   .station-panel h1 { font-size: 40px; }

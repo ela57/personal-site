@@ -3,6 +3,8 @@ import { getStations, progressForStation, poseAtProgress, dampAngle, clamp } fro
 import { createWorld } from './world.js';
 import { createAntialiasing } from './antialias.js';
 import { mountPresentation } from './presentation.js';
+import { mountLabPresenter } from './lab-presenter.js';
+import { parseLabRoute, stationForLab, historyRouteEvents } from './lab-routing.js';
 
 export { getStations, progressForStation } from './route.js';
 const changes = new EventTarget();
@@ -24,12 +26,16 @@ const camera = new THREE.PerspectiveCamera(64, 1, .15, 1800);
 camera.rotation.order = 'YXZ';
 let renderer, antialiasing, world, raf = 0, lastTime = 0, previousFrame = 0, currentStation = '';
 let frames = 0, staticView = false, jump = 0;
+let labPaused = false, navigationRevision = 0, backgroundComplete;
+const backgroundReady = new Promise(resolve => { backgroundComplete = resolve; });
 const intervals = [];
 let wanted = poseAtProgress(0);
 const diagnostics = { frames: 0, settled: true, fps: 0, assetFailures: [], progress: 0, pixelRatio: 1, reduced: reduced.matches };
 history.scrollRestoration = 'manual';
 
 function hashStation() {
+  const lab = parseLabRoute(location.hash);
+  if (lab) return stationForLab(lab.lab);
   const id = location.hash.match(/^#\/at\/([a-z-]+)$/)?.[1] || location.hash.slice(1);
   return stations.some(s => s.id === id) ? id : 'entrance';
 }
@@ -49,7 +55,7 @@ function activate(id, sync = true) {
     changes.dispatchEvent(new CustomEvent('stationchange', { detail: station }));
     window.dispatchEvent(new CustomEvent('journey:stationchange', { detail: station }));
   }
-  if (sync && !jump && location.hash !== `#/at/${id}`) history.replaceState(null, '', `/${location.search}#/at/${id}`);
+  if (sync && !jump && !labPaused && !parseLabRoute(location.hash) && location.hash !== `#/at/${id}`) history.replaceState(null, '', `/${location.search}#/at/${id}`);
 }
 function updateStation(sync = true) {
   if (hasWorld()) {
@@ -87,12 +93,12 @@ function goToStation(id, { instant = true, push = false } = {}) {
   jump = requestAnimationFrame(step);
 }
 function wake() {
-  if (!renderer || !world || document.hidden || raf || staticView) return;
+  if (!renderer || !world || document.hidden || raf || staticView || labPaused) return;
   diagnostics.settled = false; raf = requestAnimationFrame(render);
 }
 function render(now) {
   raf = 0;
-  if (document.hidden || staticView) return;
+  if (document.hidden || staticView || labPaused) return;
   const dt = lastTime ? Math.min(.05, (now - lastTime) / 1000) : 1 / 60;
   lastTime = now;
   if (reduced.matches) cut();
@@ -117,12 +123,17 @@ function render(now) {
   if (moving) wake(); else { lastTime = 0; previousFrame = 0; }
 }
 function fit() {
+  if (labPaused) return;
   document.documentElement.style.setProperty('--header-height', `${document.querySelector('header').getBoundingClientRect().height}px`);
   if (renderer && hasWorld()) {
     const bounds = container.getBoundingClientRect();
     renderer.setPixelRatio(Math.min(devicePixelRatio, innerWidth < 600 ? 1 : 1.5));
     renderer.setSize(Math.max(1,bounds.width), Math.max(1,bounds.height));
-    camera.aspect = bounds.width / Math.max(1,bounds.height); camera.updateProjectionMatrix();
+    const mobile = innerWidth <= 1000;
+    const headerHeight = document.querySelector('header').getBoundingClientRect().height;
+    const viewHeight = mobile ? Math.max(1, bounds.height * .58 - headerHeight) : bounds.height;
+    camera.setViewOffset(bounds.width, viewHeight, mobile ? 0 : -bounds.width * .18, mobile ? -headerHeight : 0, bounds.width, bounds.height);
+    camera.updateProjectionMatrix();
   }
   wake();
 }
@@ -138,15 +149,50 @@ function showFallback(message) {
   setStatic(true); motion.hidden = true;
   fallback.firstChild.textContent = `${message} `;
 }
+const presenter = mountLabPresenter({
+  currentStation: () => currentStation,
+  onRoute: syncRoute,
+  onOpen() {
+    labPaused = true; diagnostics.paused = true; cancelJump();
+    cancelAnimationFrame(raf); raf = 0; lastTime = 0; previousFrame = 0;
+  },
+  onClose() {
+    labPaused = false; diagnostics.paused = false; fit(); updateStation(false); wake();
+  }
+});
+async function syncRoute() {
+  const token = ++navigationRevision;
+  presenter.finishExit();
+  const route = parseLabRoute(location.hash);
+  if (route) {
+    await backgroundReady;
+    if (token !== navigationRevision) return;
+    if (!presenter.isOpen) {
+      if (currentStation !== stationForLab(route.lab)) goToStation(stationForLab(route.lab));
+      await new Promise(requestAnimationFrame);
+      if (token !== navigationRevision) return;
+    }
+    presenter.sync(route);
+  } else {
+    const wasOpen = presenter.isOpen; presenter.sync(null);
+    if (!wasOpen || hashStation() !== currentStation) goToStation(hashStation());
+  }
+}
+document.addEventListener('click', event => {
+  const link = event.target.closest('[data-lab-link]');
+  if (link) { event.preventDefault(); presenter.open(link.dataset.labLink); }
+});
 links.forEach(link => link.addEventListener('click', event => {
   event.preventDefault(); goToStation(link.dataset.stationLink, { instant: false, push: true });
 }));
-addEventListener('scroll', () => { updateStation(); wake(); }, { passive: true });
-addEventListener('popstate', () => goToStation(hashStation()));
-addEventListener('hashchange', () => goToStation(hashStation()));
-addEventListener('resize', () => { const id = currentStation; fit(); goToStation(id); });
+addEventListener('scroll', () => { if (!labPaused) { updateStation(); wake(); } }, { passive: true });
+const routeEvents = historyRouteEvents(syncRoute, () => location.href);
+addEventListener('popstate', routeEvents.popstate);
+addEventListener('hashchange', routeEvents.hashchange);
+addEventListener('resize', () => { if (labPaused) return; const id = currentStation; fit(); goToStation(id); });
 for (const type of ['wheel','touchstart']) addEventListener(type, () => { if (jump) { cancelJump(); updateStation(); } }, { passive: true });
 addEventListener('keydown', event => {
+  if (labPaused) return;
   if (event.target.closest('input,textarea,select,[contenteditable="true"]') || event.ctrlKey || event.metaKey) return;
   const delta = event.key === ']' || (event.altKey && event.key === 'ArrowDown') ? 1 : event.key === '[' || (event.altKey && event.key === 'ArrowUp') ? -1 : 0;
   if (delta) {
@@ -180,9 +226,11 @@ try {
       diagnostics.assetFailures = results.filter(result => !result.loaded).map(result => result.name);
       if (diagnostics.assetFailures.length) showFallback('Some forest layers could not load. Explore the destinations below or');
       wake();
+      backgroundComplete();
     });
     motion.hidden = false; fit(); wake();
   };
   if ('requestIdleCallback' in window) requestIdleCallback(start, { timeout: 500 }); else setTimeout(start, 0);
-} catch { showFallback('WebGL is unavailable. Explore the static destinations below or'); goToStation(initial); }
+} catch { showFallback('WebGL is unavailable. Explore the static destinations below or'); goToStation(initial); backgroundComplete(); }
+syncRoute();
 if (debug) window.journeyDebug = { diagnostics, camera, getStations, progressForStation, goToStation, poseAtProgress };

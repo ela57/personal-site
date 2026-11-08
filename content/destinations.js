@@ -1,4 +1,5 @@
 import { projects } from './projects.js';
+import { labs as labDefinitions } from './labs.js';
 
 export const destinations = [
   { id: 'entrance', name: 'Lakeside entrance', subtitle: 'Scroll to follow the shoreline.', projects: ['forest-lake'] },
@@ -23,7 +24,12 @@ export function projectHref(project, labs = true) {
 export const escapeHtml = text => String(text).replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]));
 
 export function projectList(id, labs = false) {
-  return stationProjects(id).map(project => `<li><h3>${escapeHtml(project.title)}</h3><span class="classification">${escapeHtml(project.label)}</span><p>${escapeHtml(project.needsContent ? 'Content needed' : project.summary)}</p><a href="${escapeHtml(projectHref(project, labs))}" aria-label="Open ${escapeHtml(project.title)}">Open <span aria-hidden="true">↗</span></a></li>`).join('\n');
+  return stationProjects(id).map(project => {
+    const lab = !labs && labDefinitions.find(lab => lab.projectId === project.id);
+    const action = lab ? 'Enter lab' : 'Open';
+    const href = lab ? `/#/lab/${lab.id}/encounter` : projectHref(project, labs);
+    return `<li><h3>${escapeHtml(project.title)}</h3><span class="classification">${escapeHtml(project.label)}</span><p>${escapeHtml(project.needsContent ? 'Content needed' : project.summary)}</p>${project.needsContent ? '' : `<a ${lab ? `data-lab-link="${lab.id}" ` : ''}href="${escapeHtml(href)}" aria-label="${action}: ${escapeHtml(project.title)}">${action} <span aria-hidden="true">↗</span></a>`}</li>`;
+  }).join('\n');
 }
 
 export function destinationIndex() {
