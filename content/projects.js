@@ -78,7 +78,7 @@ export const projects = [
     label: "Illustrative simulation",
     summary: "Seeded GBM, not market data.",
     body: ["The sandbox offers a seeded GBM price series alongside the bundled SPY prices."],
-    links: [{ title: "Sandbox dataset selector", href: "#lab/strategy" }],
+    links: [{ title: "Sandbox dataset selector", href: "/projects/?dataset=simulated#lab/strategy" }],
     assets: [],
     dataSources: [{ repo: "personal-site", path: "lab/strategy/simulated.js" }, { repo: "personal-site", path: "lab/strategy/sandbox.js" }],
     needsContent: false

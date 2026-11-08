@@ -17,7 +17,6 @@ export function stationProjects(id) {
 export function projectHref(project, labs = true) {
   const href = project.links[0]?.href;
   if (!href) return `/projects/destinations.html#${project.id}`;
-  if (href.startsWith('#lab/') && !labs) return '/projects/#lab';
   return href.startsWith('#') ? `/projects/${href}` : href;
 }
 

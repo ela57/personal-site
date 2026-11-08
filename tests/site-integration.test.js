@@ -14,16 +14,19 @@ test('generated root and direct index are current snapshots of the shared conten
   assert.deepEqual(new Set(ids), new Set(projects.map(p => p.id)));
 });
 
-test('destination links resolve to direct projects, while journey lab integrations are deferred', () => {
+test('destination links preserve specific direct project and sandbox routes', () => {
   for (const project of projects) {
     const href = projectHref(project);
     assert.ok(href.startsWith('/projects/'));
     assert.ok(projectList(destinations.find(s => s.projects.includes(project.id)).id).includes(escapeHtml(project.title)));
     if (project.needsContent) assert.ok(projectList(destinations.find(s => s.projects.includes(project.id)).id).includes('Content needed'));
-    const file = href.split('#')[0];
+    const file = href.split(/[?#]/)[0];
     assert.ok(existsSync(new URL(`..${file.endsWith('/') ? file + 'index.html' : file}`, import.meta.url)), href);
   }
-  assert.equal(projectHref(projects.find(p => p.id === 'strategy'), false), '/projects/#lab');
+  assert.equal(projectHref(projects.find(p => p.id === 'strategy'), false), '/projects/#lab/strategy');
+  const simulated = projects.find(p => p.id === 'strategy-simulation');
+  for (const labs of [true, false]) assert.equal(projectHref(simulated, labs), '/projects/?dataset=simulated#lab/strategy');
+  assert.ok(projectList('observatory').includes('href="/projects/?dataset=simulated#lab/strategy"'));
   assert.equal(projectHref(projects.find(p => p.id === 'thermal')), '/projects/#project/thermal');
 });
 

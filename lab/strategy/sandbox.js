@@ -8,12 +8,12 @@ const price = value => value.toFixed(2);
 const mounts = new WeakMap();
 let instance = 0;
 
-export function mountStrategy(root, { readOnly = false } = {}) {
+export function mountStrategy(root, { readOnly = false, initialDataset = 'spy' } = {}) {
   mounts.get(root)?.();
   const id = `strategy-${++instance}`;
   let disposed = false;
   const controller = new AbortController(), opts = { signal: controller.signal };
-  let spy = null, dataset = "spy", timer = 0, result = null;
+  let spy = null, dataset = initialDataset === 'simulated' ? 'simulated' : 'spy', timer = 0, result = null;
   const simulated = simulateGBM();
   root.innerHTML = `<p class="strategyDisclaimer mono">Educational historical simulation. Not live trading performance or investment advice.</p>
     <div class="strategyControls">
@@ -125,6 +125,8 @@ export function mountStrategy(root, { readOnly = false } = {}) {
   }, opts);
   field("dataset").addEventListener("change", () => { dataset = field("dataset").value; setDates(); compute(); }, opts);
   root.querySelector("[data-reset]").addEventListener("click", reset, opts);
+  field("dataset").value = dataset;
+  if (dataset === 'simulated') { setDates(); compute(); }
   fetch(new URL("./data/spy.json", import.meta.url), opts).then(response => {
     if (!response.ok) throw new Error("Bundled prices could not load.");
     return response.json();

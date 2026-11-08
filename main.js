@@ -213,7 +213,7 @@ import("./lab/lake/lake.js").then(({ mountLake }) => mountLake());
       const version = labVersion, host = $(chess ? "[data-chess]" : "[data-strategy]", content);
       const module = chess ? import("./lab/chess/board.js") : import("./lab/strategy/sandbox.js");
       module.then(exports => {
-        if (version === labVersion && host.isConnected) labCleanup = chess ? exports.mountChess(host) : exports.mountStrategy(host);
+        if (version === labVersion && host.isConnected) labCleanup = chess ? exports.mountChess(host) : exports.mountStrategy(host, { initialDataset: new URLSearchParams(location.search).get('dataset') });
       }).catch(() => {
         if (version === labVersion) host.textContent = "The experiment could not load. Close and reopen to try again.";
       });
