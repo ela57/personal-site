@@ -122,7 +122,7 @@
         <a class="cover" href="#project/thermal" tabindex="-1" aria-hidden="true"></a>
       </article>
 
-      <!-- 03 — chart + oversized statistic -->
+      <!-- 03 — compact chart paired with research notes -->
       <article class="proj proj--vol grid" id="work-vol" data-project="vol">
         <figure class="plate plate--paper" data-annotate="vol" style="--ar:768/418">
           <div class="plateVis">
@@ -132,11 +132,10 @@
             <li style="--lx:38%;--ly:45%" data-side="r" data-at=".293,.682"><b>1</b> Signal held up through the 2022 drawdown</li>
             <li style="--lx:76%;--ly:18%" data-side="l" data-at=".934,.110"><b>2</b> Sharpe 0.66 vs 0.55 buy-and-hold</li>
           </ol>
-          <figcaption class="mono"><span><b>Fig. 3</b> Growth of $1 on the held-out test period (from the notebook).</span><button class="annoBtn" type="button" aria-pressed="false">Annotate</button></figcaption>
+          <figcaption class="mono"><span><b>Fig. 3</b> Growth of $1 on the held-out test period (from the notebook).</span><button class="annoBtn" type="button" aria-pressed="false">Annotate</button><p class="bigStat"><span class="mono">R² =</span>0.000</p></figcaption>
         </figure>
         <div class="projText">
           <p class="projNo" aria-hidden="true">03</p>
-          <p class="bigStat"><span class="mono">R² =</span>0.000</p>
           <h3 class="projTitle">Does today’s volatility predict tomorrow’s&nbsp;return?</h3>
           <p class="projDesc">Four realized-volatility estimators on SPY daily data from 2000. On its own, volatility explains none of the next day’s return; with lagged return added there’s a small, significant mean-reversion effect.</p>
           <p class="projWhy"><b>Why.</b> A plausible market story is not enough. A time-based train, validation and test split asks whether a fitted signal survives beyond the data that produced it.</p>
