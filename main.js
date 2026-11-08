@@ -4,6 +4,7 @@ import { mountThermal } from "./lab/thermal.js";
 import { imagePoint } from "./lab/lake/annotations.js";
 import { mountWords } from "./lab/words.js";
 import { mountPipeline } from "./lab/pipeline.js";
+import { parseDetailRoute } from "./lab/detail-routing.js";
 mountWords();
 import("./lab/lake/lake.js").then(({ mountLake }) => mountLake());
 
@@ -192,7 +193,7 @@ import("./lab/lake/lake.js").then(({ mountLake }) => mountLake());
   const backdropEls = Array.from(document.body.children).filter(el => el !== detail && el.tagName !== "TEMPLATE" && el.tagName !== "SCRIPT");
   const setInert = on => backdropEls.forEach(el => (el.inert = on));
   const focusables = () => $$('a[href], button:not([disabled]):not([tabindex="-1"]), select, input:not([disabled]), [tabindex]:not([tabindex="-1"])', detail).filter(el => el.offsetParent !== null);
-  let openSlug = null, returnFocus = null, pushedEntry = false, enterTimer = 0;
+  let openSlug = null, openDataset = null, returnFocus = null, pushedEntry = false, enterTimer = 0;
   const cardFor = slug => $(`.proj[data-project="${slug}"]`);
   let labCleanup = null, labVersion = 0;
   const cleanup = () => {
@@ -213,7 +214,7 @@ import("./lab/lake/lake.js").then(({ mountLake }) => mountLake());
       const version = labVersion, host = $(chess ? "[data-chess]" : "[data-strategy]", content);
       const module = chess ? import("./lab/chess/board.js") : import("./lab/strategy/sandbox.js");
       module.then(exports => {
-        if (version === labVersion && host.isConnected) labCleanup = chess ? exports.mountChess(host) : exports.mountStrategy(host, { initialDataset: new URLSearchParams(location.search).get('dataset') });
+        if (version === labVersion && host.isConnected) labCleanup = chess ? exports.mountChess(host) : exports.mountStrategy(host, { initialDataset: parseDetailRoute(location.hash)?.dataset });
       }).catch(() => {
         if (version === labVersion) host.textContent = "The experiment could not load. Close and reopen to try again.";
       });
@@ -234,11 +235,13 @@ import("./lab/lake/lake.js").then(({ mountLake }) => mountLake());
   };
 
   function openDetail(slug, { trigger = null } = {}) {
-    if (openSlug === slug) return;
+    const dataset = parseDetailRoute(location.hash)?.dataset;
+    if (openSlug === slug && (slug !== 'lab-strategy' || openDataset === dataset)) return;
     const wasOpen = !!openSlug, card = cardFor(slug);
     const show = () => {
       if (!fillDetail(slug)) return;
       openSlug = slug;
+      openDataset = dataset;
       detail.hidden = false; detail.scrollTop = 0;
       document.body.classList.add("noscroll"); setInert(true);
       detail.classList.remove("entering"); void detail.offsetWidth; detail.classList.add("entering");
@@ -285,8 +288,7 @@ import("./lab/lake/lake.js").then(({ mountLake }) => mountLake());
     closeDetail();
   }
   function route() {
-    const m = location.hash.match(/^#(project|lab)\/([a-z0-9-]+)$/);
-    const slug = m && (m[1] === "lab" ? `lab-${m[2]}` : m[2]);
+    const slug = parseDetailRoute(location.hash)?.slug;
     if (slug && (ORDER.includes(slug) || ["lab-chess", "lab-strategy"].includes(slug))) { openDetail(slug); }
     else if (openSlug) { pushedEntry = false; closeDetail(); }
   }
@@ -295,7 +297,8 @@ import("./lab/lake/lake.js").then(({ mountLake }) => mountLake());
     if (!a || e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
     e.preventDefault();
     const hash = a.getAttribute("href");
-    const slug = hash.startsWith("#lab/") ? `lab-${hash.slice(5)}` : hash.slice(9);
+    const slug = parseDetailRoute(hash)?.slug;
+    if (!slug) return;
     if (openSlug) { history.replaceState(null, "", hash); openSlug = null; openDetail(slug); return; }
     history.pushState(null, "", hash); pushedEntry = true;
     const card = a.closest(".proj");
