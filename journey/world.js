@@ -258,7 +258,7 @@ export function createWorld(renderer, invalidate) {
   const jobs = [];
   const load = (name, apply) => {
     jobs.push(new Promise(resolve => {
-      loader.load(`assets/journey/${name}.webp`, texture => {
+      loader.load(`/assets/journey/${name}.webp`, texture => {
         texture.colorSpace = THREE.SRGBColorSpace;
         texture.anisotropy = Math.min(4, renderer.capabilities.getMaxAnisotropy());
         apply(texture); invalidate(); resolve({ name, loaded: true });

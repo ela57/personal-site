@@ -1,0 +1,9 @@
+import { createRenderer } from '../lab/renderer.js';
+export function mount(root,{signal}) {
+  root.innerHTML='<p class="notice">Working project integration: the site’s JavaScript / Canvas renderer, not the original Python implementation. Flat means uniform face color; per-face uses Lambert lighting. No PBR materials.</p><canvas class="render-play" aria-label="Interactive shaded icosahedron"></canvas><div class="prototype-controls"></div><output aria-live="polite"></output>';
+  const controls=root.querySelector('.prototype-controls');
+  controls.innerHTML=[['azimuth',-180,180,-30],['elevation',-80,80,40],['ambient',0,1,.18],['diffuse',0,1,.82],['focal',1,4,2.2]].map(([key,min,max,value])=>`<label>${key}<input type="range" data-control="${key}" min="${min}" max="${max}" step="${max>10?1:.01}" value="${value}"></label>`).join('')+'<label>Shading<select data-control="shading"><option value="face">Per-face lighting</option><option value="flat">Flat uniform color</option></select></label><label>Wireframe overlay<input type="checkbox" data-control="wireframe" checked></label>';
+  const renderer=createRenderer(root.querySelector('canvas'),{rotate:false});
+  const update=()=>{const value=k=>Number(root.querySelector(`[data-control=${k}]`).value),a=value('azimuth')*Math.PI/180,e=value('elevation')*Math.PI/180;renderer.set({light:[Math.sin(a)*Math.cos(e),Math.sin(e),-Math.cos(a)*Math.cos(e)],ambient:value('ambient'),diffuse:value('diffuse'),focal:value('focal'),shading:root.querySelector('select').value,wireframe:root.querySelector('[type=checkbox]').checked});root.querySelector('output').textContent=`Light ${value('azimuth')}° / ${value('elevation')}° · focal ${value('focal').toFixed(2)}`;};
+  controls.addEventListener('input',update,{signal});update();return()=>renderer.destroy();
+}

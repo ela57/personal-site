@@ -5,6 +5,7 @@ import { createAntialiasing } from './antialias.js';
 import { mountPresentation } from './presentation.js';
 import { mountLabPresenter } from './lab-presenter.js';
 import { parseLabRoute, stationForLab, historyRouteEvents } from './lab-routing.js';
+import { mountTour } from './tour.js';
 
 export { getStations, progressForStation } from './route.js';
 const changes = new EventTarget();
@@ -233,4 +234,5 @@ try {
   if ('requestIdleCallback' in window) requestIdleCallback(start, { timeout: 500 }); else setTimeout(start, 0);
 } catch { showFallback('WebGL is unavailable. Explore the static destinations below or'); goToStation(initial); backgroundComplete(); }
 syncRoute();
+if (new URLSearchParams(location.search).get('tour') === '1') mountTour(document.body,{navigate:goToStation,origin:currentStation});
 if (debug) window.journeyDebug = { diagnostics, camera, getStations, progressForStation, goToStation, poseAtProgress };

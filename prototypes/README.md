@@ -68,3 +68,40 @@ move handling and the all-defences mate validation test. Puzzle data is unchange
 
 `npm test` covers registry sources/scores, privacy, estimator math and the shared
 lab schema (including chess). Browser evidence lives outside git in `~/shots/j5/`.
+
+## Pass 2b / motion
+
+Seven additional registry entries include six live interactions and a link to
+`/dev/motion.html`. Both dev pages are noindex and absent from public navigation.
+New previews have stable-height, internally scrolling windows so lazy mounts
+cannot push neighboring cards out of view and tear down their live systems.
+`lab/renderer.js` and `lab/thermal.js` are mechanical extractions of the existing
+site implementations; main.js imports them. Renderer defaults retain the original
+light, ambient/diffuse weights, face shading and edge strokes. Opt-in flat shading
+means a uniform face color, not vertex interpolation or a PBR material model.
+
+The map samples the actual Catmull–Rom curve; classification and station-area
+filters use shared project membership. Placeholder entries remain placeholders.
+`journey/tour.js` is navigation-injected, enabled only by `/?tour=1`: four stops,
+15 seconds each. Pause retains elapsed time, Skip advances a stop, Exit returns
+to the origin. Hidden tabs and open lab dialogs pause the clock. Reduced motion
+uses instant cuts. The gallery removes the iframe when it leaves the viewport.
+
+The accumulator is an original, **generic** integer ISA, not SCOMP documentation
+or coursework. Program memory is separate, AC is signed/unbounded, and CALL/RETURN
+use a separate return stack. A 16-bit unsigned input is divided by 16 using
+repeated SUB; four remainders are compared to memory[5]. Run is bounded at 50,000
+instructions; the largest selectable word fits this bound. The Moore simulation
+is likewise **not Ethan’s VHDL**: FEED waits for box-present, PRESS and EJECT each
+last one clock, and safe-off returns to IDLE only at a sampled clock. It is not a
+hardware safety controller. Timing retains the last 24 sampled cycles.
+
+Motion comparisons reuse `createWorld`, cap plane-card instances, freeze water,
+cap DPR at .75, and render only while moving/loading. The historical ribbon is a
+sampled extrusion of bundled SPY adjusted closes, not a forecast. Portal detail
+uses the existing renderer project text. Exploded layers are a generic four-box
+assembly. The overview path rises to show the route and returns to its origin.
+Scrubbing and wheel input set deterministic targets; damping changes convergence,
+speed changes wheel/playback rate. Reduced motion disables play and cuts to each
+scrubbed pose. Euler order is YXZ and roll is explicitly zero. All use/cost notes
+are qualitative, not GPU measurements. Screenshots: `~/shots/j6/`.
