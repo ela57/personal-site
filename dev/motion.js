@@ -67,7 +67,8 @@ try{
   diagnostics.ready=true;$('#motion-status').textContent=diagnostics.assetFailures.length?'Some forest layers unavailable.':'Forest ready · wheel within the canvas to scrub';wake();
   addEventListener('pagehide',()=>{resize.disconnect();dispose();},{once:true});
 }catch{$('#motion-status').textContent='WebGL unavailable. The motion playground requires a WebGL-capable browser.';}
-for(const input of [select,scrub,$('#damping'),$('#speed')])input.addEventListener('input',update);
+for(const input of [select,scrub])input.addEventListener('input',update);
+for(const input of [$('#damping'),$('#speed')])input.addEventListener('input',wake);
 canvas.addEventListener('wheel',event=>{event.preventDefault();scrub.value=Math.max(0,Math.min(1,Number(scrub.value)+event.deltaY*.001*Number($('#speed').value)));update();},{passive:false});
 $('#play').addEventListener('click',()=>{if(reduced.matches)return;playing=!playing;if(playing&&Number(scrub.value)>=1)scrub.value=0;$('#play').textContent=playing?'Pause':'Play';wake();});
 const preference=()=>{playing=false;$('#play').disabled=reduced.matches;update();};reduced.addEventListener('change',preference);preference();

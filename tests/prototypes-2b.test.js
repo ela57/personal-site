@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
+import {runInNewContext} from 'node:vm';
 import {createMachine,step,instructions} from '../prototypes/accumulator-engine.js';
 import {clock,leds} from '../prototypes/fsm-engine.js';
 import {motionPose,techniques} from '../dev/motion-poses.js';
@@ -28,6 +29,18 @@ test('all eight motion paths have finite changing poses and zero roll at endpoin
 });
 test('tour is four supported stops at fifteen seconds each; invalid time stays at the first stop',()=>{
   const ids=getStations().map(s=>s.id);assert.equal(tourStops.length,4);tourStops.forEach(stop=>{assert.ok(ids.includes(stop.id));assert.ok(stop.caption);});assert.deepEqual([0,14.99,15,30,45,60].map(tourStepAt),[0,0,1,2,3,3]);assert.equal(tourStepAt(NaN),0);assert.equal(tourStepAt(-1),0);
+});
+
+test('motion tuning preserves playback while scrubbing and technique changes stop it',()=>{
+  const source=readFileSync(new URL('../dev/motion.js',import.meta.url),'utf8');
+  const control=()=>({textContent:'Pause',addEventListener(type,handler){this[type]=handler;}});
+  const speed=control(),damping=control(),play=control(),select=control(),scrub=control();select.value='forward';
+  const context={playing:true,select,scrub,diagnostics:{settled:true},techniques:[{id:'forward',note:'Forward'}],wake(){context.wakes++;},wakes:0,$:s=>({'#speed':speed,'#damping':damping,'#play':play,'#technique-note':{}}[s])};
+  runInNewContext(source.slice(source.indexOf('function update()'),source.indexOf('function fit()'))+source.slice(source.indexOf('for(const input of [select,scrub])'),source.indexOf("canvas.addEventListener('wheel'")),context);
+  for(const input of [speed,damping]){input.input();assert.equal(context.playing,true);assert.equal(play.textContent,'Pause');}
+  assert.equal(context.wakes,2);
+  for(const input of [select,scrub]){context.playing=true;input.input();assert.equal(context.playing,false);assert.equal(play.textContent,'Play');}
+  speed.input();assert.equal(context.playing,false);
 });
 test('thermal presets vary real ranges, edges and grain without duplicating illustration code',()=>{
   assert.equal(presets.length,4);assert.equal(new Set(presets.map(p=>p.range)).size,4);for(const p of presets){assert.ok(p.range>0);assert.equal(typeof p.edges,'boolean');assert.equal(typeof p.grain,'boolean');}
