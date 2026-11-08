@@ -89,7 +89,7 @@ export function mountChess(root) {
     focusSquare = puzzle.fen.split(" ")[1] === "b" ? "h1" : "a8";
     root.querySelector(".chessTitle").textContent = puzzle.title;
     root.querySelector(".chessNumber").textContent = `Puzzle ${filtered().indexOf(puzzle) + 1} / ${filtered().length}`;
-    root.querySelector(".chessCaption").textContent = `${game.turn() === "w" ? "White" : "Black"} to move · ${Math.ceil(puzzle.solution.length / 2)} move${puzzle.solution.length > 1 ? "s" : ""} to mate`;
+    root.querySelector(".chessCaption").textContent = `${game.turn() === "w" ? "White" : "Black"} to move · ${puzzle.mateIn} move${puzzle.mateIn > 1 ? "s" : ""} to mate`;
     announce("Find the forcing line."); record("load"); render();
   }
   function complete() {
