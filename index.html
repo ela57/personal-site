@@ -50,7 +50,7 @@
     <section class="hero" id="top" aria-labelledby="heroTitle">
       <div class="heroCopy">
         <h1 class="heroTitle" id="heroTitle">Ethan Lam</h1>
-        <div class="heroWords" aria-hidden="true"><span class="heroLead">I like to build</span> <span class="cycle" data-cycle><span class="cycleWord is-active">renderers.</span><span class="cycleWord">shaders.</span><span class="cycleWord">backtests.</span><span class="cycleWord">chess puzzles.</span></span></div>
+        <div class="heroWords" aria-hidden="true"><span class="heroLead">I like to build</span> <span class="cycle" data-cycle="hero"><span class="cycleWord is-active">renderers.</span><span class="cycleWord">shaders.</span><span class="cycleWord">backtests.</span><span class="cycleWord">chess puzzles.</span></span></div>
         <p class="sr-only">I like to build renderers, shaders, backtests and chess puzzles.</p>
         <p class="heroFact">Computer engineering · Georgia Tech ’28</p>
       </div>
@@ -67,11 +67,11 @@
 
       <!-- 01 — wide spread, visual left -->
       <article class="proj proj--renderer grid" id="work-renderer" data-project="renderer">
-        <figure class="plate plate--light" style="--ar:3/2">
+        <figure class="plate plate--light" style="--ar:4/3">
           <a class="plateVis" href="#project/renderer" aria-label="Open software renderer case study">
-            <picture><source type="image/webp" srcset="assets/renderer-cover-768.webp 768w, assets/renderer-cover.webp 1536w" sizes="(max-width:1099px) 100vw, 62vw"><img src="assets/renderer-cover.webp" width="1536" height="1024" alt="Illustrated exploded rendering pipeline, with geometry and shaded output arranged across four panels." loading="lazy" decoding="async"></picture>
+            <picture><img src="assets/pipeline-5.png" width="800" height="600" alt="A closed icosahedron with triangular faces and directional diffuse shading." loading="lazy" decoding="async"></picture>
           </a>
-          <figcaption class="mono">Illustration · Software rendering pipeline</figcaption>
+          <figcaption class="mono">Browser illustration · Solid shaded output</figcaption>
         </figure>
         <div class="projText">
           <p class="projNo" aria-hidden="true">01</p>
@@ -93,11 +93,11 @@
             <div class="pipelineCanvasStack"></div><figcaption class="pipelineCaption">01 / Projection &amp; perspective divide</figcaption>
           </figure>
           <ol class="pipelineSteps">
-            <li tabindex="0"><span class="mono">01 / From points to a picture</span><h3>Projection &amp; perspective divide</h3><p>World, view and projection transforms move vertices into camera space. Dividing by depth maps them into normalized device coordinates. A wireframe keeps the front and back edges visible.</p><img src="assets/pipeline-1.png" width="800" height="600" alt="Projected wireframe icosahedron, showing front and back edges." loading="lazy" decoding="async"></li>
+            <li tabindex="0"><span class="mono">01 / From points to a picture</span><h3>Projection &amp; perspective divide</h3><p>World, view and projection transforms move vertices into camera space. Dividing by depth maps them into normalized device coordinates. Wireframe edges over a solid shape keep the front and back edges visible.</p><img src="assets/pipeline-1.png" width="800" height="600" alt="Solid icosahedron with projected front and back wireframe edges." loading="lazy" decoding="async"></li>
             <li tabindex="0"><span class="mono">02 / Keep the visible side</span><h3>Backface culling</h3><p>Triangles whose normal points away from the camera are discarded. On a convex mesh, the front faces do not overlap each other: culling alone can fix visibility.</p><img src="assets/pipeline-2.png" width="800" height="600" alt="Flat-filled front faces of the icosahedron with back faces removed." loading="lazy" decoding="async"></li>
-            <li tabindex="0"><span class="mono">03 / Define the depth range</span><h3>NDC clipping</h3><p>Geometry outside the depth range is clipped after the perspective divide. In normalized device coordinates, the depth test becomes a simple range comparison.</p><img src="assets/pipeline-3.png" width="800" height="600" alt="Icosahedron faces clipped to the normalized depth range, with the NDC frame outlined." loading="lazy" decoding="async"></li>
-            <li tabindex="0"><span class="mono">04 / Choose the draw order</span><h3>Painter’s depth sort</h3><p>The remaining faces are drawn far to near. The numbers show their drawing order. Sorting whole polygons fits the Matplotlib output, but is not a per-pixel depth buffer.</p><img src="assets/pipeline-4.png" width="800" height="600" alt="Clipped faces numbered in far-to-near painter’s order." loading="lazy" decoding="async"></li>
-            <li tabindex="0"><span class="mono">05 / Let the normal catch the light</span><h3>Diffuse shading</h3><p>A directional light supplies a per-face brightness: max(0, n·l). Geometry and light direction become the shaded triangles on the page.</p><img src="assets/pipeline-5.png" width="800" height="600" alt="Clipped icosahedron shaded with directional diffuse light." loading="lazy" decoding="async"></li>
+            <li tabindex="0"><span class="mono">03 / Define the depth range</span><h3>NDC clipping</h3><p>Geometry outside the depth range is removed in this cutaway. The original Python renderer clips in NDC; this browser illustration clips in view space before projecting, so the cut edges stay geometrically consistent.</p><img src="assets/pipeline-3.png" width="800" height="600" alt="Icosahedron cut away at the depth boundary, with the NDC frame outlined." loading="lazy" decoding="async"></li>
+            <li tabindex="0"><span class="mono">04 / Choose the draw order</span><h3>Painter’s depth sort</h3><p>The full shape returns here. Visible faces are drawn far to near; the numbers show their drawing order. Sorting whole polygons fits the Matplotlib output, but is not a per-pixel depth buffer.</p><img src="assets/pipeline-4.png" width="800" height="600" alt="Closed icosahedron with faces numbered in far-to-near painter’s order." loading="lazy" decoding="async"></li>
+            <li tabindex="0"><span class="mono">05 / Let the normal catch the light</span><h3>Diffuse shading</h3><p>A directional light supplies a per-face brightness: max(0, n·l). Geometry and light direction become the shaded triangles on the page.</p><img src="assets/pipeline-5.png" width="800" height="600" alt="Closed icosahedron shaded with directional diffuse light." loading="lazy" decoding="async"></li>
           </ol>
         </div>
       </section>
@@ -122,7 +122,7 @@
         <a class="cover" href="#project/thermal" tabindex="-1" aria-hidden="true"></a>
       </article>
 
-      <!-- 03 — chart + oversized statistic -->
+      <!-- 03 — compact chart paired with research notes -->
       <article class="proj proj--vol grid" id="work-vol" data-project="vol">
         <figure class="plate plate--paper" data-annotate="vol" style="--ar:768/418">
           <div class="plateVis">
@@ -132,11 +132,10 @@
             <li style="--lx:38%;--ly:45%" data-side="r" data-at=".293,.682"><b>1</b> Signal held up through the 2022 drawdown</li>
             <li style="--lx:76%;--ly:18%" data-side="l" data-at=".934,.110"><b>2</b> Sharpe 0.66 vs 0.55 buy-and-hold</li>
           </ol>
-          <figcaption class="mono"><span><b>Fig. 3</b> Growth of $1 on the held-out test period (from the notebook).</span><button class="annoBtn" type="button" aria-pressed="false">Annotate</button></figcaption>
+          <figcaption class="mono"><span><b>Fig. 3</b> Growth of $1 on the held-out test period (from the notebook).</span><button class="annoBtn" type="button" aria-pressed="false">Annotate</button><p class="bigStat"><span class="mono">R² =</span>0.000</p></figcaption>
         </figure>
         <div class="projText">
           <p class="projNo" aria-hidden="true">03</p>
-          <p class="bigStat"><span class="mono">R² =</span>0.000</p>
           <h3 class="projTitle">Does today’s volatility predict tomorrow’s&nbsp;return?</h3>
           <p class="projDesc">Four realized-volatility estimators on SPY daily data from 2000. On its own, volatility explains none of the next day’s return; with lagged return added there’s a small, significant mean-reversion effect.</p>
           <p class="projWhy"><b>Why.</b> A plausible market story is not enough. A time-based train, validation and test split asks whether a fitted signal survives beyond the data that produced it.</p>
@@ -286,15 +285,28 @@
       <p class="sec mono"><span>02</span> GPU programming · Personal project</p>
       <h2 class="csTitle" id="detailTitle">Seeing depth as&nbsp;heat</h2>
     </header>
-    <figure class="plate plate--dark csMedia" data-annotate="thermal" style="--ar:16/10">
-      <div class="plateVis" data-vis="thermal" data-interactive></div>
-      <ol class="notes">
-        <li style="--lx:4%;--ly:9%" data-side="r" data-at=".62,.16"><b>1</b> Past max distance: clamped to the coldest colour</li>
-        <li style="--lx:96%;--ly:36%" data-side="l" data-at=".725,.31"><b>2</b> Sobel operator on the depth buffer → outlines</li>
-        <li style="--lx:4%;--ly:52%" data-side="r" data-at=".46,.83"><b>3</b> Nearest surface → hot end of the ramp</li>
-      </ol>
-      <figcaption class="mono"><span><b>Fig. 2</b> Browser illustration of the effect.</span><button class="annoBtn" type="button" aria-pressed="false">Annotate</button></figcaption>
-    </figure>
+    <section class="thermalDemo" aria-labelledby="thermalTryTitle">
+      <h3 id="thermalTryTitle">Try it</h3>
+      <div class="thermalDemoLayout">
+        <figure class="plate plate--dark csMedia" data-annotate="thermal" style="--ar:16/10">
+          <div class="plateVis" data-vis="thermal" data-interactive></div>
+          <ol class="notes">
+            <li style="--lx:4%;--ly:9%" data-side="r" data-at=".62,.16"><b>1</b> Past max distance: clamped to the coldest colour</li>
+            <li style="--lx:96%;--ly:36%" data-side="l" data-at=".725,.31"><b>2</b> Sobel operator on the depth buffer → outlines</li>
+            <li style="--lx:4%;--ly:52%" data-side="r" data-at=".46,.83"><b>3</b> Nearest surface → hot end of the ramp</li>
+          </ol>
+          <figcaption class="mono"><span><b>Fig. 2</b> Browser illustration of the effect.</span><button class="annoBtn" type="button" aria-pressed="false">Annotate</button></figcaption>
+        </figure>
+        <div class="thermalSettings">
+          <div class="controls mono" data-demo="thermal">
+            <label class="range">Max distance <input id="thermalRange" type="range" min="0.25" max="1" step="0.01" value="0.7" data-opt="range"> <output for="thermalRange" data-out="range">0.70</output></label>
+            <label class="check"><input type="checkbox" data-opt="edges" checked> Edges</label>
+            <label class="check"><input type="checkbox" data-opt="grain" checked> Grain</label>
+          </div>
+          <p class="hint mono">Browser illustration with SVG. The real shader runs on the GPU inside Unity.</p>
+        </div>
+      </div>
+    </section>
     <div class="csBody grid">
       <aside class="csMeta mono">
         <dl><div><dt>Stack</dt><dd>Unity · HLSL · C#</dd></div><div><dt>Area</dt><dd>GPU / graphics programming</dd></div><div><dt>Type</dt><dd>Personal project</dd></div></dl>
@@ -309,13 +321,6 @@
         </ol>
         <h3><span class="mono">B</span> Why depth</h3>
         <p>Because heat is derived from the depth buffer, the effect is a pure screen-space pass: it needs no per-object temperature data and works on any scene it is applied to.</p>
-        <h3><span class="mono">C</span> Try it</h3>
-        <div class="controls mono" data-demo="thermal">
-          <label class="range">Max distance <input type="range" min="0.25" max="1" step="0.01" value="0.7" data-opt="range"> <output data-out="range">0.70</output></label>
-          <label class="check"><input type="checkbox" data-opt="edges" checked> Edges</label>
-          <label class="check"><input type="checkbox" data-opt="grain" checked> Grain</label>
-        </div>
-        <p class="hint mono">Browser illustration with SVG. The real shader runs on the GPU inside Unity.</p>
       </div>
     </div>
   </template>

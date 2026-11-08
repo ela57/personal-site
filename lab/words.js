@@ -1,4 +1,7 @@
 export const revealInterval = count => Math.min(35, 580 / Math.max(1, count - 1));
+export const cycleTiming = variant => variant === 'hero'
+  ? { hold: 1400, step: 20, fade: 60, gap: 185 }
+  : { hold: 2600, step: 40, fade: 120, gap: 370 };
 
 export function mountWords(root = document) {
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
@@ -16,13 +19,15 @@ export function mountWords(root = document) {
   root.querySelectorAll('[data-cycle]').forEach(group => {
     const words = [...group.children];
     if (!words.length) return;
+    const timing = cycleTiming(group.dataset.cycle);
+    group.style.setProperty('--word-fade', `${timing.fade}ms`);
     const letters = words.map(word => {
       const chars = Array.from(word.textContent, char => {
         const span = document.createElement('span'); span.className = 'wordChar'; span.textContent = char; return span;
       });
       word.replaceChildren(...chars); return chars;
     });
-    let index = 0, timer = 0, visible = false, next = null, remaining = 2600, due = 0;
+    let index = 0, timer = 0, visible = false, next = null, remaining = timing.hold, due = 0;
     function resume() {
       if (timer || !next || !visible || document.hidden || reduced.matches || paused) return;
       due = performance.now() + remaining;
@@ -33,8 +38,8 @@ export function mountWords(root = document) {
     function enter() {
       words[index].classList.add('is-active');
       const chars = letters[index]; chars.forEach(c => c.style.opacity = '0'); let i = 0;
-      const step = () => { if (chars[i]) chars[i++].style.opacity = '1'; if (i < chars.length) schedule(step, 40); else schedule(leave, 2720); };
-      schedule(step, 40);
+      const step = () => { if (chars[i]) chars[i++].style.opacity = '1'; if (i < chars.length) schedule(step, timing.step); else schedule(leave, timing.hold + timing.fade); };
+      schedule(step, timing.step);
     }
     function leave() {
       const order = [...letters[index]];
@@ -42,16 +47,16 @@ export function mountWords(root = document) {
       let i = 0;
       const step = () => {
         if (order[i]) order[i++].style.opacity = '0';
-        if (i < order.length) schedule(step, 40);
-        else schedule(() => { words[index].classList.remove('is-active'); index = (index + 1) % words.length; enter(); }, 370);
+        if (i < order.length) schedule(step, timing.step);
+        else schedule(() => { words[index].classList.remove('is-active'); index = (index + 1) % words.length; enter(); }, timing.gap);
       };
       step();
     }
     function preference() {
       pause(); index = 0;
       words.forEach((word, i) => word.classList.toggle('is-active', i === 0));
-      letters.flat().forEach(c => c.style.opacity = '1');
-      schedule(leave, 2600);
+      letters.forEach((chars, i) => chars.forEach(c => c.style.opacity = i === 0 ? '1' : '0'));
+      schedule(leave, timing.hold);
     }
     const visibility = () => document.hidden ? pause() : resume();
     toggles.push(() => paused ? pause() : resume());
