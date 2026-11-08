@@ -1,4 +1,5 @@
 import { escape, pct } from './ui.js';
+import { niceDomain } from './chart-domain.js';
 
 export function mount(root,{signal}) {
   root.innerHTML = '<p class="notice">In-sample · SPY only · fixed 5 bps per position change. These are parameter comparisons, not out-of-sample results.</p><p role="status">Computing SMA pairs in a worker…</p><label>SMA pair / reference<select data-pair-select disabled></select></label><div class="risk-plot"></div><p class="point-details" aria-live="polite"></p>';
@@ -15,13 +16,13 @@ export function mount(root,{signal}) {
     if (signal.aborted) return;
     if (data.error) { root.querySelector('[role=status]').textContent = data.error; return; }
     points = data.points;
+    if (!points.length) { root.querySelector('[role=status]').textContent = 'No parameter results available.'; return; }
     root.querySelector('[data-pair-select]').innerHTML=points.map(p=>`<option value="${p.id}">${p.id==='hold'?'Buy & hold':`SMA ${p.id}`}</option>`).join('');
     root.querySelector('[data-pair-select]').disabled=false;
     root.querySelector('[role=status]').textContent = `${points.length-1} SMA pairs · ${data.sessions.toLocaleString()} sessions · ${data.start}–${data.end}. Tab to a point; Enter selects. Gold ring: selected; square: buy & hold.`;
-    const maxX = Math.max(...points.map(p=>p.volatility))*1.12;
-    const minY = Math.min(0,...points.map(p=>p.annual))*1.1, maxY = Math.max(.01,...points.map(p=>p.annual))*1.2;
-    const x = v => 75+v/maxX*620, y = v => 315-(v-minY)/(maxY-minY)*260;
-    root.querySelector('.risk-plot').innerHTML = `<svg viewBox="0 0 760 380" aria-label="In-sample annualized return versus annualized volatility"><text x="12" y="20">Annualized return ↑</text>${[0,.25,.5,.75,1].map(f=>`<path class="chart-grid" d="M75 ${y(minY+(maxY-minY)*f)}H695"/><text x="5" y="${y(minY+(maxY-minY)*f)+4}">${pct(minY+(maxY-minY)*f)}</text><text x="${x(maxX*f)-20}" y="340">${pct(maxX*f)}</text>`).join('')}<text x="260" y="375">Annualized volatility →</text>${points.map(p=>`<${p.id === 'hold' ? 'rect' : 'circle'} ${p.id === 'hold' ? `x="${x(p.volatility)-5}" y="${y(p.annual)-5}" width="10" height="10"` : `cx="${x(p.volatility)}" cy="${y(p.annual)}" r="5"`} data-pair="${p.id}" tabindex="0" role="button" aria-label="${escape(details(p))}"><title>${escape(details(p))}</title></${p.id === 'hold' ? 'rect' : 'circle'}>`).join('')}</svg>`;
+    const dx = niceDomain(points.map(p=>p.volatility)), dy = niceDomain(points.map(p=>p.annual));
+    const x = v => 75+(v-dx.min)/(dx.max-dx.min)*620, y = v => 315-(v-dy.min)/(dy.max-dy.min)*260;
+    root.querySelector('.risk-plot').innerHTML = `<svg viewBox="0 0 760 380" aria-label="In-sample annualized return versus annualized volatility"><text x="12" y="20">Annualized return ↑</text>${dy.ticks.map(v=>`<path class="chart-grid" d="M75 ${y(v)}H695"/><text x="5" y="${y(v)+4}">${pct(v)}</text>`).join('')}${dx.ticks.map(v=>`<path class="chart-grid" d="M${x(v)} 55V315"/><text x="${x(v)-20}" y="340">${pct(v)}</text>`).join('')}<text x="260" y="375">Annualized volatility →</text>${points.map(p=>`<${p.id === 'hold' ? 'rect' : 'circle'} ${p.id === 'hold' ? `x="${x(p.volatility)-5}" y="${y(p.annual)-5}" width="10" height="10"` : `cx="${x(p.volatility)}" cy="${y(p.annual)}" r="5"`} data-pair="${p.id}" tabindex="0" role="button" aria-label="${escape(details(p))}"><title>${escape(details(p))}</title></${p.id === 'hold' ? 'rect' : 'circle'}>`).join('')}</svg>`;
     choose(selected); root.dataset.ready = 'true';
   };
   worker.onerror = event => { event.preventDefault(); root.querySelector('[role=status]').textContent = 'Worker unavailable. This prototype needs module-worker support.'; };

@@ -10,6 +10,21 @@ def pick(value, keys):
     return {key: value[key] for key in keys if key in value}
 
 
+def boundary_note(hand, hero):
+    actions = hand.get('actions', [])
+    if sum(stack > 0 for stack in hand['starting_stacks']) != 2 or len(actions) != 1:
+        return ''
+    action = actions[0]
+    delta = hand['ending_stacks'][hero] - hand['starting_stacks'][hero]
+    if action.get('street') != 'preflop' or action.get('kind') != 'fold' or abs(delta) != hand['blinds'][0]:
+        return ''
+    if action.get('seat') == hero and delta < 0:
+        return f'Heads-up: hero folded the small blind, losing {-delta} chips net.'
+    if action.get('seat') != hero and delta > 0:
+        return f'Heads-up: opponent folded the small blind; hero gained {delta} chips net.'
+    return ''
+
+
 def export(run):
     manifest = json.loads((run / 'manifest.json').read_text())
     source = {'repo': 'ela57/pokerbot', 'commit': manifest['git_commit'], 'seed': 1000000, 'run': run.name}
@@ -56,7 +71,7 @@ def export(run):
             hand = json.loads(line)
             if hand['seed'] != source['seed']: continue
             hero = hand['hero_seat']
-            session.append({'number': hand['hand_number'], 'hero_start': hand['starting_stacks'][hero], 'hero_end': hand['ending_stacks'][hero], 'blinds': hand['blinds'], 'eliminations': hand['eliminations']})
+            session.append({'number': hand['hand_number'], 'hero_start': hand['starting_stacks'][hero], 'hero_end': hand['ending_stacks'][hero], 'blinds': hand['blinds'], 'eliminations': hand['eliminations'], 'note': boundary_note(hand, hero)})
     return replay, {'source': source, 'view': 'Public hand-boundary chip totals, blinds and elimination seat numbers only.', 'hands': session}
 
 

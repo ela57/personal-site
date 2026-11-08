@@ -90,7 +90,14 @@ export function mountLabPresenter({ onOpen, onClose, onRoute, currentStation }) 
         }
         if (token !== revision) return;
         const pre = document.createElement('pre'); pre.tabIndex = 0; pre.setAttribute('aria-label', `${excerpt.path}, lines ${excerpt.start} to ${excerpt.end}`);
-        const code = document.createElement('code'); code.textContent = excerptLines(source,excerpt.start,excerpt.end).join('\n'); pre.append(code);
+        const code = document.createElement('code');
+        excerptLines(source,excerpt.start,excerpt.end).forEach((text, index) => {
+          const row = document.createElement('span'); row.className = 'lab-code-line';
+          const number = document.createElement('span'); number.className = 'lab-line-number'; number.setAttribute('aria-hidden','true'); number.textContent = excerpt.start + index;
+          const line = document.createElement('span'); line.className = 'lab-line-source'; line.textContent = text;
+          row.append(number,line); code.append(row);
+        });
+        pre.append(code);
         section.querySelector('[role="status"]').replaceWith(pre);
       } catch {
         if (!signal.aborted && token === revision) section.querySelector('[role="status"]').textContent = 'Source unavailable. Follow the file link or retry this stage.';

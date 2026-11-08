@@ -22,6 +22,10 @@ returns**, annualized by sqrt(252). A window of N returns needs N+1 prices.
 It is not the notebook's OHLC-based GK estimator. No event annotations are added:
 the bundled series itself does not provide an audited event-date source.
 
+The risk map fits each axis to all SMA points and buy-and-hold, with padded nice
+ticks; zero is retained only near the data. Its axes are not comparable across
+future datasets without reading the tick labels.
+
 ## Poker export and privacy boundary
 
 From the personal-site root, reproduce the committed artifacts with:
@@ -50,6 +54,11 @@ Source: `ela57/pokerbot`, seed **1000000**, run `journey-audit-a`, manifest comm
   It contains no board, actions, hole cards, showdown ranks or opponent stacks.
   This is necessary because 55 hands have no hero decision observation. Clicking
   one of those hands explicitly reports that no hero observation was logged.
+  Public `note` strings explain qualifying heads-up single preflop folds with a
+  net small-blind transfer. They are derived from public actions and boundary
+  stacks, never cards. Hands 185–200 really alternate 590/790 chips as seats 0/4
+  fold in turn; all 200 exported boundaries match the raw log, with no gaps or
+  seat switches. Hover or select a point to read its note; no smoothing is applied.
 
 The replay, inspector and session chart share an in-memory selection. A chart
 click scrolls to the replay; a lazy remount reads the current selection. These

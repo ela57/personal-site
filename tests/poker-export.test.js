@@ -7,6 +7,20 @@ import { gzipSync } from 'node:zlib';
 import { spawnSync } from 'node:child_process';
 
 const load=name=>JSON.parse(readFileSync(new URL(`../prototypes/data/${name}.json`,import.meta.url)));
+test('public boundary notes require a heads-up single preflop fold and net small blind',()=>{
+  const script=`import runpy,json
+f=runpy.run_path('tools/export_poker.py')['boundary_note']
+h={'starting_stacks':[790,15210],'ending_stacks':[590,15410],'blinds':[200,400],'actions':[{'seat':0,'street':'preflop','kind':'fold'}]}
+notes=[f(h,0)]
+h['starting_stacks']=[590,15410];h['ending_stacks']=[790,15210];h['actions'][0]['seat']=1;notes.append(f(h,0))
+h['actions'][0]['street']='river';notes.append(f(h,0))
+h['actions']=[];notes.append(f(h,0))
+h['actions']=[{'seat':1,'street':'preflop','kind':'fold'}];h['ending_stacks']=[800,15200];notes.append(f(h,0))
+h['starting_stacks']=[590,15400,10];notes.append(f(h,0))
+print(json.dumps(notes))`;
+  const result=spawnSync('python3',['-c',script],{encoding:'utf8'});assert.equal(result.status,0,result.stderr);
+  const notes=JSON.parse(result.stdout);assert.match(notes[0],/hero folded/);assert.match(notes[1],/opponent folded/);assert.deepEqual(notes.slice(2),['','','','']);
+});
 function privateKeys(value){
   if(!value||typeof value!=='object')return;
   for(const[key,item]of Object.entries(value)){assert.ok(!/hole_cards|showdown|private|opponent_cards/.test(key),key);privateKeys(item);}
@@ -19,7 +33,7 @@ test('committed exports contain only hero cards, observed boards and card-free s
   const featured=replay.hands.filter(h=>replay.featured.includes(h.number));
   for(const tag of ['river decision','observed all-in','multiway postflop'])assert.ok(featured.some(h=>h.tags.includes(tag)));
   for(const hand of replay.hands)for(const d of hand.decisions){assert.equal(d.observation.my_seat,0);assert.equal(d.observation.hero_cards.length,2);for(const seat of d.observation.seats)assert.ok(!Object.keys(seat).some(key=>/card/.test(key)));}
-  for(const hand of session.hands)assert.deepEqual(Object.keys(hand),['number','hero_start','hero_end','blinds','eliminations']);
+  for(const hand of session.hands){assert.deepEqual(Object.keys(hand),['number','hero_start','hero_end','blinds','eliminations','note']);assert.equal(typeof hand.note,'string');}
 });
 test('exporter whitelist strips hostile private fields, full boards, showdown ranks and action diagnostics',()=>{
   const dir=mkdtempSync(join(tmpdir(),'poker-export-'));

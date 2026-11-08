@@ -17,6 +17,60 @@ npm test
 This is an authoring command, not a deployment requirement. Both views work as
 static HTML without JavaScript. See `journey/README.md` for navigation and rendering.
 
+## Journey, labs and development tools
+
+- `/`: six forest stations, translucent panels and `#/at/<station>` history.
+  Use the destination menu, `[ ]` or Alt+Arrow; native PageDown/Space still scroll.
+  Reduced motion cuts between stations. Static/no-WebGL/no-JS alternatives retain
+  destinations and `/projects/`; `/?tour=1` offers an opt-in 60-second tour.
+- `/projects/`: direct case studies, figures and `#project/*` / `#lab/*` routes;
+  “All destinations” shares the audited content model. Existing root legacy
+  hashes redirect here. A résumé-request link is not a downloadable résumé file.
+- `/#/lab/<id>/<stage>`: generic full-screen five-stage dialog. World rendering
+  and scroll pause; Back traverses stages, Esc exits, focus and scroll restore.
+  Inspect fetches real source with aligned line numbers and hanging line wraps.
+- `/dev/`: noindex registry-driven prototype gallery, filters/sortable ratings,
+  source labels and lazy previews that abort/tear down outside view.
+- `/dev/motion.html`: noindex eight-technique comparator, scrubber/canvas wheel,
+  Play, damping/speed, zero roll and reduced-motion cuts. The thin historical SPY
+  ribbon is sampled/normalized, not a forecast or precision finance chart.
+
+The dev pages are not linked from public navigation. See
+[`docs/journey/CURATION.md`](docs/journey/CURATION.md) for the inventory, editorial
+recommendations, proposed final station outline and exact content gaps. Scores
+are judgments, not timings. Only software-rendered fps has been measured: the
+earlier art-pass SwiftShader median was 6.42 fps at DPR .65, not a smooth pass;
+hardware-GPU performance and real-device/battery behavior remain unverified.
+
+### Add a lab
+
+1. Add or verify its project entry in `content/projects.js` and station membership
+   in `content/destinations.js`; keep unsupported entries `needsContent: true`.
+2. Add an entry to `content/labs.js`: id/title/projectId/label and Encounter,
+   Understand, Experiment, Inspect, Reflect definitions. Inspect references real
+   file paths and inclusive line ranges; prose must be supported by the code.
+3. If live content is needed, add an importable `lab/` adapter with the referenced
+   mount exports. Return cleanup, honor the AbortSignal, keep Encounter read-only
+   and support independent simultaneous mounts. No presenter-specific branch.
+4. Regenerate with `node journey/generate.js`, run `npm test`, and browser-check
+   stage history, deep links, Esc/focus, scroll lock, teardown, mobile and reduced motion.
+
+### Add a prototype
+
+1. Add `prototypes/<name>.js` exporting `mount(root, {signal})`; return cleanup or
+   a promise of cleanup. Abort fetches/listeners and terminate workers on teardown.
+2. Add a `content/prototypes.js` entry: unique id, title, area, one allowed label,
+   real sources, what-it-shows text, module/export, six 1–5 scores with rationales
+   and `main` / `detour` / `experiment` recommendation. The gallery needs no branch.
+3. Add data/behavior/privacy tests as applicable; run `npm test`. Browser-check
+   interaction, offscreen unmount/remount, errors, 390px overflow and reduced motion.
+4. Review screenshots and update curation deliberately; a registry recommendation
+   does not itself mount anything in the public journey.
+
+For a new camera study, add a finite zero-roll path/note in `dev/motion-poses.js`,
+optional scene objects in `dev/motion.js`, and test 0/50/100% poses plus a visual
+mid-scrub capture. Preserve source labels and qualitative use/cost notes.
+
 ## Generate images
 
 Run `generate_image.py` with Python 3.10 or newer. It uses the Python standard
