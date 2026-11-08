@@ -4,7 +4,7 @@ import { existsSync, readFileSync } from "node:fs";
 import { projects } from "../content/projects.js";
 
 const labels = new Set(["Working project integration", "Illustrative simulation", "Research prototype", "Proposed future feature"]);
-const html = readFileSync(new URL("../index.html", import.meta.url), "utf8");
+const html = readFileSync(new URL("../projects/index.html", import.meta.url), "utf8");
 
 function validate(entry) {
   for (const key of ["id", "title", "destination"]) assert.ok(typeof entry[key] === "string" && entry[key].trim());
@@ -34,7 +34,8 @@ test("destination model is sourced, uniquely keyed and explicitly classified", (
     }
     for (const link of entry.links) assert.ok(html.includes(`href="${link.href}"`), `Not an existing href: ${link.href}`);
   }
-  assert.ok(!html.includes("content/projects.js"), "The model must not yet be wired into the page");
+  const destinations = readFileSync(new URL('../projects/destinations.html', import.meta.url), 'utf8');
+  projects.forEach(entry => assert.ok(destinations.includes(`id="${entry.id}"`)));
 });
 
 test("unsupported areas have title-only content, distinct from working chess puzzles", () => {

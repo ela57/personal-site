@@ -1,27 +1,15 @@
 import { mountWords } from '../lab/words.js';
+import { destinations, projectList } from '../content/destinations.js';
 
-export const stationSubtitles = {
-  entrance: 'Scroll to follow the shoreline.',
-  observatory: 'Quantitative research',
-  archive: 'Data and research',
-  workshop: 'Graphics, hardware and analysis labs',
-  clearing: 'Games and experiments',
-  overlook: 'About and contact'
-};
+export const stationSubtitles = Object.fromEntries(destinations.map(s => [s.id, s.subtitle]));
 
-export function mountPresentation(root) {
-  const words = document.createElement('div');
-  words.className = 'entrance-words';
-  words.innerHTML = `<p class="build-line" aria-hidden="true">I like to build <span class="cycle" data-cycle="hero"><span class="cycleWord is-active">renderers.</span><span class="cycleWord">shaders.</span><span class="cycleWord">backtests.</span><span class="cycleWord">chess puzzles.</span></span></p>
-    <p class="sr-only">I like to build renderers, shaders, backtests and chess puzzles.</p>
-    <button id="wordMotion" type="button" aria-pressed="false" hidden>Pause word effects</button>`;
-  root.querySelector('#station-title').after(words);
+export function mountPresentation(root = document) {
+  for (const station of destinations) root.querySelector(`#${station.id} .project-list`).innerHTML = projectList(station.id);
   document.body.classList.add('journey-ready');
   mountWords(root);
-  return (id, name) => {
-    root.dataset.station = id;
-    words.hidden = id !== 'entrance';
-    root.querySelector('#station-title').textContent = id === 'entrance' ? 'Ethan Lam' : name;
-    root.querySelector('#view-status').textContent = stationSubtitles[id] || name;
+  return id => {
+    for (const section of root.querySelectorAll('.station')) section.classList.toggle('is-active', section.id === id);
+    const index = destinations.findIndex(station => station.id === id);
+    root.querySelector('#location').textContent = `${String(index + 1).padStart(2, '0')} / 06 ${id === 'entrance' ? 'Entrance' : destinations[index].name}`;
   };
 }

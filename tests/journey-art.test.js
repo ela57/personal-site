@@ -1,8 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { HalfFloatType, UnsignedByteType } from '../vendor/three.module.min.js';
-import { createAntialiasing } from './antialias.js';
-import { stationSubtitles } from './presentation.js';
+import { createAntialiasing } from '../journey/antialias.js';
+import { stationSubtitles } from '../journey/presentation.js';
 
 function fakeRenderer(hdr) {
   return {

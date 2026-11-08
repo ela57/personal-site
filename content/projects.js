@@ -7,7 +7,7 @@ export const projects = [
     body: ["Photograph generated for this site."],
     links: [{ title: "Home", href: "#top" }],
     assets: ["assets/hero/lake-1536.avif", "assets/hero/lake-portrait-640.avif"],
-    dataSources: [{ repo: "personal-site", path: "index.html", section: "footer" }, { repo: "personal-site", path: "DESIGN.md" }],
+    dataSources: [{ repo: "personal-site", path: "projects/index.html", section: "footer" }, { repo: "personal-site", path: "DESIGN.md" }],
     needsContent: false
   },
   {
@@ -22,7 +22,7 @@ export const projects = [
     ],
     links: [{ title: "Case study and pipeline bench", href: "#project/renderer" }, { title: "Selected work", href: "#projects" }],
     assets: ["assets/renderer-cover.webp", "assets/renderer-cover-768.webp", "assets/pipeline-1.png", "assets/pipeline-2.png", "assets/pipeline-3.png", "assets/pipeline-4.png", "assets/pipeline-5.png"],
-    dataSources: [{ repo: "personal-site", path: "index.html", section: "#tpl-renderer, #tpl-bench, .pipeline" }, { repo: "personal-site", path: "main.js", symbol: "createRenderer" }, { repo: "personal-site", path: "lab/pipeline.js" }],
+    dataSources: [{ repo: "personal-site", path: "projects/index.html", section: "#tpl-renderer, #tpl-bench, .pipeline" }, { repo: "personal-site", path: "main.js", symbol: "createRenderer" }, { repo: "personal-site", path: "lab/pipeline.js" }],
     needsContent: false
   },
   {
@@ -37,7 +37,7 @@ export const projects = [
     ],
     links: [{ title: "Case study and Try it", href: "#project/thermal" }],
     assets: ["assets/shader-cover.webp", "assets/shader-cover-768.webp"],
-    dataSources: [{ repo: "personal-site", path: "index.html", section: "#tpl-thermal" }, { repo: "personal-site", path: "main.js", symbol: "mountThermal" }],
+    dataSources: [{ repo: "personal-site", path: "projects/index.html", section: "#tpl-thermal" }, { repo: "personal-site", path: "main.js", symbol: "mountThermal" }],
     needsContent: false
   },
   {
@@ -53,7 +53,7 @@ export const projects = [
     links: [{ title: "Case study", href: "#project/vol" }],
     assets: ["assets/projects/realized-vol-equity.png", "assets/projects/realized-vol-equity.webp", "assets/projects/realized-vol-rolling.png", "assets/projects/realized-vol-rolling.webp"],
     dataSources: [
-      { repo: "personal-site", path: "index.html", section: "#tpl-vol" },
+      { repo: "personal-site", path: "projects/index.html", section: "#tpl-vol" },
       { repo: "ela57/Projects", path: "realized_vol_spy.ipynb", revision: "2c21c801147cd2b768fb80a611cf59690d33f6d3", url: "https://github.com/ela57/Projects/blob/2c21c801147cd2b768fb80a611cf59690d33f6d3/realized_vol_spy.ipynb" },
       { repo: "ela57/Projects", path: "realized_volatility_writeup.pdf", revision: "2c21c801147cd2b768fb80a611cf59690d33f6d3" }
     ],
@@ -90,7 +90,7 @@ export const projects = [
     body: ["Drag a piece, or select a piece and its destination. Arrow keys navigate; Enter or Space selects.", "The first puzzle is White to move: the three pawns deny the king an escape square, and the rook owns the eighth rank."],
     links: [{ title: "Play the puzzles", href: "#lab/chess" }],
     assets: ["assets/chess-preview.svg", "lab/chess/PIECES-LICENSE"],
-    dataSources: [{ repo: "personal-site", path: "index.html", section: "#lab" }, { repo: "personal-site", path: "lab/chess/puzzles.js" }, { repo: "personal-site", path: "lab/chess/board.js" }, { repo: "personal-site", path: "vendor/chess.js" }],
+    dataSources: [{ repo: "personal-site", path: "projects/index.html", section: "#lab" }, { repo: "personal-site", path: "lab/chess/puzzles.js" }, { repo: "personal-site", path: "lab/chess/board.js" }, { repo: "personal-site", path: "vendor/chess.js" }],
     needsContent: false
   },
   {
@@ -114,7 +114,7 @@ export const projects = [
     summary: "Capital allocation, rebalancing and risk constraints in a central Python portfolio controller.",
     body: ["Project Manager, Quant Sector — GTSF Investment Committee, Georgia Tech Student Foundation; Aug 2025–present.", "Built a central portfolio controller in Python for capital allocation, rebalancing and risk constraints.", "Reworked trading scripts and the backtesting pipeline for reproducible, out-of-sample validation.", "Led the integration of two independent strategies into one production-ready system."],
     links: [{ title: "Existing experience text", href: "#about" }], assets: [],
-    dataSources: [{ repo: "personal-site", path: "index.html", section: "#experience" }],
+    dataSources: [{ repo: "personal-site", path: "projects/index.html", section: "#experience" }],
     needsContent: false
   },
   {
@@ -147,7 +147,7 @@ export const projects = [
     summary: "Computer engineering at Georgia Tech, class of 2028.",
     body: ["Cybersecurity and Distributed Systems & Software Design threads.", "B.S. Computer Engineering, Georgia Institute of Technology, 2028."],
     links: [{ title: "About and experience", href: "#about" }, { title: "Contact", href: "#contact" }, { title: "Request résumé", href: "mailto:ethanlam52@gmail.com?subject=R%C3%A9sum%C3%A9%20request" }, { title: "Email", href: "mailto:ethanlam52@gmail.com" }, { title: "LinkedIn", href: "https://www.linkedin.com/in/ethanlam7/" }],
-    assets: [], dataSources: [{ repo: "personal-site", path: "index.html", section: "#about, #contact" }],
+    assets: [], dataSources: [{ repo: "personal-site", path: "projects/index.html", section: "#about, #contact" }],
     needsContent: false
   }
 ];

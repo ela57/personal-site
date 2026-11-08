@@ -28,7 +28,8 @@ function earthVariation(material, moss) {
         float groundPatch=earthNoise(earthPosition.xz*.075)*.75+earthNoise(earthPosition.xz*.24)*.25;
         ${moss ? `float detail=dot(diffuseColor.rgb,vec3(.299,.587,.114));
           diffuseColor.rgb=mix(diffuseColor.rgb*vec3(.7,1.7,.65),detail*vec3(.75,1.3,.48),.5);` : ''}
-        diffuseColor.rgb*=mix(.85,1.65,groundPatch);`);
+        diffuseColor.rgb*=mix(.85,1.65,groundPatch);
+        ${moss ? '' : 'diffuseColor.rgb*=mix(.93,1.07,earthNoise(earthPosition.xz*8.));'}`);
   };
   material.customProgramCacheKey = () => `earth-${moss}`;
 }
@@ -130,14 +131,16 @@ export function createWorld(renderer, invalidate) {
   const clearing = groupAt(2, -146);
   const stoneGeometry = new THREE.DodecahedronGeometry(1, 0);
   const random = seeded(57021);
-  for (let i = 0; i < 14; i++) {
-    const stone = new THREE.Mesh(stoneGeometry, palette.stone);
-    const a = i / 14 * Math.PI * 2;
-    stone.position.set(Math.cos(a) * 7, 0.35, Math.sin(a) * 7);
-    stone.scale.set(0.9, 0.6, 0.7); stone.rotation.set(random(), random(), random()); clearing.add(stone);
+  for (let i = 0; i < 10; i++) {
+    const a = i / 10 * Math.PI * 2;
+    const stone = box(clearing, palette.stone, Math.cos(a) * 5.4, .8, Math.sin(a) * 5.4, .65 + random() * .3, 2.3 + random() * .4, .65);
+    stone.rotation.y = -a;
   }
-  box(clearing, palette.plaster, 0, 0.8, 0, 2.6, 0.25, 2.6);
-  box(clearing, palette.timber, 0, 0.35, 0, 0.6, 0.8, 0.6);
+  box(clearing, palette.stone, 0, .75, 0, 3.3, .25, 3.3);
+  box(clearing, palette.stone, 0, .2, 0, .8, 1, .8);
+  for (let row = 0; row < 8; row++) for (let col = 0; col < 8; col++) {
+    box(clearing, (row + col) % 2 ? palette.timber : palette.plaster, (col - 3.5) * .32, .887, (row - 3.5) * .32, .32, .012, .32);
+  }
   light(clearing, 6, 1, 0);
 
   const overlook = groupAt(-18, -185);
@@ -271,7 +274,7 @@ export function createWorld(renderer, invalidate) {
     };
     material.side = THREE.BackSide;
     const sky = new THREE.Mesh(new THREE.CylinderGeometry(800, 800, 520, 64, 1, true), material);
-    sky.position.set(0, 135, -80); scene.add(sky);
+    sky.position.set(0, 135, -80); sky.renderOrder = -1; scene.add(sky);
   });
   const skyDome = new THREE.Mesh(new THREE.SphereGeometry(1000, 24, 12), new THREE.ShaderMaterial({
     side: THREE.BackSide, depthWrite: false,
@@ -284,22 +287,31 @@ export function createWorld(renderer, invalidate) {
     groundMaterial.map = texture; groundMaterial.bumpMap = texture; groundMaterial.needsUpdate = true;
   });
   const cardGeometry = new THREE.PlaneGeometry(1, 1);
-  const cardMaterial = texture => {
-    const material = new THREE.MeshBasicMaterial({ map: texture, alphaTest: 0.22, side: THREE.DoubleSide, color: '#d5dfcd' });
+  const cardMaterial = (texture, nearFade = false) => {
+    const material = new THREE.MeshBasicMaterial({ map: texture, alphaTest: 0.22, side: THREE.DoubleSide, color: '#d5dfcd', transparent: nearFade, depthWrite: !nearFade });
     material.onBeforeCompile = shader => {
+      if (nearFade) {
+        shader.vertexShader = shader.vertexShader.replace('#include <common>', '#include <common>\nvarying float cardDistance;');
+        shader.fragmentShader = shader.fragmentShader.replace('#include <common>', '#include <common>\nvarying float cardDistance;')
+          .replace('#include <alphatest_fragment>', `diffuseColor.a*=smoothstep(8.,14.,cardDistance);
+            #include <alphatest_fragment>`);
+      }
       shader.vertexShader = shader.vertexShader.replace('#include <project_vertex>', `
         #ifdef USE_INSTANCING
           vec3 center = (modelMatrix * instanceMatrix * vec4(0.,0.,0.,1.)).xyz;
           vec3 direction = cameraPosition - center;
+          ${nearFade ? 'cardDistance=length(direction.xz);' : ''}
           vec3 right = normalize(vec3(direction.z,0.,-direction.x));
           vec3 billboard = center + right * position.x * length(instanceMatrix[0].xyz)
             + vec3(0.,position.y * length(instanceMatrix[1].xyz),0.);
           vec4 mvPosition = viewMatrix * vec4(billboard,1.);
           gl_Position = projectionMatrix * mvPosition;
         #else
+          ${nearFade ? 'cardDistance=length(cameraPosition.xz-(modelMatrix*vec4(0.,0.,0.,1.)).xz);' : ''}
           #include <project_vertex>
         #endif`);
     };
+    material.customProgramCacheKey = () => `billboard-${nearFade}`;
     return material;
   };
   const protectedArea = (x, z) => [
@@ -343,7 +355,7 @@ export function createWorld(renderer, invalidate) {
       dummy.scale.set(height * texture.image.width / texture.image.height, height, 1);
       dummy.updateMatrix(); transforms.push(dummy.matrix.clone());
     }
-    const cards = new THREE.InstancedMesh(cardGeometry, cardMaterial(texture), transforms.length);
+    const cards = new THREE.InstancedMesh(cardGeometry, cardMaterial(texture, true), transforms.length);
     transforms.forEach((matrix, i) => cards.setMatrixAt(i, matrix)); scene.add(cards);
   }));
   load('ridge-treeline', texture => {
@@ -369,13 +381,13 @@ export function createWorld(renderer, invalidate) {
   load('foreground-branch', texture => {
     [0.39, 0.79].forEach(t => {
       const p = route.getPoint(t), tangent = route.getTangent(t);
-      const branch = new THREE.Mesh(new THREE.PlaneGeometry(9, 6), cardMaterial(texture));
+      const branch = new THREE.Mesh(new THREE.PlaneGeometry(9, 6), cardMaterial(texture, true));
       branch.position.set(p.x - tangent.z * 7, 6.5, p.z + tangent.x * 7);
       branch.rotation.y = Math.atan2(-tangent.x, -tangent.z); scene.add(branch);
     });
   });
-  return { scene, ready: Promise.all(jobs), update(progress) {
-    waterMaterial.uniforms.phase.value = progress * 12;
+  return { scene, ready: Promise.all(jobs), update(progress, staticWater = false) {
+    waterMaterial.uniforms.phase.value = staticWater ? 0 : progress * 12;
     const active = Math.min(lamps.length - 1, Math.floor(progress * lamps.length));
     lamps.forEach((lamp, i) => { lamp.visible = i === active; });
   } };

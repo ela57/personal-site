@@ -1,6 +1,21 @@
 # Ethan Lam's personal site
 
-A static portfolio served from `index.html`, with no build step.
+A static portfolio with no runtime build step. `/` is the forest journey;
+`/projects/` is the direct project view, retaining case studies, labs and figures.
+Its “All destinations” section and `/projects/destinations.html` share
+`content/projects.js` with the journey panels. Legacy root project/lab/section
+hashes redirect to the direct view using `location.replace`.
+
+Serve with `python3 -m http.server 8000`. After editing the destination model or
+`journey/shell.html`, regenerate the committed, JavaScript-free HTML snapshots:
+
+```sh
+node journey/generate.js
+npm test
+```
+
+This is an authoring command, not a deployment requirement. Both views work as
+static HTML without JavaScript. See `journey/README.md` for navigation and rendering.
 
 ## Generate images
 

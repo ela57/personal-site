@@ -1,7 +1,7 @@
-# Standalone forest journey
+# Integrated forest journey
 
-Serve the repository normally and open `/journey.html`. Nothing imports this page
-from `index.html`. `?debug` enables a station/progress/fps HUD and
+Serve the repository normally and open `/`. `/journey.html` redirects here.
+The original portfolio lives at `/projects/`. `?debug` enables a station/progress/fps HUD and
 `window.journeyDebug` for inspection. No CDN or build step.
 
 ## Integration surface
@@ -51,13 +51,38 @@ same target. All passes still run only when the camera/world needs rendering.
 with a reserved-width cycle, screen-reader sentence and word-motion pause button.
 The shared module handles visibility and reduced-motion preferences. Other
 stations hide the hero and show their own plain subtitles. The no-JavaScript
-page retains its static landscape/direct-portfolio fallback; its old status line
-is hidden by the journey stylesheet.
-Reduced motion defaults to the static sky view, with an explicit 3D opt-in.
+page retains the generated hero copy and every project panel.
+Reduced motion uses instant cuts to authored rest poses, a short panel opacity
+crossfade, static water/mist and the shared module's static word-cycle preference.
 The static toggle is keyboard accessible; all station links also work with native
-anchors. No JavaScript, WebGL creation failure or context loss retains the sky
-image and direct-portfolio link. Texture failures retain geometry and show a
-recovery message. The existing direct portfolio is not modified.
+anchors. No JavaScript, WebGL creation failure or context loss shows the sky and
+all six panels in a normal scrolling list, with a direct-portfolio link.
+Texture failures also switch to this recovery view.
+
+## Pages, content and navigation
+
+`content/destinations.js` groups every entry in `content/projects.js` into one
+station and resolves direct-view links. `presentation.js` reads this same model;
+the direct view imports it through `projects/destinations.js`. `generate.js`
+commits matching HTML snapshots for the root, the direct view's All destinations
+section and its standalone index. Run `node journey/generate.js` after model or
+shell edits; `npm test` detects stale snapshots. No build is needed to serve them.
+Title-only entries explicitly say “Content needed”. Journey lab links currently
+lead to the direct Lab overview; existing direct lab hash routes remain playable.
+
+The header owns the six station links, progress/location, direct view and
+Résumé/Contact shortcut. `#/at/<station>` is replaced during native scrolling;
+menu/key navigation pushes one history entry and eases native scroll for 1000ms.
+Back/Forward and initial station hashes restore the station instantly. The keys
+`[` / `]` and Alt+Up/Down select adjacent stations; PageDown/Space stay native.
+The renderer occupies the area beside the desktop column or above the mobile
+sheet, so panels do not occlude installations. Resizing updates its aspect ratio,
+not the authored route. Near tree/bough cards alpha-fade at 8–14m, while the
+clearing now has ten upright stones and a flat chess-patterned stone table.
+
+Legacy root project/lab hashes and old section anchors use `location.replace`
+to `/projects/`; `#work` maps to the existing `#projects` section. Direct assets
+use root-relative URLs while ES-module imports stay relative to their modules.
 
 ## Assets and provenance
 
