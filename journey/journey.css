@@ -18,6 +18,17 @@ header a { min-height: 44px; display: inline-flex; align-items: center; }
 .caption { position: fixed; z-index: 2; bottom: 94px; left: 3.5vw; max-width: min(660px, 90vw); text-shadow: 0 2px 18px #13201b; pointer-events: none; }
 .caption h1 { font: 400 clamp(36px, 4.2vw, 64px)/1.08 'Source Serif 4', serif; margin: 0 0 14px; text-wrap: balance; }
 .caption p { font-size: 14px; line-height: 1.6; margin: 0; }
+#view-status { display: none; }
+.journey-ready #view-status { display: block; }
+.caption[data-station="entrance"] h1 { font-size: clamp(54px, 6vw, 88px); margin-bottom: 8px; }
+.caption .build-line { display: flex; flex-wrap: wrap; gap: 0 .2em; font: 400 italic clamp(24px, 3vw, 40px)/1.25 'Source Serif 4', serif; }
+.cycle { display: inline-grid; vertical-align: baseline; }
+.cycleWord { grid-area: 1/1; visibility: hidden; white-space: pre; }
+.cycleWord.is-active { visibility: visible; }
+.wordChar { transition: opacity var(--word-fade, 60ms) linear; }
+#wordMotion { display: block; pointer-events: auto; border: 0; background: none; padding: 0; font-size: 12px; min-height: 44px; text-decoration: underline; text-underline-offset: 4px; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+body:not(.journey-ready) header > a { font-size: clamp(36px, 5vw, 64px); }
 #fallback { background: #13201be8; padding: 16px; max-width: 480px; pointer-events: auto; }
 [hidden] { display: none !important; }
 .stations { position: fixed; z-index: 3; bottom: 22px; left: 3.5vw; right: 3.5vw; display: flex; gap: 22px; border-top: 1px solid #ece7dc55; background: #13201bba; padding: 8px 16px; width: fit-content; max-width: 93vw; }
@@ -34,4 +45,4 @@ header a { min-height: 44px; display: inline-flex; align-items: center; }
   .stations { left: 20px; right: 20px; gap: 0; width: auto; display: grid; grid-template-columns: repeat(3, 1fr); padding: 6px 10px; }
   .stations a { font-size: 12px; justify-content: center; }
 }
-@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .wordChar { transition: none; } }

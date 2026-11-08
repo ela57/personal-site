@@ -1,6 +1,8 @@
 import * as THREE from '../vendor/three.module.min.js';
 import { getStations, progressForStation, poseAtProgress, dampAngle, clamp } from './route.js';
 import { createWorld } from './world.js';
+import { createAntialiasing } from './antialias.js';
+import { mountPresentation } from './presentation.js';
 
 export { getStations, progressForStation } from './route.js';
 const changes = new EventTarget();
@@ -14,7 +16,7 @@ const hud = document.querySelector('#debug');
 hud.hidden = !debug;
 const reduced = matchMedia('(prefers-reduced-motion: reduce)');
 let staticView = reduced.matches;
-let renderer, world, raf = 0, lastTime = 0, currentStation = '', frames = 0;
+let renderer, antialiasing, world, raf = 0, lastTime = 0, currentStation = '', frames = 0;
 let frameIntervals = [], previousFrame = 0;
 let wanted = poseAtProgress(0);
 const camera = new THREE.PerspectiveCamera(55, innerWidth / innerHeight, 0.15, 1800);
@@ -23,6 +25,7 @@ camera.position.copy(wanted.position); camera.rotation.set(wanted.pitch, wanted.
 const fallback = document.querySelector('#fallback');
 const motion = document.querySelector('#motion');
 const links = [...document.querySelectorAll('.stations a')];
+const presentStation = mountPresentation(document.querySelector('.caption'));
 const diagnostics = { frames: 0, settled: false, fps: 0, assetFailures: [], progress: 0, pixelRatio: 1 };
 function progress() { return clamp(scrollY / Math.max(1, document.documentElement.scrollHeight - innerHeight), 0, 1); }
 function showFallback(message) {
@@ -38,7 +41,7 @@ function updateStation() {
   if (wanted.station !== currentStation) {
     currentStation = wanted.station;
     const station = getStations().find(s => s.id === currentStation);
-    document.querySelector('#station-title').textContent = station.name;
+    presentStation(station.id, station.name);
     links.forEach(link => {
       if (link.hash === `#${station.id}`) link.setAttribute('aria-current', 'location');
       else link.removeAttribute('aria-current');
@@ -62,7 +65,8 @@ function render(now) {
   camera.rotation.y = dampAngle(camera.rotation.y, wanted.yaw, dt);
   camera.rotation.x = dampAngle(camera.rotation.x, wanted.pitch, dt, 9, 0.25);
   camera.rotation.z = 0;
-  world.update(wanted.progress); renderer.render(world.scene, camera);
+  world.update(wanted.progress);
+  const drawCalls = antialiasing.render(world.scene, camera);
   if (previousFrame) {
     frameIntervals.push(now - previousFrame);
     if (frameIntervals.length > 180) frameIntervals.shift();
@@ -77,13 +81,12 @@ function render(now) {
   const angularError = Math.abs(Math.atan2(Math.sin(wanted.yaw - camera.rotation.y), Math.cos(wanted.yaw - camera.rotation.y)));
   const moving = camera.position.distanceTo(wanted.position) > 0.002 || angularError > 0.0002 || Math.abs(camera.rotation.x - wanted.pitch) > 0.0002;
   diagnostics.settled = !moving;
-  if (debug) hud.textContent = `${currentStation}\nProgress ${(wanted.progress * 100).toFixed(1)}%\n${diagnostics.fps.toFixed(1)} fps · ${moving ? 'moving' : 'settled'}\n${renderer.info.render.calls} draw calls · DPR ${renderer.getPixelRatio()}`;
+  if (debug) hud.textContent = `${currentStation}\nProgress ${(wanted.progress * 100).toFixed(1)}%\n${diagnostics.fps.toFixed(1)} fps · ${moving ? 'moving' : 'settled'}\n${drawCalls} draw calls · DPR ${renderer.getPixelRatio()}`;
   if (moving) wake(); else { lastTime = 0; previousFrame = 0; }
 }
 function setStatic(value) {
   staticView = value;
   document.querySelector('#world').hidden = value;
-  document.querySelector('#view-status').textContent = value ? 'Illustrative simulation · Static view. Use the station links or direct portfolio.' : 'Illustrative simulation · Scroll to follow the shoreline.';
   motion.textContent = value ? 'Use 3D view' : 'Use static view';
   if (value && raf) { cancelAnimationFrame(raf); raf = 0; }
   lastTime = 0;
@@ -123,6 +126,7 @@ try {
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 1.05;
+  antialiasing = createAntialiasing(renderer);
   document.querySelector('#world').append(canvas);
   canvas.addEventListener('webglcontextlost', event => {
     event.preventDefault(); cancelAnimationFrame(raf); raf = 0;
