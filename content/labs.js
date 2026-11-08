@@ -2,6 +2,7 @@ import { projects } from './projects.js';
 
 export const labStages = ['encounter', 'understand', 'experiment', 'inspect', 'reflect'];
 const strategy = projects.find(project => project.id === 'strategy');
+const chess = projects.find(project => project.id === 'chess');
 
 export const labs = [{
   id: 'strategy', title: strategy.title, projectId: strategy.id, label: strategy.label,
@@ -36,6 +37,42 @@ export const labs = [{
       lessons: ['Keeping signals, positions and returns separate makes the execution convention inspectable.', 'Entry and exit costs change both the trade ledger and compounded equity. Open trades are marked to the last close, without an assumed liquidation cost.'],
       limitations: ['The historical mode contains one asset, SPY. It is not a multi-asset portfolio or index-membership study.', 'Parameters are selected on the displayed history; the code has no separate hold-out or walk-forward evaluation.', 'Fills use adjusted closing prices, not executable quotes. The fixed basis-point charge does not separately model bid/ask spread, market impact or an order book.', 'No cash interest, taxes or slippage beyond the selected cost. Sharpe uses rf=0 and volatility uses a 252-session annualization.'],
       improvements: ['A possible next step is explicit hold-out or walk-forward evaluation before interpreting parameter comparisons.', 'Separate execution assumptions from the current single basis-point charge. These are potential improvements, not implemented features.']
+    }
+  }
+}, {
+  id: 'chess', title: chess.title, projectId: chess.id, label: chess.label,
+  stages: {
+    encounter: {
+      title: 'Find the forcing move',
+      paragraphs: ['Twelve curated puzzles, three difficulty levels and a board backed by chess.js. This read-only position is the first bundled puzzle: The locked back rank.', 'Experiment enables legal moves, hints, undo and solution playback. The preview does not change saved progress.'],
+      mount: { module: '/lab/chess/lab.js', export: 'mountEncounter' }
+    },
+    understand: {
+      title: 'A legal move is not always the forcing line',
+      problem: ['A mate claim needs more than a plausible sequence. Starting positions, side to move, legal moves and the available defences must agree.'],
+      approach: ['Puzzle entries supply a FEN, a strict SAN solution and a declared mate length. The tests validate these and check the claim against every defence.', 'The board uses chess.js for legal destinations and move attempts. Scripted replies follow the stored line; this is not a general-purpose chess opponent.']
+    },
+    experiment: {
+      title: 'Play, inspect a hint, try again',
+      paragraphs: ['Select a piece and destination, drag a piece, or use the arrow keys with Enter / Space. Try Hint, Undo or another difficulty.', 'Show solution plays the stored line but is not counted as a solve. Progress is local to this browser when storage is available.'],
+      mount: { module: '/lab/chess/lab.js', export: 'mountExperiment' }
+    },
+    inspect: {
+      title: 'From a FEN to a verified mate',
+      paragraphs: ['The board compares legal attempts with the stored SAN line. A different final move is accepted if it delivers checkmate. The test search distinguishes an attacking choice from every defending choice.'],
+      excerpts: [
+        { title: 'Position, side to move and mate metadata', path: 'lab/chess/puzzles.js', start: 1, end: 13 },
+        { title: 'Expected move and legal destinations', path: 'lab/chess/board.js', start: 51, end: 62 },
+        { title: 'Legal attempts and the final checkmate test', path: 'lab/chess/board.js', start: 119, end: 132 },
+        { title: 'Validation against all defences', path: 'tests/chess-puzzles.test.js', start: 33, end: 44 }
+      ],
+      steps: ['FEN + solution + mate length', 'Validate the starting position', 'Apply legal moves with chess.js', 'Check every defending reply in tests', 'Verify final checkmate']
+    },
+    reflect: {
+      title: 'A small, inspectable puzzle system',
+      lessons: ['Board orientation comes from the side to move in the FEN. The rendering and legality engine share the same position.', 'A cooperative line is not proof of forced mate; the tests explicitly consider defences.'],
+      limitations: ['The twelve puzzles are curated, not generated or adaptively rated.', 'Opponent replies in the UI use the stored line rather than a general search engine.', 'Progress uses optional localStorage. There is no account or cross-device synchronization.'],
+      improvements: ['A possible extension is exploring alternative defending lines in the UI, rather than only in validation tests.', 'More positions would need the same legality and mate checks before being added. Neither extension is implemented here.']
     }
   }
 }];

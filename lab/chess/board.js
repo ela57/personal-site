@@ -16,7 +16,9 @@ function pieceSVG(piece) {
   return `<svg viewBox="0 0 48 48" aria-hidden="true" class="chessPiece ${piece.color === "w" ? "pieceWhite" : "pieceBlack"}">${drawings[piece.type]}<path d="M13 36h22v5H13z"/></svg>`;
 }
 
-export function mountChess(root) {
+let instance = 0;
+export function mountChess(root, { readOnly = false, persist = true } = {}) {
+  const difficultyId = `chess-difficulty-${++instance}`;
   const controller = new AbortController(), opts = { signal: controller.signal };
   let progress;
   try { progress = normalizeProgress(JSON.parse(localStorage.getItem("notebook-chess"))); }
@@ -27,8 +29,8 @@ export function mountChess(root) {
   root.innerHTML = `<div class="chessLayout">
     <div class="chessBoardWrap"><div class="chessBoard" role="grid" aria-label="Chess puzzle board"></div>
     <p class="chessCaption mono"></p></div>
-    <div class="chessPanel"><label class="mono" for="chessDifficulty">Difficulty</label>
-      <select id="chessDifficulty"><option>Beginner</option><option>Intermediate</option><option>Advanced</option></select>
+    <div class="chessPanel"><label class="mono" for="${difficultyId}">Difficulty</label>
+      <select id="${difficultyId}"><option>Beginner</option><option>Intermediate</option><option>Advanced</option></select>
       <p class="chessNumber mono"></p><h3 class="chessTitle"></h3>
       <p class="chessStatus" role="status" aria-live="polite" aria-atomic="true"></p>
       <div class="chessControls"><button data-action="hint">Hint</button><button data-action="undo">Undo</button><button data-action="reset">Reset puzzle</button><button data-action="solution">Show solution</button><button data-action="next">Next puzzle →</button></div>
@@ -36,9 +38,12 @@ export function mountChess(root) {
       <p class="chessHelp mono">Drag a piece, or select a piece and its destination. Arrow keys navigate; Enter or Space selects. Promotions follow the puzzle line, otherwise queen.</p>
     </div></div>`;
   const board = root.querySelector(".chessBoard"), status = root.querySelector(".chessStatus");
+  root.dataset.readOnly = String(readOnly);
+  if (readOnly) root.querySelectorAll('.chessControls button,select').forEach(control => { control.disabled = true; });
   const filtered = () => puzzles.filter(p => p.difficulty === level);
   const announce = text => { status.textContent = text; };
   const record = event => {
+    if (!persist) return;
     progress = updateProgress(progress, event, puzzle.id);
     try { localStorage.setItem("notebook-chess", JSON.stringify(progress)); } catch { /* Storage is optional. */ }
     root.querySelector(".chessProgress").textContent = `Solved ${progress.solved.length} · Streak ${progress.streak}`;
@@ -63,6 +68,7 @@ export function mountChess(root) {
       for (const file of files) {
         const square = file + rank, piece = game.get(square), cell = document.createElement("button");
         cell.type = "button"; cell.dataset.square = square; cell.setAttribute("role", "gridcell");
+        cell.disabled = readOnly;
         cell.tabIndex = square === focusSquare ? 0 : -1;
         cell.className = "chessSquare " + ((file.charCodeAt(0) + Number(rank)) % 2 ? "chessLight" : "chessDark");
         cell.classList.toggle("selected", square === selected);
@@ -78,9 +84,9 @@ export function mountChess(root) {
       board.append(row);
     }
     if (hadFocus) board.querySelector(`[data-square="${focusSquare}"]`)?.focus({ preventScroll: true });
-    root.querySelector('[data-action="undo"]').disabled = ply === 0;
-    root.querySelector('[data-action="hint"]').disabled = finished || revealed || busy;
-    root.querySelector('[data-action="solution"]').disabled = revealed;
+    root.querySelector('[data-action="undo"]').disabled = readOnly || ply === 0;
+    root.querySelector('[data-action="hint"]').disabled = readOnly || finished || revealed || busy;
+    root.querySelector('[data-action="solution"]').disabled = readOnly || revealed;
     root.querySelector(".chessExplanation").textContent = finished ? puzzle.explanation : "";
   }
   function load(nextPuzzle = puzzle) {
@@ -133,6 +139,7 @@ export function mountChess(root) {
     } else if (selected) attempt(selected, square);
   }
   board.addEventListener("pointerdown", e => {
+    if (readOnly) return;
     const cell = e.target.closest("[data-square]");
     if (!cell || e.button !== 0 || busy || finished || revealed) return;
     focusSquare = cell.dataset.square;
@@ -163,6 +170,7 @@ export function mountChess(root) {
   }, opts);
   board.addEventListener("pointercancel", () => { drag = null; ghost?.remove(); ghost = null; selected = null; render(); }, opts);
   board.addEventListener("keydown", e => {
+    if (readOnly) return;
     const cell = e.target.closest("[data-square]"); if (!cell) return;
     const cells = [...board.querySelectorAll("[data-square]")], i = cells.indexOf(cell);
     const offsets = { ArrowLeft: -1, ArrowRight: 1, ArrowUp: -8, ArrowDown: 8 };
@@ -173,6 +181,7 @@ export function mountChess(root) {
   }, opts);
   root.querySelector("select").addEventListener("change", e => { level = e.target.value; load(filtered()[0]); }, opts);
   root.addEventListener("click", e => {
+    if (readOnly) return;
     const action = e.target.closest("[data-action]")?.dataset.action;
     if (action === "reset") load();
     if (action === "next") { const group = filtered(); load(group[(group.indexOf(puzzle) + 1) % group.length]); }
@@ -192,5 +201,6 @@ export function mountChess(root) {
     }
   }, opts);
   load(filtered()[0]);
+  if (readOnly) announce('Read-only position. Experiment enables moves, hints and solution playback.');
   return () => { cancel(); controller.abort(); root.replaceChildren(); };
 }
