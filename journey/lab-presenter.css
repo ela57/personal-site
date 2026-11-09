@@ -1,0 +1,72 @@
+.lab-dialog { position: fixed; inset: 0; margin: 0; width: 100%; height: 100svh; max-width: none; max-height: none; padding: 0; border: 0; background: #101e17f2; color: #ece7dc; backdrop-filter: blur(9px); overflow: hidden; font: 14px/1.6 'Archivo',sans-serif; }
+.lab-dialog[open] { display: grid; grid-template-rows: auto minmax(0,1fr) auto; }
+.lab-dialog::backdrop { background: #07110e55; }
+.lab-dialog [hidden] { display: none !important; }
+.lab-topbar { padding: 20px 32px 0; display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 16px; border-bottom: 1px solid #73836d; }
+.lab-heading { display: flex; gap: 18px; align-items: center; flex-wrap: wrap; }
+.lab-dialog h1 { font: 400 26px/1.2 'Source Serif 4',serif; margin: 0; }
+.lab-dialog .classification { font-size: 11px; }
+.lab-dialog button { min-height: 44px; padding: 8px 16px; font: inherit; color: inherit; border: 1px solid #73836d; background: #172b20; cursor: pointer; }
+.lab-dialog button:disabled { opacity: .4; cursor: default; }
+.lab-dialog a { color: #e3b677; }
+.lab-stages { grid-column: 1/-1; display: flex; gap: 30px; }
+.lab-stages a { min-height: 44px; display: flex; align-items: center; text-decoration: none; border-bottom: 2px solid transparent; }
+.lab-stages a[aria-current] { border-bottom-color: #e3b677; color: #ece7dc; }
+.lab-layout { display: grid; grid-template-columns: minmax(0,.85fr) minmax(0,1.3fr); min-height: 0; max-width: 1600px; width: 100%; margin: auto; height: 100%; }
+.lab-copy,.lab-live { overflow: auto; min-width: 0; padding: 32px; overscroll-behavior: contain; scrollbar-gutter: stable; }
+.lab-copy { border-right: 1px solid #73836d66; }
+.lab-kicker { color: #e3b677; font-size: 12px; margin: 0 0 12px; }
+.lab-dialog h2 { font: 400 clamp(32px,3.1vw,48px)/1.08 'Source Serif 4',serif; margin: 0 0 24px; text-wrap: balance; }
+.lab-dialog h3 { font: 400 23px/1.2 'Source Serif 4',serif; margin: 0 0 14px; }
+.lab-copy p { max-width: 62ch; margin: 0 0 18px; }
+.lab-prose-group,.lab-excerpt { margin: 30px 0; }
+.lab-excerpt p { font-size: 12px; }
+.lab-excerpt pre { max-width: 100%; padding: 18px; background: #07130e; border: 1px solid #73836d66; font: 12px/1.7 monospace; tab-size: 2; }
+.lab-excerpt pre code { display: block; white-space: normal; }
+.lab-code-line { display: grid; grid-template-columns: 4ch minmax(0,1fr); gap: 1ch; min-height: 1.7em; }
+.lab-line-number { text-align: right; color: #a4b19e; user-select: none; }
+.lab-line-source { white-space: pre-wrap; overflow-wrap: anywhere; padding-left: 2ch; text-indent: -2ch; min-width: 0; }
+.lab-pipeline { list-style: none; margin: 30px 0; padding: 0; }
+.lab-pipeline li { border: 1px solid #73836d; padding: 14px 20px; max-width: 420px; font-size: 17px; }
+.lab-pipeline li+li { margin-top: 28px; position: relative; }
+.lab-pipeline li+li::before { content: '↓'; position: absolute; top: -30px; left: 20px; color: #e3b677; }
+.lab-live img { max-width: 100%; height: auto; }
+.lab-bottom { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 14px 32px; border-top: 1px solid #73836d; background: #102019; }
+.lab-bottom output { font-size: 12px; }
+.lab-dialog header { position: static; inset: auto; z-index: auto; display: block; padding: 0; background: none; border: 0; }
+.lab-dialog .strategyDisclaimer { color: #e3b677; font-size: 12px; margin: 0 0 20px; }
+.lab-dialog .strategyControls { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 18px; }
+.lab-dialog .strategyControls label { display: flex; flex-direction: column; gap: 7px; font-size: 12px; }
+.lab-dialog input,.lab-dialog select { background: #203229; color: #ece7dc; border: 1px solid #73836d; padding: 8px; width: 100%; min-width: 0; font: inherit; min-height: 42px; accent-color: #e3b677; }
+.lab-dialog .strategyPair { display: flex; align-items: center; gap: 12px; }
+.lab-dialog .strategyPair input[type=number] { max-width: 76px; }
+.lab-dialog .strategyActions { display: flex; align-items: center; gap: 16px; font-size: 12px; margin: 20px 0; }
+.lab-dialog .strategySource,.lab-dialog .strategyAttribution { font-size: 11px; line-height: 1.6; margin: 20px 0; overflow-wrap: anywhere; }
+.lab-dialog .strategyChartSection,.lab-dialog .strategyTrades { margin: 28px 0; border-top: 1px solid #73836d66; }
+.lab-dialog .strategyChartSection header,.lab-dialog .strategyTrades header { padding: 18px 0; }
+.lab-dialog .strategyChartSection header p,.lab-dialog .strategyTrades header p { font-size: 11px; margin: 0; }
+.lab-dialog .strategyChartSection h3 { font-size: 20px; }
+.lab-dialog .strategyChart { width: 100%; min-width: 0; }
+.lab-dialog .strategyResults { display: grid; gap: 32px; }
+.lab-dialog table { border-collapse: collapse; width: 100%; font-size: 12px; text-align: right; }
+.lab-dialog td,.lab-dialog th { padding: 10px 6px; border-bottom: 1px solid #73836d66; white-space: nowrap; }
+.lab-dialog th:first-child,.lab-dialog td:first-child { text-align: left; }
+.lab-dialog .strategyTableScroll { max-height: 360px; overflow: auto; }
+.lab-dialog .strategyTableScroll table { min-width: 650px; }
+.lab-dialog .srOnly { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+@media(max-width:760px) {
+  .lab-topbar { padding: 14px 16px 0; gap: 12px; }
+  .lab-heading { gap: 8px; }
+  .lab-dialog h1 { font-size: 21px; }
+  .lab-dialog .classification { font-size: 10px; }
+  .lab-stages { gap: 0; flex-wrap: wrap; justify-content: space-between; }
+  .lab-stages a { font-size: 11px; min-height: 40px; }
+  .lab-layout { display: block; overflow: auto; overscroll-behavior: contain; }
+  .lab-copy,.lab-live { overflow: visible; padding: 24px 20px; }
+  .lab-copy { border-right: 0; border-bottom: 1px solid #73836d66; }
+  .lab-dialog h2 { font-size: 34px; }
+  .lab-bottom { padding: 10px 14px; gap: 8px; }
+  .lab-bottom button { font-size: 11px; padding: 8px; }
+  .lab-bottom output { font-size: 10px; }
+  .lab-dialog .strategyControls { grid-template-columns: minmax(0,1fr); }
+}

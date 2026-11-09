@@ -1,0 +1,48 @@
+@font-face { font-family: Archivo; src: url('../assets/fonts/archivo-var.woff2') format('woff2'); font-display: swap; }
+@font-face { font-family: 'Source Serif 4'; src: url('../assets/fonts/source-serif-4-var.woff2') format('woff2'); font-display: swap; }
+:root { color-scheme: dark; font-family: Archivo, sans-serif; color: #ece7dc; background: #13201b; }
+* { box-sizing: border-box; }
+body { margin: 0; }
+::selection { background: #e3b677; color: #13201b; }
+a { color: inherit; text-decoration-thickness: 1px; text-underline-offset: 5px; }
+button { font: inherit; color: inherit; background: #13201bbf; border: 1px solid #ece7dc55; padding: 10px 14px; cursor: pointer; }
+:focus-visible { outline: 2px solid #e3b677; outline-offset: 5px; }
+.landscape, #world { position: fixed; inset: 0; }
+.landscape { background: #b7bbb0 url('../assets/journey/sky-mountains.webp') center / cover; }
+#world canvas { display: block; width: 100%; height: 100%; }
+body::after { content: ''; position: fixed; z-index: 1; inset: 55% 0 0; background: linear-gradient(transparent, #13201bdd); pointer-events: none; }
+header { position: fixed; z-index: 2; inset: 0 0 auto; padding: 24px 3.5vw; display: flex; align-items: center; justify-content: space-between; background: linear-gradient(#13201b99, transparent); }
+header > a { font: 25px 'Source Serif 4', serif; text-decoration: none; }
+header nav { display: flex; gap: 24px; align-items: center; font-size: 14px; }
+header a { min-height: 44px; display: inline-flex; align-items: center; }
+.caption { position: fixed; z-index: 2; bottom: 94px; left: 3.5vw; max-width: min(660px, 90vw); text-shadow: 0 2px 18px #13201b; pointer-events: none; }
+.caption h1 { font: 400 clamp(36px, 4.2vw, 64px)/1.08 'Source Serif 4', serif; margin: 0 0 14px; text-wrap: balance; }
+.caption p { font-size: 14px; line-height: 1.6; margin: 0; }
+#view-status { display: none; }
+.journey-ready #view-status { display: block; }
+.caption[data-station="entrance"] h1 { font-size: clamp(54px, 6vw, 88px); margin-bottom: 8px; }
+.caption .build-line { display: flex; flex-wrap: wrap; gap: 0 .2em; font: 400 italic clamp(24px, 3vw, 40px)/1.25 'Source Serif 4', serif; }
+.cycle { display: inline-grid; vertical-align: baseline; }
+.cycleWord { grid-area: 1/1; visibility: hidden; white-space: pre; }
+.cycleWord.is-active { visibility: visible; }
+.wordChar { transition: opacity var(--word-fade, 60ms) linear; }
+#wordMotion { display: block; pointer-events: auto; border: 0; background: none; padding: 0; font-size: 12px; min-height: 44px; text-decoration: underline; text-underline-offset: 4px; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+body:not(.journey-ready) header > a { font-size: clamp(36px, 5vw, 64px); }
+#fallback { background: #13201be8; padding: 16px; max-width: 480px; pointer-events: auto; }
+[hidden] { display: none !important; }
+.stations { position: fixed; z-index: 3; bottom: 22px; left: 3.5vw; right: 3.5vw; display: flex; gap: 22px; border-top: 1px solid #ece7dc55; background: #13201bba; padding: 8px 16px; width: fit-content; max-width: 93vw; }
+.stations a { display: flex; align-items: center; min-height: 44px; font-size: 13px; text-decoration: none; }
+.stations a[aria-current] { color: #e3b677; text-decoration: underline; }
+.scroll-track section { height: 500svh; }
+#debug { position: fixed; z-index: 5; right: 22px; top: 88px; background: #13201be8; padding: 12px; font-size: 13px; white-space: pre; font-variant-numeric: tabular-nums; }
+@media (max-width: 600px) {
+  header { padding: 14px 20px; }
+  header nav { gap: 10px; font-size: 12px; }
+  header > a { font-size: 21px; }
+  button { padding: 8px; }
+  .caption { left: 20px; bottom: 150px; }
+  .stations { left: 20px; right: 20px; gap: 0; width: auto; display: grid; grid-template-columns: repeat(3, 1fr); padding: 6px 10px; }
+  .stations a { font-size: 12px; justify-content: center; }
+}
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .wordChar { transition: none; } }

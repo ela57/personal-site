@@ -1,6 +1,39 @@
 # Forest lake at dawn
 
-One fixed landscape continues behind the page. Pale sky supports the hero;
+## Journey and direct-view surfaces
+
+The public `/` is a full-bleed layered forest/lake world (`journey/world.js`),
+not the former photograph-only scrolling homepage. Use an authored, reversible
+route with station dwells, level horizon, restrained travel and real project
+panels: translucent left overlays on desktop, bottom sheets on mobile. Keep
+installations in the unobscured right-side framing. Explicit labels belong to
+projects; unsupported entries say Content needed and have no action.
+
+The six stations are Entrance, Observatory, Archive, Workshop, Clearing and
+Overlook. Reduced motion uses instant cuts/static water and typography; static,
+no-WebGL and no-JS views retain readable destinations. Preserve native scrolling,
+focus, station keys, Back/deep links and a persistent `/projects/` alternative.
+
+Five-stage labs use one accessible full-screen presenter: Encounter, Understand,
+Experiment, Inspect, Reflect. Keep copy/live surfaces in consistent positions,
+stack on mobile, lock world scrolling and pause rendering, and restore focus and
+exact scroll on exit. Inspect uses real source ranges, numbered rows and hanging
+wrapped lines rather than horizontal code scrolling.
+
+`/dev/` is a noindex, non-public curation gallery with stable preview windows,
+lazy mounts/teardown, source/classification metadata and scored comparisons.
+`/dev/motion.html` compares eight camera techniques; it is not public navigation.
+The historical ribbon is a thin sampled line with a bright edge, sparse year
+posts and a camera-following date marker, not an area slab or precise chart.
+See `docs/journey/CURATION.md` for proposed promotions, weak items and content gaps.
+
+Only software-rendered fps is available (earlier art-pass median 6.42 fps on
+SwiftShader at DPR .65). Hardware smoothness is unverified; do not present demand
+rendering or qualitative cost scores as a successful GPU performance benchmark.
+
+## Direct project view visual system
+
+In `/projects/`, one fixed landscape continues behind the page. Pale sky supports the hero;
 a forest veil reaches 72% at Work and 90% by About. Water motion stays subtle,
 below the shoreline, and stops for reduced motion, hidden tabs, or an opaque veil.
 
