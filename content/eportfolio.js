@@ -13,7 +13,7 @@ export const about = [
 export const career = {
   intro: "I want to build the systems other software depends on: fast, reliable backends and infrastructure, especially in financial technology. Here is where I am, where I want to go, and the steps I'm taking to get there.",
   goal: 'Pursue software engineering roles focused on backend systems, infrastructure or performance, with particular interest in financial technology and trading firms.',
-  now: "computer engineering at Georgia Tech (Cybersecurity and Distributed Systems & Software Design threads). Coursework so far includes GPU Graphics Programming, Computer Architecture, Advanced Malware Reverse Engineering and Circuit Analysis. I'm a Portfolio Manager in the GTSF Investment Committee's Quant Sector, building Python portfolio and backtesting infrastructure.",
+  now: "I study computer engineering at Georgia Tech (Cybersecurity and Distributed Systems & Software Design threads). Coursework so far includes GPU Graphics Programming, Computer Architecture, Advanced Malware Reverse Engineering and Circuit Analysis. I'm a Portfolio Manager in the GTSF Investment Committee's Quant Sector, building Python portfolio and backtesting infrastructure.",
   steps: [
     ['Internship', 'Secure a Summer 2027 software engineering internship where I can contribute to real engineering projects, learn from experienced developers, and gain experience working on a team.'],
     ['Coursework', 'Build on my programming, data structures and GPU programming experience through coursework in computer architecture, operating systems, networking and embedded systems.'],
