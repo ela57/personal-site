@@ -32,10 +32,29 @@ test('destination links preserve specific direct project and sandbox routes', ()
 });
 
 test('unknown/empty station lists and unsafe text have safe presentation', () => {
+  assert.deepEqual(stationProjects('entrance'), []);
+  assert.equal(projectList('entrance'), '');
   assert.deepEqual(stationProjects('missing'), []);
   assert.equal(projectList('missing'), '');
   assert.equal(escapeHtml('<a "x">&\''), '&lt;a &quot;x&quot;&gt;&amp;&#39;');
   assert.equal(projectHref({ id: 'empty', links: [] }), '/projects/destinations.html#empty');
+});
+
+test('forest scenery remains without a destination card or empty entrance lists', () => {
+  assert.equal(projects.length, 15);
+  assert.ok(!projects.some(project => project.id === 'forest-lake'));
+  assert.ok(!destinations.some(station => station.projects.includes('forest-lake')));
+  for (const path of ['index.html', 'projects/index.html', 'projects/destinations.html']) {
+    assert.ok(!generatedPages[path].includes('Forest lake'), path);
+    assert.ok(!generatedPages[path].includes('One continuous forest-lake environment.'), path);
+    assert.ok(!generatedPages[path].includes('<ul class="project-list"></ul>'), path);
+  }
+  const entrance = generatedPages['index.html'].match(/<section id="entrance"[\s\S]*?<\/section>/)[0];
+  assert.ok(entrance.includes('<h2>Welcome</h2>'));
+  assert.ok(entrance.includes('Scroll to follow the shoreline.'));
+  assert.ok(!entrance.includes('<ul'));
+  assert.ok(generatedPages['index.html'].includes('id="world"'));
+  for (const path of ['projects/index.html', 'projects/destinations.html']) assert.ok(!generatedPages[path].includes('Lakeside entrance'), path);
 });
 
 test('simulated dataset belongs only to its explicit hash route, never a retained query', () => {

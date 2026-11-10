@@ -2,7 +2,7 @@ import { projects } from './projects.js';
 import { labs as labDefinitions } from './labs.js';
 
 export const destinations = [
-  { id: 'entrance', name: 'Lakeside entrance', subtitle: 'Scroll to follow the shoreline.', projects: ['forest-lake'] },
+  { id: 'entrance', name: 'Lakeside entrance', subtitle: 'Scroll to follow the shoreline.', projects: [] },
   { id: 'observatory', name: 'Observatory', subtitle: 'Quantitative research', projects: ['vol', 'strategy', 'strategy-simulation', 'portfolio-manager'] },
   { id: 'archive', name: 'Archive', subtitle: 'Data and research', projects: ['data-universe', 'human-interaction'] },
   { id: 'workshop', name: 'Workshop', subtitle: 'Graphics, hardware and analysis labs', projects: ['renderer', 'thermal', 'scomp', 'palletizer-fsm', 'malware-research'] },
@@ -32,5 +32,5 @@ export function projectList(id, labs = false) {
 }
 
 export function destinationIndex() {
-  return destinations.map(station => `<div class="destination-group"><h3>${escapeHtml(station.name)}</h3><ul class="project-list">${projectList(station.id, true).replaceAll('<h3>', '<h4>').replaceAll('</h3>', '</h4>')}</ul></div>`).join('\n');
+  return destinations.filter(station => station.projects.length).map(station => `<div class="destination-group"><h3>${escapeHtml(station.name)}</h3><ul class="project-list">${projectList(station.id, true).replaceAll('<h3>', '<h4>').replaceAll('</h3>', '</h4>')}</ul></div>`).join('\n');
 }

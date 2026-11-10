@@ -3,16 +3,6 @@ import { about } from './eportfolio.js';
 // Destination keys are content identifiers, not newly implemented hash routes.
 export const projects = [
   {
-    id: "forest-lake", title: "Forest lake", destination: "arrival",
-    label: "Illustrative simulation",
-    summary: "One continuous forest-lake environment.",
-    body: ["Photograph generated for this site."],
-    links: [{ title: "Home", href: "#top" }],
-    assets: ["assets/hero/lake-1536.avif", "assets/hero/lake-portrait-640.avif"],
-    dataSources: [{ repo: "personal-site", path: "projects/index.html", section: "footer" }, { repo: "personal-site", path: "DESIGN.md" }],
-    needsContent: false
-  },
-  {
     id: "renderer", title: "A renderer with no graphics API", destination: "renderer",
     label: "Illustrative simulation",
     summary: "A JavaScript and Canvas 2D illustration of a Python rendering pipeline.",

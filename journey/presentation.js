@@ -4,7 +4,7 @@ import { destinations, projectList } from '../content/destinations.js';
 export const stationSubtitles = Object.fromEntries(destinations.map(s => [s.id, s.subtitle]));
 
 export function mountPresentation(root = document) {
-  for (const station of destinations) root.querySelector(`#${station.id} .project-list`).innerHTML = projectList(station.id);
+  for (const station of destinations.filter(station => station.projects.length)) root.querySelector(`#${station.id} .project-list`).innerHTML = projectList(station.id);
   document.body.classList.add('journey-ready');
   mountWords(root);
   return id => {
