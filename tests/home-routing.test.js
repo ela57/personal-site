@@ -27,6 +27,10 @@ test('homepage and projects alias share static content and a footer-only experim
     assert.ok(html.indexOf('id="experimental"') > html.indexOf('id="destinations"'));
     assert.ok(html.includes('Experimental interactive version'));
     assert.ok(!html.includes('>Forest journey</a>'));
+    assert.ok(html.includes('Computer engineering · Georgia Tech ’28'));
+    assert.ok(html.includes('All destinations <span aria-hidden="true">↗</span></a>'));
+    assert.ok(html.includes('<h1 class="heroTitle" id="heroTitle">Ethan Lam</h1>'));
+    assert.ok(html.includes('data-cycle="hero"'));
   }
   assert.ok(generatedPages['index.html'].includes('href="/" aria-current="page"'));
   assert.ok(read('main.js').includes('interactive: !staticPortfolio'));

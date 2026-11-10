@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync, existsSync } from 'node:fs';
 import { projects } from '../content/projects.js';
-import { destinations, stationProjects, projectHref, projectList, escapeHtml } from '../content/destinations.js';
+import { destinations, stationProjects, categories, categoryProjects, projectHref, projectList, escapeHtml } from '../content/destinations.js';
 import { generatedPages } from '../journey/generate.js';
 import { getStations } from '../journey/route.js';
 import { parseDetailRoute } from '../lab/detail-routing.js';
@@ -29,6 +29,27 @@ test('destination links preserve specific direct project and sandbox routes', ()
   for (const labs of [true, false]) assert.equal(projectHref(simulated, labs), '/projects/#lab/strategy/simulated');
   assert.ok(projectList('observatory').includes('href="/projects/#lab/strategy/simulated"'));
   assert.equal(projectHref(projects.find(p => p.id === 'thermal')), '/projects/#project/thermal');
+});
+
+test('static categories cover every destination once without using journey stations', () => {
+  assert.deepEqual(categories.map(category => category.name), ['Projects', 'Research & labs', 'Leadership & experience', 'Résumé']);
+  const ids = categories.flatMap(category => category.projects);
+  assert.equal(ids.length, projects.length);
+  assert.deepEqual(new Set(ids), new Set(projects.map(project => project.id)));
+  for (const category of categories) assert.deepEqual(categoryProjects(category.id), category.projects.map(id => projects.find(project => project.id === id)));
+  assert.deepEqual(categoryProjects('missing'), []);
+  assert.deepEqual(categoryProjects('leadership-experience').map(project => project.id), ['portfolio-manager', 'chess-buddies']);
+  for (const path of ['index.html', 'projects/index.html', 'projects/destinations.html']) {
+    const html = generatedPages[path];
+    for (const category of categories) assert.ok(html.includes(escapeHtml(category.name)), path);
+    for (const station of destinations) assert.ok(!html.includes(station.name), `${path}: ${station.name}`);
+    for (const project of projects) assert.ok(html.includes(escapeHtml(project.title)), `${path}: ${project.id}`);
+  }
+  for (const station of destinations.filter(station => station.projects.length)) {
+    const panel = generatedPages['explore/index.html'].match(new RegExp(`<section id="${station.id}"[\\s\\S]*?</section>`))[0];
+    assert.ok(panel.includes(station.name));
+    for (const project of stationProjects(station.id)) assert.ok(panel.includes(escapeHtml(project.title)));
+  }
 });
 
 test('unknown/empty station lists and unsafe text have safe presentation', () => {

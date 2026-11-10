@@ -10,6 +10,17 @@ export const destinations = [
   { id: 'overlook', name: 'Overlook', subtitle: 'About and contact', projects: ['resume'] }
 ];
 
+export const categories = [
+  { id: 'projects', name: 'Projects', projects: ['renderer', 'thermal', 'data-universe', 'scomp', 'palletizer-fsm'] },
+  { id: 'research-labs', name: 'Research & labs', projects: ['vol', 'strategy', 'strategy-simulation', 'chess', 'poker', 'human-interaction', 'malware-research'] },
+  { id: 'leadership-experience', name: 'Leadership & experience', projects: ['portfolio-manager', 'chess-buddies'] },
+  { id: 'resume', name: 'Résumé', projects: ['resume'] }
+];
+
+export function categoryProjects(id) {
+  return (categories.find(category => category.id === id)?.projects || []).map(id => projects.find(project => project.id === id));
+}
+
 export function stationProjects(id) {
   return (destinations.find(station => station.id === id)?.projects || []).map(id => projects.find(project => project.id === id));
 }
@@ -23,7 +34,11 @@ export function projectHref(project, labs = true) {
 export const escapeHtml = text => String(text).replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]));
 
 export function projectList(id, labs = false) {
-  return stationProjects(id).map(project => {
+  return renderProjectList(stationProjects(id), labs);
+}
+
+function renderProjectList(items, labs) {
+  return items.map(project => {
     const lab = !labs && labDefinitions.find(lab => lab.projectId === project.id);
     const action = lab ? 'Enter lab' : 'Open';
     const href = lab ? `/explore/#/lab/${lab.id}/encounter` : projectHref(project, labs);
@@ -32,5 +47,5 @@ export function projectList(id, labs = false) {
 }
 
 export function destinationIndex() {
-  return destinations.filter(station => station.projects.length).map(station => `<div class="destination-group"><h3>${escapeHtml(station.name)}</h3><ul class="project-list">${projectList(station.id, true).replaceAll('<h3>', '<h4>').replaceAll('</h3>', '</h4>')}</ul></div>`).join('\n');
+  return categories.map(category => `<div class="destination-group"><h3>${escapeHtml(category.name)}</h3><ul class="project-list">${renderProjectList(categoryProjects(category.id), true).replaceAll('<h3>', '<h4>').replaceAll('</h3>', '</h4>')}</ul></div>`).join('\n');
 }
