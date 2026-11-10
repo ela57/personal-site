@@ -1,5 +1,6 @@
 .DS_Store
 assets/*.pdf
+!assets/Lam_Ethan_Resume.pdf
 .env
 .env.*
 __pycache__/
