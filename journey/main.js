@@ -56,7 +56,7 @@ function activate(id, sync = true) {
     changes.dispatchEvent(new CustomEvent('stationchange', { detail: station }));
     window.dispatchEvent(new CustomEvent('journey:stationchange', { detail: station }));
   }
-  if (sync && !jump && !labPaused && !parseLabRoute(location.hash) && location.hash !== `#/at/${id}`) history.replaceState(null, '', `/${location.search}#/at/${id}`);
+  if (sync && !jump && !labPaused && !parseLabRoute(location.hash) && location.hash !== `#/at/${id}`) history.replaceState(null, '', `${location.pathname}${location.search}#/at/${id}`);
 }
 function updateStation(sync = true) {
   if (hasWorld()) {
@@ -76,7 +76,7 @@ function cancelJump() { cancelAnimationFrame(jump); jump = 0; }
 function goToStation(id, { instant = true, push = false } = {}) {
   if (!stations.some(s => s.id === id)) return;
   cancelJump();
-  if (push && location.hash !== `#/at/${id}`) history.pushState(null, '', `/${location.search}#/at/${id}`);
+  if (push && location.hash !== `#/at/${id}`) history.pushState(null, '', `${location.pathname}${location.search}#/at/${id}`);
   const y = hasWorld() ? progressForStation(id) * (document.documentElement.scrollHeight - innerHeight)
     : scrollY + document.getElementById(id).getBoundingClientRect().top - document.querySelector('header').getBoundingClientRect().height - 12;
   if (instant || reduced.matches || !hasWorld()) {
@@ -142,7 +142,7 @@ function setStatic(value) {
   const id = currentStation || 'entrance'; cancelJump();
   staticView = value; document.body.classList.toggle('has-world', !value);
   container.hidden = value; fallback.hidden = !value;
-  motion.textContent = value ? 'Use 3D view' : 'Use static view';
+  motion.textContent = 'Use static view';
   cancelAnimationFrame(raf); raf = 0; lastTime = 0;
   fit(); goToStation(id);
 }
@@ -207,7 +207,6 @@ document.addEventListener('visibilitychange', () => {
   else wake();
 });
 reduced.addEventListener('change', () => { diagnostics.reduced = reduced.matches; cancelJump(); goToStation(currentStation); });
-motion.addEventListener('click', () => setStatic(!staticView));
 const initial = hashStation(); activate(initial, false);
 wanted = poseAtProgress(progressForStation(initial)); cut();
 new ResizeObserver(fit).observe(document.querySelector('header'));

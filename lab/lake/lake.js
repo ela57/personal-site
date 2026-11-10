@@ -1,12 +1,11 @@
 import { scrollState } from './math.js';
-import { createWater } from './water.js';
 
-export function mountLake() {
+export function mountLake({ interactive = true } = {}) {
   const hero = document.querySelector('#top'), scene = document.querySelector('.envScene');
   const image = document.querySelector('#lakeImage'), veil = document.querySelector('.veil');
   const copy = hero.querySelector('.heroCopy'), cue = hero.querySelector('.scrollLine'), scrollCue = hero.querySelector('.scrollCue');
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
-  let water = null, raf = 0, height = hero.offsetHeight, aboutTop = 0, visible = true, stopped = false;
+  let water = null, raf = 0, height = hero.offsetHeight, aboutTop = 0, visible = true, stopped = false, revision = 0;
   let lastY = scrollY, lastTime = performance.now();
   function visibility() {
     cue.style.animationPlayState = visible && !document.hidden ? 'running' : 'paused';
@@ -37,9 +36,16 @@ export function mountLake() {
   }
   function scroll() { if (!raf && !stopped) raf = requestAnimationFrame(update); }
   function resize() { height = hero.offsetHeight; aboutTop = document.querySelector('#about').offsetTop; scroll(); }
-  function preference() {
+  async function preference() {
+    const token = ++revision;
     water?.destroy(); water = null;
-    if (!reduced.matches) water = createWater(scene, image);
+    if (interactive && !reduced.matches) {
+      try {
+        const { createWater } = await import('./water.js');
+        if (stopped || token !== revision) return;
+        water = createWater(scene, image);
+      } catch {}
+    }
     scroll();
   }
   function pagehide(event) {

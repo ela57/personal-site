@@ -65,10 +65,10 @@ test('route includes an observatory arc and a sideways workshop approach', () =>
 });
 
 test('integrated journey has local assets, fallback, native scroll and debug-only diagnostics', () => {
-  const html = readFileSync(new URL('../index.html', import.meta.url), 'utf8');
+  const html = readFileSync(new URL('../explore/index.html', import.meta.url), 'utf8');
   assert.ok(html.includes('journey/main.js'));
   assert.match(html, /id="fallback"/);
-  assert.match(html, /href="\/projects\/"/);
+  assert.match(html, /id="motion" href="\/"/);
   assert.match(html, /id="debug" hidden/);
   getStations().forEach(s => assert.ok(html.includes(`id="${s.id}"`)));
   assert.ok(existsSync(new URL('../vendor/three.LICENSE', import.meta.url)));

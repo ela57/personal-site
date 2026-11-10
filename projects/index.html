@@ -18,11 +18,12 @@
   <link rel="preload" href="/assets/fonts/archivo-var.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/assets/fonts/source-serif-4-var.woff2" as="font" type="font/woff2" crossorigin>
   <script>document.documentElement.classList.add("js");</script>
+  <script src="/journey/legacy.js"></script>
   <link rel="stylesheet" href="/styles.css" />
   <link rel="stylesheet" href="/projects/direct.css" />
   <link rel="stylesheet" href="/eportfolio/site.css" />
 </head>
-<body>
+<body data-static-portfolio>
   <a class="skip" href="#main">Skip to content</a>
   <div class="env" aria-hidden="true">
     <div class="envScene">
@@ -48,7 +49,7 @@
         <div class="heroWords" aria-hidden="true"><span class="heroLead">I like to build</span> <span class="cycle" data-cycle="hero"><span class="cycleWord is-active">renderers.</span><span class="cycleWord">shaders.</span><span class="cycleWord">backtests.</span><span class="cycleWord">chess puzzles.</span></span></div>
         <p class="sr-only">I like to build renderers, shaders, backtests and chess puzzles.</p>
         <p class="heroFact">Computer engineering · Georgia Tech ’28</p>
-        <p class="direct-links"><a href="/">Forest journey</a> · <a href="#destinations">All destinations</a></p>
+        <p class="direct-links"><a href="#destinations">All destinations</a></p>
       </div>
       <a class="scrollCue" href="#projects"><span>Selected work</span><span class="scrollLine" aria-hidden="true"></span></a>
     </section>
@@ -232,6 +233,11 @@
 <li><h4>Chess Buddies leadership</h4><span class="classification">Working project integration</span><p>President · Aug 2022–May 2024 · Chess Buddies</p><a href="/about/#chess-buddies" aria-label="Open: Chess Buddies leadership">Open <span aria-hidden="true">↗</span></a></li></ul></div>
 <div class="destination-group"><h3>Overlook</h3><ul class="project-list"><li><h4>Résumé</h4><span class="classification">Working project integration</span><p>Computer engineering at Georgia Tech, class of 2028.</p><a href="/resume/" aria-label="Open: Résumé">Open <span aria-hidden="true">↗</span></a></li></ul></div></div></section>
     <!-- destinations:end -->
+    <section class="experimental-interactive" id="experimental" aria-labelledby="experimental-title">
+      <h2 id="experimental-title">Experimental interactive version</h2>
+      <p>An optional 3D forest journey through the same projects and labs.</p>
+      <a href="/explore/">Open the experimental journey ↗</a>
+    </section>
   </main>
 
   <footer class="foot mono">

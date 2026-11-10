@@ -2,8 +2,13 @@
 
 ## Journey and direct-view surfaces
 
-The public `/` is a full-bleed layered forest/lake world (`journey/world.js`),
-not the former photograph-only scrolling homepage. Use an authored, reversible
+The public `/` is the static ePortfolio, sharing `/projects/` content and visual
+system: Welcome, selected work, project/lab write-ups, About and Contact. Do not
+mount automatic canvases or load WebGL/Three.js on these direct pages. Keep the
+optional journey link small and only at the bottom, labelled “Experimental
+interactive version”; project/lab overlays remain opt-in.
+
+`/explore/` is the full-bleed layered forest/lake world (`journey/world.js`). Use an authored, reversible
 route with station dwells, level horizon, restrained travel and real project
 panels: translucent left overlays on desktop, bottom sheets on mobile. Keep
 installations in the unobscured right-side framing. Explicit labels belong to
@@ -12,7 +17,9 @@ projects; unsupported entries say Content needed and have no action.
 The six stations are Entrance, Observatory, Archive, Workshop, Clearing and
 Overlook. Reduced motion uses instant cuts/static water and typography; static,
 no-WebGL and no-JS views retain readable destinations. Preserve native scrolling,
-focus, station keys, Back/deep links and a persistent `/projects/` alternative.
+focus, station keys, Back/deep links and a persistent `/` alternative. Home and
+“Use static view” return to `/`. Legacy root journey URLs preserve query/hash
+state when redirected to `/explore/`; direct project/lab hashes stay on `/`.
 
 Five-stage labs use one accessible full-screen presenter: Encounter, Understand,
 Experiment, Inspect, Reflect. Keep copy/live surfaces in consistent positions,
@@ -33,9 +40,9 @@ rendering or qualitative cost scores as a successful GPU performance benchmark.
 
 ## Direct project view visual system
 
-In `/projects/`, one fixed landscape continues behind the page. Pale sky supports the hero;
-a forest veil reaches 72% at Work and 90% by About. Water motion stays subtle,
-below the shoreline, and stops for reduced motion, hidden tabs, or an opaque veil.
+In `/` and `/projects/`, one fixed photograph continues behind the page. Pale sky
+supports the hero; a forest veil reaches 72% at Work and 90% by About. The direct
+pages do not load the animated WebGL water effect.
 
 - Source Serif 4: display, project titles, large figures. Archivo: prose, UI,
   metadata; tabular numerals where useful. Sentence-case labels, 13–14px/500,
@@ -57,8 +64,8 @@ below the shoreline, and stops for reduced motion, hidden tabs, or an opaque vei
 - Reusable selectable character effects: stable-width word cycles and once-only
   heading reveals (35ms/character, under 700ms). Pause control, static reduced-motion
   and no-JS text. Hero: “I like to build” with four real project subjects.
-- The renderer pipeline progresses through five sticky, crossfading modes, with
-  focusable steps. Reduced motion and no JS show static figures beside each step.
+- The renderer pipeline shows static figures beside all five focusable steps;
+  the live renderer remains available inside its opt-in case study.
   Chart annotations map to actual image bounds inside a paper mat; no chart zoom.
 
 Static HTML, CSS and vanilla JS only. Local responsive AVIF/WebP images and fonts.

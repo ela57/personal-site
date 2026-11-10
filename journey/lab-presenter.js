@@ -107,7 +107,7 @@ export function mountLabPresenter({ onOpen, onClose, onRoute, currentStation }) 
   function changeStage(stage, focus = false) {
     if (!active || active.stage === stage) return;
     const state = stateFor(active);
-    history.pushState({ journeyLab: { ...state, depth: state.depth + 1 } }, '', `/${location.search}${labHash(active.lab.id,stage)}`);
+    history.pushState({ journeyLab: { ...state, depth: state.depth + 1 } }, '', `${location.pathname}${location.search}${labHash(active.lab.id,stage)}`);
     onRoute();
     if (focus) dialog.querySelector(`[data-stage="${stage}"]`).focus();
   }
@@ -115,7 +115,7 @@ export function mountLabPresenter({ onOpen, onClose, onRoute, currentStation }) 
     if (!active) return;
     const state = stateFor(active), distance = exitDistance(state);
     if (distance) { if (state.deep) pendingExit = state.origin; history.go(-distance); }
-    else { history.replaceState(null,'',`/${location.search}${state.origin}`); onRoute(); }
+    else { history.replaceState(null,'',`${location.pathname}${location.search}${state.origin}`); onRoute(); }
   }
   dialog.addEventListener('click', event => {
     const stage = event.target.closest('[data-stage]');
@@ -146,7 +146,7 @@ export function mountLabPresenter({ onOpen, onClose, onRoute, currentStation }) 
     open(id) {
       const lab = labs.find(lab => lab.id === id); if (!lab) return;
       const state = { lab: id, session: crypto.randomUUID(), origin: `#/at/${currentStation()}`, depth: 0, deep: false };
-      history.pushState({ journeyLab: state }, '', `/${location.search}${labHash(id,'encounter')}`); onRoute();
+      history.pushState({ journeyLab: state }, '', `${location.pathname}${location.search}${labHash(id,'encounter')}`); onRoute();
     },
     sync(route) {
       if (!route) { close(); return; }
@@ -157,7 +157,7 @@ export function mountLabPresenter({ onOpen, onClose, onRoute, currentStation }) 
     },
     finishExit() {
       if (!pendingExit) return;
-      history.replaceState(null,'',`/${location.search}${pendingExit}`); pendingExit = null;
+      history.replaceState(null,'',`${location.pathname}${location.search}${pendingExit}`); pendingExit = null;
     }
   };
 }

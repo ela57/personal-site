@@ -1,8 +1,16 @@
 # Integrated forest journey
 
-Serve the repository normally and open `/`. `/journey.html` redirects here.
-The original portfolio lives at `/projects/`. `?debug` enables a station/progress/fps HUD and
+Serve the repository normally and open `/explore/`. `/journey.html` redirects here,
+preserving query/hash state. `/` is the static ePortfolio; `/projects/` retains its
+direct-view alias. Both link to the experiment only at the bottom. The journey's
+Home and “Use static view” links return to `/`. `?debug` enables a station/progress/fps HUD and
 `window.journeyDebug` for inspection. No CDN or build step.
+
+Old root `#/at/<station>`, bare station hashes, `#/lab/<id>/<stage>` and tour/debug
+queries redirect to `/explore/` with their complete query/hash. Direct
+`/#project/*` and `/#lab/*` routes remain on the static homepage. Station and lab
+history retain the journey pathname. `/explore/?tour=1` offers the guided tour.
+Regenerate `explore/index.html` from `journey/shell.html` with `node journey/generate.js`.
 
 ## Integration surface
 
@@ -54,7 +62,7 @@ stations hide the hero and show their own plain subtitles. The no-JavaScript
 page retains the generated hero copy and every project panel.
 Reduced motion uses instant cuts to authored rest poses, a short panel opacity
 crossfade, static water/mist and the shared module's static word-cycle preference.
-The static toggle is keyboard accessible; all station links also work with native
+The static-portfolio link is keyboard accessible; all station links also work with native
 anchors. No JavaScript, WebGL creation failure or context loss shows the sky and
 all six panels in a normal scrolling list, with a direct-portfolio link.
 Texture failures also switch to this recovery view.
@@ -64,11 +72,11 @@ Texture failures also switch to this recovery view.
 `content/destinations.js` groups every entry in `content/projects.js` into one
 station and resolves direct-view links. `presentation.js` reads this same model;
 the direct view imports it through `projects/destinations.js`. `generate.js`
-commits matching HTML snapshots for the root, the direct view's All destinations
-section and its standalone index. Run `node journey/generate.js` after model or
+commits matching HTML snapshots for `/explore/`, the static homepage, the direct
+view's All destinations section and its standalone index. Run `node journey/generate.js` after model or
 shell edits; `npm test` detects stale snapshots. No build is needed to serve them.
-Title-only entries explicitly say “Content needed”. Journey lab links currently
-lead to the direct Lab overview; existing direct lab hash routes remain playable.
+Title-only entries explicitly say “Content needed”. Journey lab links open the
+five-stage presenter; existing direct lab hash routes remain playable.
 
 The header owns the six station links, progress/location, direct view and
 Résumé/Contact shortcut. `#/at/<station>` is replaced during native scrolling;
@@ -80,8 +88,8 @@ sheet, so panels do not occlude installations. Resizing updates its aspect ratio
 not the authored route. Near tree/bough cards alpha-fade at 8–14m, while the
 clearing now has ten upright stones and a flat chess-patterned stone table.
 
-Legacy root project/lab hashes and old section anchors use `location.replace`
-to `/projects/`; `#work` maps to the existing `#projects` section. Direct assets
+Legacy root project/lab hashes and old section anchors remain on the static
+homepage; `#work` maps to the existing `#projects` section. Direct assets
 use root-relative URLs while ES-module imports stay relative to their modules.
 
 ## Assets and provenance

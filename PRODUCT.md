@@ -1,13 +1,20 @@
 # Ethan Lam — personal portfolio
 
 A static, no-build portfolio for a Georgia Tech computer engineering student.
-The public `/` is a six-station forest journey. `/projects/` is its persistent
-direct-view alternative, retaining three real projects as a curated exhibition, then two interactive lab
-panels, a draft Approach section, About, and email contact. Use expanded project
-copy grounded in the case studies, reusable word effects and a five-stage renderer
-scroll story with static fallbacks. Preserve project facts, annotations, case-study
+The public `/` is the static ePortfolio, with `/projects/` retaining the same direct
+view: Welcome, three selected projects, two opt-in lab panels, Approach, About and
+Contact. Shared navigation reaches About, the viewable/downloadable Résumé and
+Career Goals. Neither direct page automatically mounts canvases or loads WebGL/Three.js;
+the five-stage renderer pipeline uses static images. Preserve project facts, annotations, case-study
 hash routes, chess puzzles, strategy sandbox, and the renderer bench inside its
 case study. No GitHub links or PE-worm project.
+
+The six-station forest journey is an optional experiment at `/explore/`, linked
+only at the bottom of both direct pages as “Experimental interactive version”.
+Its “Use static view” link and Home return to `/`. Stations, five-stage labs,
+Back/deep links and reduced-motion/no-WebGL/no-JS alternatives remain available.
+Old root journey hashes and tour/debug queries redirect to `/explore/` with state
+intact; direct `/#project/*` and `/#lab/*` links stay on the static homepage.
 
 Both surfaces read `content/projects.js` / `content/destinations.js`; regenerate
 committed no-JS snapshots with `node journey/generate.js`. Preserve legacy root

@@ -44,16 +44,16 @@ test('forest scenery remains without a destination card or empty entrance lists'
   assert.equal(projects.length, 15);
   assert.ok(!projects.some(project => project.id === 'forest-lake'));
   assert.ok(!destinations.some(station => station.projects.includes('forest-lake')));
-  for (const path of ['index.html', 'projects/index.html', 'projects/destinations.html']) {
+  for (const path of ['index.html', 'explore/index.html', 'projects/index.html', 'projects/destinations.html']) {
     assert.ok(!generatedPages[path].includes('Forest lake'), path);
     assert.ok(!generatedPages[path].includes('One continuous forest-lake environment.'), path);
     assert.ok(!generatedPages[path].includes('<ul class="project-list"></ul>'), path);
   }
-  const entrance = generatedPages['index.html'].match(/<section id="entrance"[\s\S]*?<\/section>/)[0];
+  const entrance = generatedPages['explore/index.html'].match(/<section id="entrance"[\s\S]*?<\/section>/)[0];
   assert.ok(entrance.includes('<h2>Welcome</h2>'));
   assert.ok(entrance.includes('Scroll to follow the shoreline.'));
   assert.ok(!entrance.includes('<ul'));
-  assert.ok(generatedPages['index.html'].includes('id="world"'));
+  assert.ok(generatedPages['explore/index.html'].includes('id="world"'));
   for (const path of ['projects/index.html', 'projects/destinations.html']) assert.ok(!generatedPages[path].includes('Lakeside entrance'), path);
 });
 

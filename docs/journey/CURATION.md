@@ -1,5 +1,9 @@
 # Journey curation — Pass 3
 
+Routing update: the default `/` is now the static ePortfolio; the optional journey
+is at `/explore/`, reached only from the bottom experiment link. The recommendations
+below concern that opt-in journey, not the homepage.
+
 This is a proposal, not a claim that gallery prototypes have been promoted into
 the public journey. The current public lab definitions are strategy and chess;
 the other previews remain at `/dev/`, which is noindex and absent from public nav.

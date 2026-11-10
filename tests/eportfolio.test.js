@@ -6,13 +6,13 @@ import { welcome, about, career, skills, awards } from '../content/eportfolio.js
 import { portfolioNav, escape } from '../eportfolio/pages.js';
 
 const read = path => readFileSync(new URL(`../${path}`, import.meta.url), 'utf8');
-test('every public page has static shared navigation and one current page', () => {
-  for (const [file,current] of [['index.html','home'],['projects/index.html','projects'],['projects/destinations.html','projects'],['about/index.html','about'],['resume/index.html','resume'],['career/index.html','career']]) {
+test('every public page has static shared navigation and appropriate current page', () => {
+  for (const [file,current] of [['index.html','home'],['explore/index.html','explore'],['projects/index.html','projects'],['projects/destinations.html','projects'],['about/index.html','about'],['resume/index.html','resume'],['career/index.html','career']]) {
     const html = read(file);
     assert.ok(html.includes(portfolioNav(current)), file);
-    assert.equal((portfolioNav(current).match(/aria-current="page"/g) || []).length, 1);
+    assert.equal((portfolioNav(current).match(/aria-current="page"/g) || []).length, current === 'explore' ? 0 : 1);
     assert.ok(html.includes('/eportfolio/site.css'));
-    if (!['index.html','projects/index.html'].includes(file)) assert.ok(html.includes('class="eportfolio-page'), file);
+    if (!['index.html','explore/index.html','projects/index.html'].includes(file)) assert.ok(html.includes('class="eportfolio-page'), file);
   }
   assert.ok(!portfolioNav('missing').includes('aria-current'));
   assert.equal(escape('<>&\'"'), '&lt;&gt;&amp;&#39;&quot;');

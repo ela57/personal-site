@@ -1,13 +1,17 @@
 # Ethan Lam's personal site
 
-A static portfolio with no runtime build step. `/` is the forest journey;
-`/projects/` is the direct project view, retaining case studies, labs and figures.
+A static portfolio with no runtime build step. `/` is the static ePortfolio;
+`/projects/` retains the same direct view, case studies, labs and figures.
 Its “All destinations” section and `/projects/destinations.html` share
 `content/projects.js` with the journey panels. Legacy root project/lab/section
-hashes redirect to the direct view using `location.replace`.
+hashes stay on the homepage. The optional forest journey lives at `/explore/`,
+linked only in the bottom “Experimental interactive version” section of both
+direct pages. Neither direct page automatically mounts canvases or loads WebGL/Three.js.
+Project and lab overlays remain opt-in.
 
 Serve with `python3 -m http.server 8000`. After editing the destination model or
-`journey/shell.html`, regenerate the committed, JavaScript-free HTML snapshots:
+`journey/shell.html`, regenerate the committed, JavaScript-free HTML snapshots.
+`projects/index.html` is also the direct-page source for the generated homepage:
 
 ```sh
 node journey/generate.js
@@ -19,16 +23,23 @@ static HTML without JavaScript. See `journey/README.md` for navigation and rende
 
 ## Journey, labs and development tools
 
-- `/`: six forest stations, translucent panels and `#/at/<station>` history.
+- `/` and `/projects/`: Welcome, selected work, static pipeline figures, project/lab
+  write-ups, About, Contact and the bottom experiment link. Direct `#project/*` /
+  `#lab/*` links work on either route, including `#lab/strategy/simulated`.
+- `/about/`, `/resume/`, `/career/`: no-JS reading pages; the résumé is viewable
+  and downloadable at `/assets/Lam_Ethan_Resume.pdf`.
+- `/explore/`: six forest stations, translucent panels and `#/at/<station>` history.
   Use the destination menu, `[ ]` or Alt+Arrow; native PageDown/Space still scroll.
   Reduced motion cuts between stations. Static/no-WebGL/no-JS alternatives retain
-  destinations and `/projects/`; `/?tour=1` offers an opt-in 60-second tour.
-- `/projects/`: direct case studies, figures and `#project/*` / `#lab/*` routes;
-  “All destinations” shares the audited content model. Existing root legacy
-  hashes redirect here. A résumé-request link is not a downloadable résumé file.
-- `/#/lab/<id>/<stage>`: generic full-screen five-stage dialog. World rendering
+  destinations and a link back to `/`; `/explore/?tour=1` offers an opt-in
+  60-second tour. “Use static view” and Home both return to `/`.
+- `/explore/#/lab/<id>/<stage>`: generic full-screen five-stage dialog. World rendering
   and scroll pause; Back traverses stages, Esc exits, focus and scroll restore.
   Inspect fetches real source with aligned line numbers and hanging line wraps.
+- Old root `#/at/*`, `#/lab/*`, bare station hashes and journey `?tour` / `?debug`
+  URLs redirect with their complete query/hash to `/explore/` using `location.replace`.
+  Explicit direct project/lab/section hashes take priority and stay on `/`.
+  `/journey.html` also redirects to `/explore/`, preserving query/hash state.
 - `/dev/`: noindex registry-driven prototype gallery, filters/sortable ratings,
   source labels and lazy previews that abort/tear down outside view.
 - `/dev/motion.html`: noindex eight-technique comparator, scrubber/canvas wheel,
