@@ -66,7 +66,7 @@ test('paired popstate/hashchange routes once, including an Exit replacement, wit
   assert.equal(calls,3);
 });
 test('journey lab entry is generated from definitions; placeholders have no actions', () => {
-  assert.match(projectList('observatory'),/data-lab-link="strategy"[^>]+href="\/#\/lab\/strategy\/encounter"/);
+  assert.match(projectList('observatory'),/data-lab-link="strategy"[^>]+href="\/explore\/#\/lab\/strategy\/encounter"/);
   assert.ok(projectList('observatory').includes('Enter lab'));
   assert.ok(!projectList('archive').includes('<a '));
   assert.ok(!projectList('archive',true).includes('<a '));

@@ -91,7 +91,7 @@ means a uniform face color, not vertex interpolation or a PBR material model.
 
 The map samples the actual Catmull–Rom curve; classification and station-area
 filters use shared project membership. Placeholder entries remain placeholders.
-`journey/tour.js` is navigation-injected, enabled only by `/?tour=1`: four stops,
+`journey/tour.js` is navigation-injected, enabled only by `/explore/?tour=1`: four stops,
 15 seconds each. Pause retains elapsed time, Skip advances a stop, Exit returns
 to the origin. Hidden tabs and open lab dialogs pause the clock. Reduced motion
 uses instant cuts. The gallery removes the iframe when it leaves the viewport.

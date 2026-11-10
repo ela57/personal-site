@@ -6,7 +6,8 @@ import { mountWords } from "./lab/words.js";
 import { mountPipeline } from "./lab/pipeline.js";
 import { parseDetailRoute } from "./lab/detail-routing.js";
 mountWords();
-import("./lab/lake/lake.js").then(({ mountLake }) => mountLake());
+const staticPortfolio = document.body.hasAttribute('data-static-portfolio');
+import("./lab/lake/lake.js").then(({ mountLake }) => mountLake({ interactive: !staticPortfolio }));
 
 (() => {
   "use strict";
@@ -183,7 +184,7 @@ import("./lab/lake/lake.js").then(({ mountLake }) => mountLake());
     $$("[data-bench]", root).forEach(mountBench);
   }
   mountVisuals(document);
-  mountPipeline(createRenderer);
+  if (!staticPortfolio) mountPipeline(createRenderer);
 
   /* ---------------- Interaction B: case-study overlay (hash routed) ---------------- */
   const ORDER = ["renderer", "thermal", "vol"];

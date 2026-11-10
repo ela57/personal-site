@@ -6,25 +6,24 @@
   <meta name="theme-color" content="#13201b">
   <meta name="description" content="Ethan Lam — a forest-lake journey through graphics, quantitative research, games and experiments.">
   <title>Ethan Lam — Forest journey</title>
-  <link rel="canonical" href="https://ethan-lam.com/">
+  <link rel="canonical" href="https://ethan-lam.com/explore/">
   <link rel="icon" href="/favicon.png">
   <link rel="stylesheet" href="/journey/journey.css">
   <link rel="stylesheet" href="/journey/site.css">
   <link rel="stylesheet" href="/journey/lab-presenter.css">
   <link rel="stylesheet" href="/eportfolio/site.css">
-  <script src="/journey/legacy.js"></script>
 </head>
 <body>
   <a class="skip" href="#entrance">Skip to destinations</a>
   <div class="landscape" aria-hidden="true"></div>
   <div id="world" aria-hidden="true" hidden></div>
   <header>
-    <div class="header-top"><a class="brand" href="/">Ethan Lam</a><nav aria-label="Journey controls"><button id="motion" type="button" hidden>Use static view</button></nav></div>
+    <div class="header-top"><a class="brand" href="/">Ethan Lam</a><nav aria-label="Journey controls"><a id="motion" href="/">Use static view</a></nav></div>
     <!-- eportfolio-nav:start --><!-- eportfolio-nav:end -->
     <div class="header-route"><output id="location" aria-live="polite">01 / 06 Entrance</output><nav class="stations" aria-label="Journey stations">{{MENU}}</nav></div>
     <progress id="progress" max="1" value="0" aria-label="Journey progress"></progress>
   </header>
-  <p id="fallback" role="status">Static landscape. Explore the destinations below or <a href="/projects/">view projects directly</a>.</p>
+  <p id="fallback" role="status">Static landscape. Explore the destinations below or <a href="/">view the static portfolio</a>.</p>
   <main class="scroll-track" aria-label="Forest journey destinations">{{PANELS}}</main>
   <p class="keys">Keys: [ / ] previous / next · PageDown / Space scroll</p>
   <output id="debug" hidden aria-label="Rendering diagnostics"></output>
