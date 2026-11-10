@@ -1,3 +1,5 @@
+import { about } from './eportfolio.js';
+
 // Destination keys are content identifiers, not newly implemented hash routes.
 export const projects = [
   {
@@ -112,8 +114,8 @@ export const projects = [
     id: "portfolio-manager", title: "Portfolio Manager", destination: "portfolio-manager",
     label: "Proposed future feature",
     summary: "Capital allocation, rebalancing and risk constraints in a central Python portfolio controller.",
-    body: ["Project Manager, Quant Sector — GTSF Investment Committee, Georgia Tech Student Foundation; Aug 2025–present.", "Built a central portfolio controller in Python for capital allocation, rebalancing and risk constraints.", "Reworked trading scripts and the backtesting pipeline for reproducible, out-of-sample validation.", "Led the integration of two independent strategies into one production-ready system."],
-    links: [{ title: "Existing experience text", href: "#about" }], assets: [],
+    body: ["Portfolio Manager, Quant Sector — GTSF Investment Committee, Georgia Tech Student Foundation; Aug 2025–present.", "Built a central portfolio controller in Python for capital allocation, rebalancing and risk constraints.", "Reworked trading scripts and the backtesting pipeline for reproducible, out-of-sample validation.", "Led the integration of two independent strategies into one production-ready system."],
+    links: [{ title: "Existing experience text", href: "/projects/#experience" }], assets: [],
     dataSources: [{ repo: "personal-site", path: "projects/index.html", section: "#experience" }],
     needsContent: false
   },
@@ -139,15 +141,19 @@ export const projects = [
   },
   {
     id: "chess-buddies", title: "Chess Buddies leadership", destination: "chess-buddies",
-    label: "Proposed future feature", summary: "", body: [], links: [], assets: [], dataSources: [], needsContent: true
+    label: "Working project integration",
+    summary: 'President · Aug 2022–May 2024 · Chess Buddies',
+    body: [about[3]],
+    links: [{ title: 'Chess Buddies leadership', href: '/about/#chess-buddies' }], assets: [],
+    dataSources: [{ repo: 'personal-site', path: 'assets/Lam_Ethan_Resume.pdf' }, { repo: 'personal-site', path: 'about/index.html', section: '#chess-buddies' }], needsContent: false
   },
   {
     id: "resume", title: "Résumé", destination: "resume",
     label: "Working project integration",
     summary: "Computer engineering at Georgia Tech, class of 2028.",
     body: ["Cybersecurity and Distributed Systems & Software Design threads.", "B.S. Computer Engineering, Georgia Institute of Technology, 2028."],
-    links: [{ title: "About and experience", href: "#about" }, { title: "Contact", href: "#contact" }, { title: "Request résumé", href: "mailto:ethanlam52@gmail.com?subject=R%C3%A9sum%C3%A9%20request" }, { title: "Email", href: "mailto:ethanlam52@gmail.com" }, { title: "LinkedIn", href: "https://www.linkedin.com/in/ethanlam7/" }],
-    assets: [], dataSources: [{ repo: "personal-site", path: "projects/index.html", section: "#about, #contact" }],
+    links: [{ title: "View résumé", href: "/resume/" }, { title: "About", href: "/about/" }, { title: "Contact", href: "/projects/#contact" }, { title: "Email", href: "mailto:ethanlam52@gmail.com" }, { title: "LinkedIn", href: "https://www.linkedin.com/in/ethanlam7/" }],
+    assets: ['assets/Lam_Ethan_Resume.pdf'], dataSources: [{ repo: "personal-site", path: "assets/Lam_Ethan_Resume.pdf" }],
     needsContent: false
   }
 ];

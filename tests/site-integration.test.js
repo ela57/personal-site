@@ -18,7 +18,7 @@ test('generated root and direct index are current snapshots of the shared conten
 test('destination links preserve specific direct project and sandbox routes', () => {
   for (const project of projects) {
     const href = projectHref(project);
-    assert.ok(href.startsWith('/projects/'));
+    assert.ok(href.startsWith('/projects/') || href.startsWith('/about/') || href.startsWith('/resume/'));
     assert.ok(projectList(destinations.find(s => s.projects.includes(project.id)).id).includes(escapeHtml(project.title)));
     if (project.needsContent) assert.ok(projectList(destinations.find(s => s.projects.includes(project.id)).id).includes('Content needed'));
     const file = href.split(/[?#]/)[0];

@@ -39,7 +39,7 @@ test("destination model is sourced, uniquely keyed and explicitly classified", (
 });
 
 test("unsupported areas have title-only content, distinct from working chess puzzles", () => {
-  assert.deepEqual(projects.filter(entry => entry.needsContent).map(entry => entry.id), ["data-universe", "malware-research", "scomp", "palletizer-fsm", "human-interaction", "chess-buddies"]);
+  assert.deepEqual(projects.filter(entry => entry.needsContent).map(entry => entry.id), ["data-universe", "malware-research", "scomp", "palletizer-fsm", "human-interaction"]);
   assert.equal(projects.find(entry => entry.id === "chess").needsContent, false);
 });
 
