@@ -12,6 +12,7 @@ test('every public page has static shared navigation and one current page', () =
     assert.ok(html.includes(portfolioNav(current)), file);
     assert.equal((portfolioNav(current).match(/aria-current="page"/g) || []).length, 1);
     assert.ok(html.includes('/eportfolio/site.css'));
+    if (!['index.html','projects/index.html'].includes(file)) assert.ok(html.includes('class="eportfolio-page'), file);
   }
   assert.ok(!portfolioNav('missing').includes('aria-current'));
   assert.equal(escape('<>&\'"'), '&lt;&gt;&amp;&#39;&quot;');
