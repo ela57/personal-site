@@ -24,23 +24,44 @@ export function clipDepth(points, near, far) {
   return result;
 }
 
-export function mountPipeline(createRenderer, root = document) {
+export function pipelineStepIndex(tops, focusLine) {
+  if (!tops.length) return -1;
+  let index = 0;
+  tops.forEach((top, i) => { if (top <= focusLine) index = i; });
+  return index;
+}
+
+export function mountPipeline(createRenderer, root = document, scrollRoot = null) {
   const section = root.querySelector('.pipeline');
-  if (!section) return;
+  if (!section) return () => {};
   const steps = [...section.querySelectorAll('.pipelineSteps li')];
   const stack = section.querySelector('.pipelineCanvasStack'), caption = section.querySelector('.pipelineCaption');
+  if (!steps.length || !stack || !caption) return () => {};
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   const renderers = [], canvases = [];
-  let observer = null, active = -1;
+  const initialCaption = caption.textContent, scrollTarget = scrollRoot || window;
+  let frame = 0, active = -1;
   const activate = index => {
-    if (index === active) return;
+    if (!canvases.length || index === active) return;
     active = index; canvases.forEach((canvas, i) => canvas.classList.toggle('is-active', index === i));
     steps.forEach((step, i) => step.classList.toggle('is-current', index === i));
     caption.textContent = `${String(index + 1).padStart(2, '0')} / ${steps[index].querySelector('h3').textContent}`;
   };
-  const preference = () => {
-    observer?.disconnect(); renderers.splice(0).forEach(renderer => renderer.destroy());
+  const update = () => {
+    frame = 0;
+    const top = scrollRoot ? scrollRoot.getBoundingClientRect().top : 0;
+    const height = scrollRoot ? scrollRoot.clientHeight : innerHeight;
+    activate(pipelineStepIndex(steps.map(step => step.getBoundingClientRect().top), top + height * .55));
+  };
+  const schedule = () => { if (!frame) frame = requestAnimationFrame(update); };
+  const reset = () => {
+    renderers.splice(0).forEach(renderer => renderer.destroy());
     canvases.length = 0; stack.replaceChildren(); section.classList.remove('is-enhanced'); active = -1;
+    steps.forEach(step => step.classList.remove('is-current'));
+    caption.textContent = initialCaption;
+  };
+  const preference = () => {
+    reset();
     if (reduced.matches) return;
     section.classList.add('is-enhanced');
     pipelineModes.forEach(mode => {
@@ -49,19 +70,26 @@ export function mountPipeline(createRenderer, root = document) {
       renderers.push(createRenderer(canvas, { ...mode, rotate: false, drag: false, ndc: mode.clip, scale: .46 }));
     });
     activate(0);
-    const visible = new Set();
-    observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => entry.isIntersecting ? visible.add(entry.target) : visible.delete(entry.target));
-      const closest = [...visible].sort((a, b) => Math.abs(a.getBoundingClientRect().top - innerHeight * .5) - Math.abs(b.getBoundingClientRect().top - innerHeight * .5))[0];
-      if (closest) activate(steps.indexOf(closest));
-    }, { rootMargin: '-35% 0px -20% 0px', threshold: 0 });
-    steps.forEach(step => observer.observe(step));
+    schedule();
   };
-  steps.forEach((step, index) => step.addEventListener('focusin', () => activate(index)));
+  const focusHandlers = steps.map((step, index) => {
+    const focus = () => activate(index);
+    step.addEventListener('focusin', focus);
+    return focus;
+  });
+  const resize = new ResizeObserver(schedule); resize.observe(section);
+  scrollTarget.addEventListener('scroll', schedule, { passive: true });
+  addEventListener('resize', schedule);
   preference(); reduced.addEventListener('change', preference);
   const cleanup = event => {
-    if (event.persisted) return;
-    observer?.disconnect(); renderers.forEach(renderer => renderer.destroy()); reduced.removeEventListener('change', preference); removeEventListener('pagehide', cleanup);
+    if (event?.persisted) return;
+    cancelAnimationFrame(frame); frame = 0;
+    resize.disconnect(); reset();
+    steps.forEach((step, index) => step.removeEventListener('focusin', focusHandlers[index]));
+    scrollTarget.removeEventListener('scroll', schedule);
+    removeEventListener('resize', schedule);
+    reduced.removeEventListener('change', preference); removeEventListener('pagehide', cleanup);
   };
   addEventListener('pagehide', cleanup);
+  return cleanup;
 }

@@ -294,6 +294,24 @@
         <p>The bench below re-implements the same stages in JavaScript and Canvas 2D. It is an illustration for the web; the original renderer is Python.</p>
       </div>
     </div>
+    <!-- renderer-pipeline:start -->
+    <section class="pipeline" aria-labelledby="detailPipelineTitle">
+        <p class="sec mono">Inside project 01</p>
+        <h2 id="detailPipelineTitle">The pipeline, one stage at a time</h2>
+        <div class="pipelineLayout">
+          <figure class="pipelineStage" role="img" aria-label="An icosahedron rendered through the five pipeline stages. Each stage is described in the adjacent text.">
+            <div class="pipelineCanvasStack"></div><figcaption class="pipelineCaption">01 / Projection &amp; perspective divide</figcaption>
+          </figure>
+          <ol class="pipelineSteps">
+            <li tabindex="0"><span class="mono">01 / From points to a picture</span><h3>Projection &amp; perspective divide</h3><p>World, view and projection transforms move vertices into camera space. Dividing by depth maps them into normalized device coordinates. Wireframe edges over a solid shape keep the front and back edges visible.</p><img src="/assets/pipeline-1.png" width="800" height="600" alt="Solid icosahedron with projected front and back wireframe edges." loading="lazy" decoding="async"></li>
+            <li tabindex="0"><span class="mono">02 / Keep the visible side</span><h3>Backface culling</h3><p>Triangles whose normal points away from the camera are discarded. On a convex mesh, the front faces do not overlap each other: culling alone can fix visibility.</p><img src="/assets/pipeline-2.png" width="800" height="600" alt="Flat-filled front faces of the icosahedron with back faces removed." loading="lazy" decoding="async"></li>
+            <li tabindex="0"><span class="mono">03 / Define the depth range</span><h3>NDC clipping</h3><p>Geometry outside the depth range is removed in this cutaway. The original Python renderer clips in NDC; this browser illustration clips in view space before projecting, so the cut edges stay geometrically consistent.</p><img src="/assets/pipeline-3.png" width="800" height="600" alt="Icosahedron cut away at the depth boundary, with the NDC frame outlined." loading="lazy" decoding="async"></li>
+            <li tabindex="0"><span class="mono">04 / Choose the draw order</span><h3>Painter’s depth sort</h3><p>The full shape returns here. Visible faces are drawn far to near; the numbers show their drawing order. Sorting whole polygons fits the Matplotlib output, but is not a per-pixel depth buffer.</p><img src="/assets/pipeline-4.png" width="800" height="600" alt="Closed icosahedron with faces numbered in far-to-near painter’s order." loading="lazy" decoding="async"></li>
+            <li tabindex="0"><span class="mono">05 / Let the normal catch the light</span><h3>Diffuse shading</h3><p>A directional light supplies a per-face brightness: max(0, n·l). Geometry and light direction become the shaded triangles on the page.</p><img src="/assets/pipeline-5.png" width="800" height="600" alt="Closed icosahedron shaded with directional diffuse light." loading="lazy" decoding="async"></li>
+          </ol>
+        </div>
+      </section>
+    <!-- renderer-pipeline:end -->
     <div class="benchMount" data-bench></div>
   </template>
 
