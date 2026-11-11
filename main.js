@@ -196,9 +196,10 @@ import("./lab/lake/lake.js").then(({ mountLake }) => mountLake({ interactive: !s
   const focusables = () => $$('a[href], button:not([disabled]):not([tabindex="-1"]), select, input:not([disabled]), [tabindex]:not([tabindex="-1"])', detail).filter(el => el.offsetParent !== null);
   let openSlug = null, openDataset = null, returnFocus = null, pushedEntry = false, enterTimer = 0;
   const cardFor = slug => $(`.proj[data-project="${slug}"]`);
-  let labCleanup = null, labVersion = 0;
+  let labCleanup = null, pipelineCleanup = null, labVersion = 0;
   const cleanup = () => {
     labVersion++; labCleanup?.(); labCleanup = null;
+    pipelineCleanup?.(); pipelineCleanup = null;
     $$("[data-vis], [data-bench], [data-annotate]", content).forEach(el => el._cleanup && el._cleanup());
   };
 
@@ -226,6 +227,7 @@ import("./lab/lake/lake.js").then(({ mountLake }) => mountLake({ interactive: !s
     nextEl.href = `#project/${next}`;
     nextEl.textContent = `Next: ${String(ORDER.indexOf(next) + 1).padStart(2, "0")} ${TITLES[next]} →`;
     mountVisuals(content);
+    pipelineCleanup = mountPipeline(createRenderer, content, detail);
     return true;
   }
   const withTransition = (fn, a, b) => {
