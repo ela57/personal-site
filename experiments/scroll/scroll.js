@@ -1,5 +1,15 @@
+import { pipelineModes } from '../../lab/pipeline.js';
+import { createRenderer } from '../../lab/renderer.js';
+
 export const clamp = value => Math.max(0, Math.min(1, value));
 export const progress = (scroll, start, distance) => clamp((scroll - start) / Math.max(.000001, distance));
+export const tones = [[236, 231, 220], [19, 44, 35], [24, 55, 68], [73, 43, 35]];
+export function paletteInk(a, b, t) {
+  const rgb = tones[a].map((value, i) => value * (1 - t) + tones[b][i] * t);
+  const luminance = values => values.map(value => { const v = value / 255; return v <= .04045 ? v / 12.92 : ((v + .055) / 1.055) ** 2.4; }).reduce((sum, v, i) => sum + v * [.2126, .7152, .0722][i], 0);
+  const bg = luminance(rgb), dark = 0, light = 1;
+  return (bg + .05) / (dark + .05) >= (light + .05) / (bg + .05) ? 'dark' : 'light';
+}
 
 if (typeof document !== 'undefined') {
   const root = document.documentElement;
@@ -20,8 +30,21 @@ if (typeof document !== 'undefined') {
   const cards = [...document.querySelectorAll('.career-card')];
   const track = document.querySelector('.gallery-track');
   const gallery = document.querySelector('.gallery-window');
-  const mask = document.querySelector('.expand-mask');
-  const caption = document.querySelector('.expansion-pin figcaption');
+  const expansions = [...document.querySelectorAll('.expansion-section')];
+  const marquee = [...document.querySelectorAll('.marquee-row')];
+  const marqueeToggle = document.querySelector('.marquee-toggle');
+  const path = document.querySelector('.timeline-draw');
+  const milestones = [...document.querySelectorAll('.timeline li')];
+  const splitTitles = document.querySelector('.split-titles');
+  const splitImages = document.querySelector('.split-images');
+  const counters = [...document.querySelectorAll('.counter-value')];
+  const layers = [...document.querySelectorAll('.lake-layer, .mist-layer, .name-layer')];
+  const spotlight = document.querySelector('.spotlight-track');
+  const stages = [...document.querySelectorAll('.spotlight-stage')];
+  const stageLabels = [...document.querySelectorAll('.spotlight-progress li')];
+  const renderers = [];
+  let timelineTop = 0, timelineHeight = 0, counterTops = [], marqueeWidths = [];
+  let lastScroll = null, velocity = 0, marqueePhase = 0, marqueePaused = false;
   const palette = [...document.querySelectorAll('.palette > div')];
   const rail = [...document.querySelectorAll('.feature-rail a')];
   const preview = document.querySelector('.cursor-preview');
@@ -55,14 +78,25 @@ if (typeof document !== 'undefined') {
       top += card.offsetHeight + gap;
       return naturalTop;
     });
+    const timeline = document.querySelector('.timeline svg');
+    timelineTop = timeline.getBoundingClientRect().top + scroll;
+    timelineHeight = timeline.getBoundingClientRect().height;
+    counterTops = counters.map(counter => counter.getBoundingClientRect().top + scroll);
+    marqueeWidths = marquee.map(row => row.scrollWidth / 2);
     needsMeasure = false;
   }
 
   function resetEffects() {
-    [...words, ...lines, ...cards, track, mask, caption].forEach(element => {
+    [...words, ...lines, ...cards, track, ...expansions.flatMap(section => [section.querySelector('.expand-mask'), section.querySelector('figcaption')]), ...marquee, splitTitles, splitImages, ...layers, spotlight].forEach(element => {
       element.style.removeProperty('transform');
       element.style.removeProperty('opacity');
     });
+    counters.forEach(counter => { counter.textContent = counter.dataset.count; });
+    path.style.strokeDashoffset = 0;
+    milestones.forEach(milestone => milestone.classList.add('milestone-lit'));
+    renderers.splice(0).forEach(renderer => renderer.destroy());
+    stages.forEach(stage => { stage.querySelector('canvas')?.remove(); stage.classList.remove('is-live'); });
+    velocity = 0; lastScroll = null;
   }
 
   function paintPalette(scroll) {
@@ -93,11 +127,16 @@ if (typeof document !== 'undefined') {
       if (tone === upper) opacity = a === b ? 1 : a < b ? t : 1 - t;
       layer.style.opacity = opacity;
     });
+    document.body.dataset.ink = paletteInk(a, b, t);
   }
 
   function render(time) {
     frame = 0;
     const scroll = window.scrollY;
+    const dt = Math.min(64, Math.max(1, time - (lastTime || time - 16)));
+    const instantaneous = lastScroll === null ? 0 : Math.max(-1, Math.min(1, (scroll - lastScroll) / dt / 3));
+    velocity += (instantaneous - velocity) * (1 - Math.exp(-dt / 110));
+    lastScroll = scroll;
     if (needsMeasure) measure(scroll);
     paintPalette(scroll);
     if (!reduced.matches) {
@@ -121,12 +160,51 @@ if (typeof document !== 'undefined') {
         card.style.transform = `scale(${1 - p * .045})`;
         card.style.opacity = 1 - p * .16;
       });
-      if (active.has(sections[6])) {
-        const g = geometry[6];
+      expansions.forEach(section => {
+        if (!active.has(section)) return;
+        const g = geometry[sections.indexOf(section)];
         const p = progress(scroll, g.top, g.height - height);
+        const mask = section.querySelector('.expand-mask'), caption = section.querySelector('figcaption');
         mask.style.transform = `scale(${.64 + .48 * p})`;
         caption.style.opacity = progress(p, .32, .4);
         caption.style.transform = `translateY(${(1 - p) * 22}px)`;
+      });
+      if (active.has(sections[7]) && !marqueePaused && !document.hidden) {
+        marqueePhase += dt / 1000 * (18 + Math.abs(velocity) * 220);
+        marquee.forEach((row, i) => {
+          const distance = marqueeWidths[i] || 1, phase = marqueePhase % distance;
+          row.style.transform = `translateX(${i ? phase - distance : -phase}px) skewX(${velocity * (i ? -3 : 3)}deg)`;
+        });
+      }
+      if (active.has(sections[8])) {
+        const p = progress(scroll + height * .65, timelineTop, timelineHeight);
+        path.style.strokeDasharray = 1; path.style.strokeDashoffset = 1 - p;
+        milestones.forEach((milestone, i) => milestone.classList.toggle('milestone-lit', p + .001 >= i / 3));
+      }
+      if (!narrow.matches && active.has(sections[9])) {
+        const g = geometry[9], p = progress(scroll, g.top, g.height - height), distance = 360 * 4;
+        splitTitles.style.transform = `translateY(${-p * distance}px)`;
+        splitImages.style.transform = `translateY(${(p - 1) * distance}px)`;
+      }
+      if (active.has(sections[10])) counters.forEach((counter, i) => {
+        counter.textContent = Math.round(Number(counter.dataset.count) * progress(scroll + height * .9, counterTops[i], height * .35));
+      });
+      if (active.has(sections[11])) {
+        const g = geometry[11], p = progress(scroll + height, g.top, g.height + height) - .5;
+        layers.forEach((layer, i) => { layer.style.transform = `translateY(${p * [42, -60, 24][i]}px)`; });
+      }
+      if (active.has(sections[13])) {
+        if (!renderers.length) stages.forEach((stage, i) => {
+          const canvas = document.createElement('canvas'); canvas.setAttribute('aria-hidden', 'true'); stage.append(canvas);
+          if (!canvas.getContext('2d')) { canvas.remove(); return; }
+          try {
+            renderers.push(createRenderer(canvas, { ...pipelineModes[i], rotate: false, drag: false, ndc: pipelineModes[i].clip, scale: .46 }));
+            stage.classList.add('is-live');
+          } catch { canvas.remove(); }
+        });
+        const g = geometry[13], p = progress(scroll, g.top, g.height - height), index = Math.round(p * 4);
+        spotlight.style.transform = `translateX(${-p * 400}%)`;
+        stageLabels.forEach((label, i) => i === index ? label.setAttribute('aria-current', 'step') : label.removeAttribute('aria-current'));
       }
     }
     const show = previewLink && fine.matches && !narrow.matches && !reduced.matches;
@@ -143,6 +221,7 @@ if (typeof document !== 'undefined') {
     preview.style.transform = `translate(${position.x}px, ${position.y}px)`;
     lastTime = time;
     if ((show && (Math.abs(target.x - position.x) + Math.abs(target.y - position.y) > .1 || previewOpacity < .999)) || (!show && previewOpacity)) schedule();
+    if (!reduced.matches && !marqueePaused && !document.hidden && active.has(sections[7])) schedule();
   }
 
   const observer = new IntersectionObserver(entries => {
@@ -152,6 +231,15 @@ if (typeof document !== 'undefined') {
   sections.forEach(section => observer.observe(section));
   function resize() { needsMeasure = true; schedule(); }
   function preferenceChange() { resetEffects(); previewLink = null; resize(); }
+  marqueeToggle.hidden = false;
+  marqueeToggle.addEventListener('click', () => {
+    marqueePaused = !marqueePaused;
+    marqueeToggle.setAttribute('aria-pressed', String(marqueePaused));
+    marqueeToggle.textContent = marqueePaused ? 'Resume marquee' : 'Pause marquee';
+    schedule();
+  });
+  document.addEventListener('visibilitychange', () => { lastScroll = null; lastTime = 0; schedule(); });
+  window.addEventListener('pagehide', event => { if (!event.persisted) renderers.splice(0).forEach(renderer => renderer.destroy()); });
   reduced.addEventListener('change', preferenceChange);
   narrow.addEventListener('change', preferenceChange);
   fine.addEventListener('change', preferenceChange);
@@ -184,6 +272,11 @@ if (typeof document !== 'undefined') {
       const offset = Math.min(travel, card.offsetLeft - track.offsetLeft);
       window.scrollTo({ top: geometry[3].top + offset, behavior: 'instant' });
     }
+  }));
+  splitImages.querySelectorAll('a').forEach((link, index) => link.addEventListener('focus', () => {
+    if (narrow.matches || reduced.matches) return;
+    const g = geometry[9];
+    window.scrollTo({ top: g.top + index / 4 * (g.height - height), behavior: 'instant' });
   }));
   document.addEventListener('keydown', event => { if (event.key === 'Escape') { previewLink = null; schedule(); } });
   root.classList.add('enhanced');

@@ -1,24 +1,25 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync, existsSync } from 'node:fs';
-import { renderScrollPage, selection } from '../experiments/scroll/generate.js';
+import { renderScrollPage, selection, counters, pipelineStages } from '../experiments/scroll/generate.js';
 import { portfolioNav, escape } from '../eportfolio/pages.js';
 import { about, career, welcome } from '../content/eportfolio.js';
-import { clamp, progress } from '../experiments/scroll/scroll.js';
+import { clamp, progress, paletteInk, tones } from '../experiments/scroll/scroll.js';
 
 const read = path => readFileSync(new URL(`../${path}`, import.meta.url), 'utf8');
 
-test('scroll gallery is a committed no-JS page with shared navigation and seven labelled features', () => {
+test('scroll gallery is a committed no-JS page with shared navigation and fourteen labelled features', () => {
   const html = read('experiments/scroll/index.html');
   assert.equal(html, renderScrollPage());
   assert.ok(html.includes(portfolioNav('experiments')));
   assert.ok(html.includes('Scroll experiments — pick the ones you like by number.'));
-  for (let index = 1; index <= 7; index++) {
-    assert.ok(html.includes(`id="F0${index}"`));
-    assert.ok(html.includes(`F0${index} · `));
-    assert.ok(html.includes(`href="#F0${index}"`));
+  for (let index = 1; index <= 14; index++) {
+    const id = `F${String(index).padStart(2, '0')}`;
+    assert.ok(html.includes(`id="${id}"`));
+    assert.ok(html.includes(`${id} · `));
+    assert.ok(html.includes(`href="#${id}"`));
   }
-  assert.equal((html.match(/<section /g) || []).length, 7);
+  assert.equal((html.match(/<section /g) || []).length, 14);
   assert.ok(html.includes(escape(welcome)));
   assert.ok(html.includes(escape(about[0].slice(about[0].indexOf('What draws')))));
   career.steps.forEach(([title, text]) => {
@@ -33,6 +34,28 @@ test('scroll gallery is a committed no-JS page with shared navigation and seven 
   assert.ok(!/three|webgl|https?:\/\//i.test(html));
   assert.ok(!read('index.html').includes('/experiments/scroll'));
   assert.ok(!read('projects/index.html').includes('/experiments/scroll'));
+});
+
+test('second batch uses sourced counters, labelled future goals and shared static pipeline modes', () => {
+  const html = read('experiments/scroll/index.html');
+  assert.deepEqual(counters.map(([value]) => value), [2, 5, 12, 2028]);
+  assert.equal(pipelineStages.length, 5);
+  assert.ok(html.includes('Summer 2027 · internship goal'));
+  assert.ok(html.includes('May 2028 · graduation goal'));
+  assert.ok(html.includes('Long term · career goal'));
+  assert.equal((html.match(/class="spotlight-stage"/g) || []).length, 5);
+  assert.ok(read('experiments/scroll/scroll.js').includes("import { pipelineModes } from '../../lab/pipeline.js'"));
+  assert.ok(read('experiments/scroll/scroll.js').includes('rotate: false, drag: false'));
+  assert.ok(html.includes('Pause marquee'));
+});
+
+test('threshold ink retains AA contrast through every chapter crossfade', () => {
+  const luminance = rgb => rgb.map(v => v / 255).map(v => v <= .04045 ? v / 12.92 : ((v + .055) / 1.055) ** 2.4).reduce((sum, v, i) => sum + v * [.2126, .7152, .0722][i], 0);
+  for (let a = 0; a < tones.length; a++) for (let b = 0; b < tones.length; b++) for (let step = 0; step <= 100; step++) {
+    const t = step / 100, bg = luminance(tones[a].map((v, i) => v * (1 - t) + tones[b][i] * t));
+    const ratio = paletteInk(a, b, t) === 'dark' ? (bg + .05) / .05 : 1.05 / (bg + .05);
+    assert.ok(ratio >= 4.5, `${a}/${b}/${t}: ${ratio}`);
+  }
 });
 
 test('native scroll progress clamps empty, before, within and after ranges', () => {
