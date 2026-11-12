@@ -175,6 +175,7 @@ html:not(.enhanced) .marquee-copy { min-width: 0; padding-inline: 24px; }
 .chess-scroll-section, .spy-scroll-section { padding-block: 70px; }
 .chess-scroll-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 45px; align-items: center; }
 .chess-scroll-layout .chessBoardWrap { max-width: min(42svh, 390px); }
+#F15 .chessBoard { touch-action: pan-y; }
 .chess-scroll-caption { font-size: 13px; margin-top: 12px; }
 .chess-scroll-moves { display: grid; gap: 10px; }
 .chess-scroll-moves li { padding: 8px 12px; border-left: 3px solid #8e9e94; }

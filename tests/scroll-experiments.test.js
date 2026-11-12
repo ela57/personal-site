@@ -45,6 +45,11 @@ test('Skills chapter copy matches its headings rather than the career goal', () 
   assert.ok(!chapter.includes(escape(career.goal)));
 });
 
+test('F15 allows vertical touch scrolling without changing the interactive lab board', () => {
+  assert.match(read('experiments/scroll/scroll.css'), /#F15\s+\.chessBoard\s*\{\s*touch-action:\s*pan-y\s*;\s*\}/);
+  assert.match(read('lab/chess/lab.css'), /\.chessMount\s+\.chessBoard\{[^}]*touch-action:none/);
+});
+
 test('second batch uses sourced counters, labelled future goals and shared static pipeline modes', () => {
   const html = read('experiments/scroll/index.html');
   assert.deepEqual(counters.map(([value]) => value), [2, 5, 12, 2028]);
