@@ -3,23 +3,23 @@ import assert from 'node:assert/strict';
 import { readFileSync, existsSync } from 'node:fs';
 import { renderScrollPage, selection, counters, pipelineStages } from '../experiments/scroll/generate.js';
 import { portfolioNav, escape } from '../eportfolio/pages.js';
-import { about, career, welcome } from '../content/eportfolio.js';
+import { about, career, welcome, skills } from '../content/eportfolio.js';
 import { clamp, progress, paletteInk, tones } from '../experiments/scroll/scroll.js';
 
 const read = path => readFileSync(new URL(`../${path}`, import.meta.url), 'utf8');
 
-test('scroll gallery is a committed no-JS page with shared navigation and fourteen labelled features', () => {
+test('scroll gallery is a committed no-JS page with shared navigation and sixteen labelled features', () => {
   const html = read('experiments/scroll/index.html');
   assert.equal(html, renderScrollPage());
   assert.ok(html.includes(portfolioNav('experiments')));
   assert.ok(html.includes('Scroll experiments — pick the ones you like by number.'));
-  for (let index = 1; index <= 14; index++) {
+  for (let index = 1; index <= 16; index++) {
     const id = `F${String(index).padStart(2, '0')}`;
     assert.ok(html.includes(`id="${id}"`));
     assert.ok(html.includes(`${id} · `));
     assert.ok(html.includes(`href="#${id}"`));
   }
-  assert.equal((html.match(/<section /g) || []).length, 14);
+  assert.equal((html.match(/<section /g) || []).length, 16);
   assert.ok(html.includes(escape(welcome)));
   assert.ok(html.includes(escape(about[0].slice(about[0].indexOf('What draws')))));
   career.steps.forEach(([title, text]) => {
@@ -31,9 +31,18 @@ test('scroll gallery is a committed no-JS page with shared navigation and fourte
     assert.ok(html.includes(escape(project.summary)));
   });
   for (const asset of html.matchAll(/src="\/(assets\/[^"#]+)"/g)) assert.ok(existsSync(new URL(`../${asset[1]}`, import.meta.url)), asset[1]);
-  assert.ok(!/three|webgl|https?:\/\//i.test(html));
+  assert.ok(!/three|webgl/i.test(html));
+  assert.ok(!/<(?:script|link|img)[^>]+(?:src|href)="https?:\/\//i.test(html));
   assert.ok(!read('index.html').includes('/experiments/scroll'));
   assert.ok(!read('projects/index.html').includes('/experiments/scroll'));
+});
+
+test('Skills chapter copy matches its headings rather than the career goal', () => {
+  const chapter = read('experiments/scroll/index.html').match(/<section [^>]*id="F03"[\s\S]+?<\/section>/)[0];
+  assert.ok(chapter.includes(escape(skills.Languages)));
+  assert.ok(chapter.includes(escape(skills.Tools)));
+  assert.ok(chapter.includes('Achievements &amp; awards'));
+  assert.ok(!chapter.includes(escape(career.goal)));
 });
 
 test('second batch uses sourced counters, labelled future goals and shared static pipeline modes', () => {

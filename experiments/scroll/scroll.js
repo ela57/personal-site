@@ -43,6 +43,14 @@ if (typeof document !== 'undefined') {
   const stages = [...document.querySelectorAll('.spotlight-stage')];
   const stageLabels = [...document.querySelectorAll('.spotlight-progress li')];
   const renderers = [];
+  const chessBoard = document.querySelector('#F15 .chessBoard');
+  const chessTemplates = [...document.querySelectorAll('.chess-scroll-frame')];
+  const chessMoves = [...document.querySelectorAll('.chess-scroll-moves li')];
+  const chessCaption = document.querySelector('.chess-scroll-caption');
+  const spyLine = document.querySelector('.spy-line');
+  const spyMarkers = [...document.querySelectorAll('.spy-marker')];
+  const spyStatus = document.querySelector('.spy-current');
+  let currentPly = chessTemplates.length - 1;
   let timelineTop = 0, timelineHeight = 0, counterTops = [], marqueeWidths = [];
   let lastScroll = null, velocity = 0, marqueePhase = 0, marqueePaused = false;
   const palette = [...document.querySelectorAll('.palette > div')];
@@ -57,7 +65,7 @@ if (typeof document !== 'undefined') {
     if (!frame) frame = requestAnimationFrame(render);
   }
 
-  function measure(scroll) {
+  function measure() {
     width = innerWidth;
     height = innerHeight;
     headerHeight = document.querySelector('.eportfolio-header').offsetHeight;
@@ -65,8 +73,10 @@ if (typeof document !== 'undefined') {
     const style = getComputedStyle(gallery);
     travel = Math.max(0, track.scrollWidth - gallery.clientWidth + parseFloat(style.paddingLeft) + parseFloat(style.paddingRight));
     document.querySelector('#F04').style.setProperty('--gallery-travel', `${travel}px`);
-    geometry = sections.map(section => {
-      const rect = section.getBoundingClientRect();
+    const rects = sections.map(section => section.getBoundingClientRect());
+    const scroll = window.scrollY;
+    geometry = sections.map((section, index) => {
+      const rect = rects[index];
       return { top: rect.top + scroll, height: section.offsetHeight, tone: Number(section.dataset.palette) };
     });
     lineTops = lines.map(line => line.parentElement.getBoundingClientRect().top + scroll);
@@ -84,6 +94,7 @@ if (typeof document !== 'undefined') {
     counterTops = counters.map(counter => counter.getBoundingClientRect().top + scroll);
     marqueeWidths = marquee.map(row => row.scrollWidth / 2);
     needsMeasure = false;
+    return scroll;
   }
 
   function resetEffects() {
@@ -97,6 +108,21 @@ if (typeof document !== 'undefined') {
     renderers.splice(0).forEach(renderer => renderer.destroy());
     stages.forEach(stage => { stage.querySelector('canvas')?.remove(); stage.classList.remove('is-live'); });
     velocity = 0; lastScroll = null;
+    paintChess(chessTemplates.length - 1);
+    spyLine.style.strokeDashoffset = 0;
+    spyMarkers.forEach(marker => { marker.style.opacity = 1; });
+    spyStatus.textContent = 'All sandbox fills shown.';
+  }
+
+  function paintChess(ply) {
+    if (ply === currentPly) return;
+    currentPly = ply;
+    const frame = chessTemplates[ply];
+    chessBoard.replaceChildren(frame.content.cloneNode(true));
+    chessBoard.dataset.fen = frame.dataset.fen;
+    chessBoard.dataset.ply = ply;
+    chessCaption.textContent = frame.dataset.caption;
+    chessMoves.forEach((move, index) => index + 1 === ply ? move.setAttribute('aria-current', 'step') : move.removeAttribute('aria-current'));
   }
 
   function paintPalette(scroll) {
@@ -132,12 +158,11 @@ if (typeof document !== 'undefined') {
 
   function render(time) {
     frame = 0;
-    const scroll = window.scrollY;
+    const scroll = needsMeasure ? measure() : window.scrollY;
     const dt = Math.min(64, Math.max(1, time - (lastTime || time - 16)));
     const instantaneous = lastScroll === null ? 0 : Math.max(-1, Math.min(1, (scroll - lastScroll) / dt / 3));
     velocity += (instantaneous - velocity) * (1 - Math.exp(-dt / 110));
     lastScroll = scroll;
-    if (needsMeasure) measure(scroll);
     paintPalette(scroll);
     if (!reduced.matches) {
       if (active.has(sections[0])) {
@@ -205,6 +230,21 @@ if (typeof document !== 'undefined') {
         const g = geometry[13], p = progress(scroll, g.top, g.height - height), index = Math.round(p * 4);
         spotlight.style.transform = `translateX(${-p * 400}%)`;
         stageLabels.forEach((label, i) => i === index ? label.setAttribute('aria-current', 'step') : label.removeAttribute('aria-current'));
+      }
+      if (active.has(sections[14])) {
+        const g = geometry[14], p = progress(scroll, g.top, g.height - height);
+        paintChess(Math.round(p * (chessTemplates.length - 1)));
+      }
+      if (active.has(sections[15])) {
+        const g = geometry[15], p = progress(scroll, g.top, g.height - height);
+        spyLine.style.strokeDashoffset = 1 - p;
+        let latest = null;
+        spyMarkers.forEach(marker => {
+          const reached = p >= Number(marker.dataset.progress);
+          marker.style.opacity = reached ? 1 : 0;
+          if (reached) latest = marker;
+        });
+        spyStatus.textContent = p === 1 ? 'All sandbox fills shown.' : latest ? `${latest.dataset.side === 'buy' ? 'Buy' : 'Sell'} · ${latest.dataset.date} · sandbox fill` : 'No sandbox fills reached yet.';
       }
     }
     const show = previewLink && fine.matches && !narrow.matches && !reduced.matches;

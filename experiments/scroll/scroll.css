@@ -23,6 +23,7 @@ section.experiment[id] { position: relative; scroll-margin-top: calc(var(--heade
 .feature-label { margin-bottom: 22px; }
 .experiment h2 { font: 400 clamp(28px, 3.5vw, 48px)/1.15 var(--serif); margin-bottom: 34px; }
 .experiment h3 { font-family: var(--serif); font-weight: 400; }
+.awards-heading { font-size: 24px; margin-top: 30px; }
 .ink-section, .rise-section, .palette-section, .preview-section { padding-block: clamp(64px, 10vh, 120px); }
 .ink-copy { max-width: 27ch; font: 400 clamp(30px, 3.3vw, 49px)/1.35 var(--serif); }
 .ink-word { display: inline; }
@@ -171,6 +172,47 @@ section.experiment[id] { position: relative; scroll-margin-top: calc(var(--heade
 }
 html:not(.enhanced) .marquee-row { display: block; width: auto; }
 html:not(.enhanced) .marquee-copy { min-width: 0; padding-inline: 24px; }
+.chess-scroll-section, .spy-scroll-section { padding-block: 70px; }
+.chess-scroll-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 45px; align-items: center; }
+.chess-scroll-layout .chessBoardWrap { max-width: min(42svh, 390px); }
+.chess-scroll-caption { font-size: 13px; margin-top: 12px; }
+.chess-scroll-moves { display: grid; gap: 10px; }
+.chess-scroll-moves li { padding: 8px 12px; border-left: 3px solid #8e9e94; }
+.chess-scroll-moves li[aria-current] { background: #ece7dc; color: #13201b; border-color: #b87528; font-weight: 600; }
+.chess-scroll-explanation { font-size: 15px; margin-top: 20px; max-width: 50ch; }
+.spy-legend { font-size: 14px; margin-bottom: 16px; }
+.spy-chart { position: relative; padding-left: 40px; background: #ece7dc; color: #13201b; }
+.spy-chart svg { width: 100%; height: min(38svh, 360px); display: block; }
+.spy-yaxis { position: absolute; left: 0; top: 12%; bottom: 12%; display: flex; flex-direction: column; justify-content: space-between; font-size: 11px; }
+.spy-grid { stroke: #a6afa1; stroke-width: 1; fill: none; }
+.spy-line { stroke: #183744; stroke-width: 2; fill: none; }
+.spy-marker { fill: #995713; }
+.spy-marker.sell { fill: #3545a0; }
+.spy-dates { display: flex; justify-content: space-between; font-size: 12px; margin-top: 8px; }
+.spy-current { min-height: 24px; padding-left: 12px; border-left: 3px solid #b87528; font-size: 14px; margin-top: 12px; }
+.spy-source { font-size: 12px; margin-top: 12px; max-width: 95ch; }
+.spy-source a { text-decoration: underline; }
+.spy-fill-list { margin-top: 14px; font-size: 12px; }
+.spy-fill-list summary { cursor: pointer; padding-block: 8px; }
+.spy-fill-list ul { max-height: 130px; overflow-y: auto; padding: 12px; border: 1px solid #8e9e94; }
+.enhanced .chess-scroll-section, .enhanced .spy-scroll-section { height: 280svh; }
+.enhanced .chess-scroll-pin, .enhanced .spy-scroll-pin { position: sticky; top: calc(var(--header-height) + 16px); }
+.enhanced .spy-line { stroke-dasharray: 1; stroke-dashoffset: 1; }
+.enhanced .spy-marker { opacity: 0; }
+@media(max-width: 719px) {
+  .chess-scroll-layout { grid-template-columns: 1fr; gap: 18px; }
+  .chess-scroll-layout .chessBoardWrap { max-width: 245px; margin-inline: auto; }
+  .chess-scroll-moves { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chess-scroll-moves li { padding: 5px 7px; font-size: 12px; }
+  .chess-scroll-explanation { font-size: 14px; line-height: 1.4; margin-top: 14px; }
+  .chess-scroll-caption { margin-top: 8px; }
+  .chess-scroll-section h2, .spy-scroll-section h2 { margin-bottom: 20px; }
+  .spy-chart svg { height: 210px; }
+  .spy-line { stroke-width: 4; }
+  .spy-legend { font-size: 12px; }
+  .spy-current { font-size: 12px; }
+  .spy-source { line-height: 1.5; }
+}
 @media(prefers-reduced-motion: reduce) {
   .marquee-row { display: block; width: auto; transform: none !important; }
   .marquee-copy { min-width: 0; padding-inline: 24px; }
@@ -184,6 +226,10 @@ html:not(.enhanced) .marquee-copy { min-width: 0; padding-inline: 24px; }
   .enhanced .split-titles { display: none; }
   .enhanced .split-images, .enhanced .spotlight-track { display: grid; transform: none !important; gap: 24px; }
   .enhanced .split-images article { height: auto; }
+  .enhanced .chess-scroll-section, .enhanced .spy-scroll-section { height: auto; }
+  .enhanced .chess-scroll-pin, .enhanced .spy-scroll-pin { position: relative; top: auto; }
+  .enhanced .spy-line { stroke-dashoffset: 0 !important; }
+  .enhanced .spy-marker { opacity: 1 !important; }
 }
 @media(hover: hover) and (pointer: fine) and (min-width: 720px) {
   .enhanced .cursor-preview { display: block; }

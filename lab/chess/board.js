@@ -16,6 +16,21 @@ function pieceSVG(piece) {
   return `<svg viewBox="0 0 48 48" aria-hidden="true" class="chessPiece ${piece.color === "w" ? "pieceWhite" : "pieceBlack"}">${drawings[piece.type]}<path d="M13 36h22v5H13z"/></svg>`;
 }
 
+export function renderChessPosition(fen, { black = fen.split(' ')[1] === 'b', readOnly = true, focusSquare = null, selected = null, legal = [], lastMove = null, next = null, hint = 0, finished = false } = {}) {
+  const game = new Chess(fen), files = black ? 'hgfedcba' : 'abcdefgh', ranks = black ? '12345678' : '87654321';
+  return [...ranks].map(rank => `<div role="row">${[...files].map(file => {
+    const square = file + rank, piece = game.get(square);
+    const classes = ['chessSquare', (file.charCodeAt(0) + Number(rank)) % 2 ? 'chessLight' : 'chessDark'];
+    if (square === selected) classes.push('selected');
+    if (legal.includes(square)) classes.push('legal');
+    if (lastMove && [lastMove.from, lastMove.to].includes(square)) classes.push('lastMove');
+    if (next && ((hint >= 1 && square === next.from) || (hint >= 2 && square === next.to))) classes.push('hint');
+    if (finished && square === lastMove?.to) classes.push('mateSquare');
+    const label = `${square}${piece ? ` ${piece.color === 'w' ? 'White' : 'Black'} ${names[piece.type]}` : ' empty'}${legal.includes(square) ? ', legal destination' : ''}`;
+    return `<button type="button" data-square="${square}" role="gridcell"${readOnly ? ' disabled' : ''} tabindex="${square === focusSquare ? 0 : -1}" class="${classes.join(' ')}" aria-label="${label}" aria-selected="${square === selected}">${piece ? pieceSVG(piece) : ''}<span class="chessCoord chessRank mono" aria-hidden="true">${file === files[0] ? rank : ''}</span><span class="chessCoord chessFile mono" aria-hidden="true">${rank === ranks[7] ? file : ''}</span></button>`;
+  }).join('')}</div>`).join('');
+}
+
 let instance = 0;
 export function mountChess(root, { readOnly = false, persist = true } = {}) {
   const difficultyId = `chess-difficulty-${++instance}`;
@@ -57,32 +72,11 @@ export function mountChess(root, { readOnly = false, persist = true } = {}) {
   function render() {
     const hadFocus = board.contains(document.activeElement);
     const black = puzzle.fen.split(" ")[1] === "b";
-    const files = black ? "hgfedcba" : "abcdefgh", ranks = black ? "12345678" : "87654321";
     const legal = selected && !busy ? game.moves({ square: selected, verbose: true }).map(m => m.to) : [];
     const next = !finished && ply < puzzle.solution.length ? expected() : null;
     board.dataset.fen = game.fen();
     board.classList.toggle("chessSolved", finished && !revealed);
-    board.replaceChildren();
-    for (const rank of ranks) {
-      const row = document.createElement("div"); row.setAttribute("role", "row");
-      for (const file of files) {
-        const square = file + rank, piece = game.get(square), cell = document.createElement("button");
-        cell.type = "button"; cell.dataset.square = square; cell.setAttribute("role", "gridcell");
-        cell.disabled = readOnly;
-        cell.tabIndex = square === focusSquare ? 0 : -1;
-        cell.className = "chessSquare " + ((file.charCodeAt(0) + Number(rank)) % 2 ? "chessLight" : "chessDark");
-        cell.classList.toggle("selected", square === selected);
-        cell.classList.toggle("legal", legal.includes(square));
-        cell.classList.toggle("lastMove", !!lastMove && [lastMove.from, lastMove.to].includes(square));
-        cell.classList.toggle("hint", !!next && ((hint >= 1 && square === next.from) || (hint >= 2 && square === next.to)));
-        cell.classList.toggle("mateSquare", finished && square === lastMove?.to);
-        cell.setAttribute("aria-label", `${square}${piece ? ` ${piece.color === "w" ? "White" : "Black"} ${names[piece.type]}` : " empty"}${legal.includes(square) ? ", legal destination" : ""}`);
-        cell.setAttribute("aria-selected", String(square === selected));
-        cell.innerHTML = (piece ? pieceSVG(piece) : "") + `<span class="chessCoord chessRank mono" aria-hidden="true">${file === files[0] ? rank : ""}</span><span class="chessCoord chessFile mono" aria-hidden="true">${rank === ranks[7] ? file : ""}</span>`;
-        row.append(cell);
-      }
-      board.append(row);
-    }
+    board.innerHTML = renderChessPosition(game.fen(), { black, readOnly, focusSquare, selected, legal, lastMove, next, hint, finished });
     if (hadFocus) board.querySelector(`[data-square="${focusSquare}"]`)?.focus({ preventScroll: true });
     root.querySelector('[data-action="undo"]').disabled = readOnly || ply === 0;
     root.querySelector('[data-action="hint"]').disabled = readOnly || finished || revealed || busy;
