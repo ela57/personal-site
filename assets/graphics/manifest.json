@@ -1,0 +1,559 @@
+{
+  "schema": 1,
+  "generator": "python3 tools/graphics/generate.py",
+  "toolchain": {
+    "chrome": "156.0.8078.47",
+    "python": "3.12.16",
+    "playwright": "1.64.1",
+    "pillow": "13.0.0"
+  },
+  "design": {
+    "background": "#13201b",
+    "frame": "1 px, inset 40 px",
+    "grid": "1 px / 40 px, mist at 5.5% opacity",
+    "fonts": [
+      "Archivo",
+      "IBM Plex Mono"
+    ],
+    "format": "lossless WebP"
+  },
+  "graphics": [
+    {
+      "id": "renderer",
+      "caption": "01 · SOFTWARE RENDERER",
+      "note": "20 triangles · Canvas 2D illustration",
+      "accent": "#e3b677",
+      "metrics": {
+        "triangles": 20,
+        "vertices": 12,
+        "pose": {
+          "rx": 0.45,
+          "ry": 0.5
+        },
+        "shading": "existing face.lit / ambient .18 + diffuse .82"
+      },
+      "description": "Projected mesh and Lambert values captured from createRenderer.onFrame; flat palette recolouring of the browser illustration, not the original Python output.",
+      "sources": [
+        {
+          "path": "assets/fonts/archivo-var.woff2",
+          "sha256": "e3a28eade21a900c7155a247757f4b2834c07bb7ef07ad7efa55cebaac1e8f5e"
+        },
+        {
+          "path": "assets/fonts/ibm-plex-mono-400.woff2",
+          "sha256": "08949f728dc52d528e69b1667d15c89a5686a4ee9a296ff90983985f99c380f7"
+        },
+        {
+          "path": "lab/pipeline.js",
+          "sha256": "f27a5f3dc49039586246c837ced2418d5044ec5788cbf05ed02916acb69cb9ca"
+        },
+        {
+          "path": "lab/renderer.js",
+          "sha256": "cfbe05d40ef8df2d4c3a9cf26fa0a4ddea2ef7c67c884d6017fa8f69ae0d6b3a"
+        },
+        {
+          "path": "tools/graphics/generate.py",
+          "sha256": "b857bd7c65a5721ec92084743f5ca5545cfcf7d59f577b43480c2eab97f5c84b"
+        },
+        {
+          "path": "tools/graphics/model.js",
+          "sha256": "a98b0123c252c1cc9c6504845e2ddb5f6a446cdc975f0339c84b3315f1267543"
+        },
+        {
+          "path": "tools/graphics/render.html",
+          "sha256": "4d53000e10569154c26185733a50f4a03380ed4a1781820a5f0034e95d5ffa2c"
+        },
+        {
+          "path": "tools/graphics/render.js",
+          "sha256": "0a89beea12a1badb343ad3be5b73291d3aa08f452322089b0ed53e164b8280ea"
+        }
+      ],
+      "files": [
+        {
+          "path": "assets/graphics/renderer-1600.webp",
+          "width": 1600,
+          "height": 1000,
+          "sha256": "70f498f755ee88bc56f7e4b44c108a8c2b14c1149dc643cdb240e2066d723377"
+        },
+        {
+          "path": "assets/graphics/renderer-800.webp",
+          "width": 800,
+          "height": 500,
+          "sha256": "c471a989ffcaf3d1151acc25354c883fda0d0baa7d2ccb94cf5980e864cfaa75"
+        }
+      ]
+    },
+    {
+      "id": "thermal",
+      "caption": "02 · THERMAL SHADER / ILLUSTRATIVE",
+      "note": "palette-mapped depth · not Unity output",
+      "accent": "#e3b677",
+      "metrics": {
+        "cameraDepths": [
+          3.6,
+          4.8,
+          6
+        ],
+        "bands": 7,
+        "normalizedDepthRange": [
+          2.6,
+          7
+        ],
+        "originalHlslAvailable": false
+      },
+      "description": "Three actual renderer mesh projections. View-space face depths map to seven forest/ember bands. The Unity/HLSL source and original shader ramp are absent; no Unity output is claimed.",
+      "sources": [
+        {
+          "path": "assets/fonts/archivo-var.woff2",
+          "sha256": "e3a28eade21a900c7155a247757f4b2834c07bb7ef07ad7efa55cebaac1e8f5e"
+        },
+        {
+          "path": "assets/fonts/ibm-plex-mono-400.woff2",
+          "sha256": "08949f728dc52d528e69b1667d15c89a5686a4ee9a296ff90983985f99c380f7"
+        },
+        {
+          "path": "lab/pipeline.js",
+          "sha256": "f27a5f3dc49039586246c837ced2418d5044ec5788cbf05ed02916acb69cb9ca"
+        },
+        {
+          "path": "lab/renderer.js",
+          "sha256": "cfbe05d40ef8df2d4c3a9cf26fa0a4ddea2ef7c67c884d6017fa8f69ae0d6b3a"
+        },
+        {
+          "path": "lab/thermal.js",
+          "sha256": "b5ceb38766be51ef0ff40306f4fc5711aad6f79342c67a121f1f6b088f0a3e77"
+        },
+        {
+          "path": "tools/graphics/generate.py",
+          "sha256": "b857bd7c65a5721ec92084743f5ca5545cfcf7d59f577b43480c2eab97f5c84b"
+        },
+        {
+          "path": "tools/graphics/model.js",
+          "sha256": "a98b0123c252c1cc9c6504845e2ddb5f6a446cdc975f0339c84b3315f1267543"
+        },
+        {
+          "path": "tools/graphics/render.html",
+          "sha256": "4d53000e10569154c26185733a50f4a03380ed4a1781820a5f0034e95d5ffa2c"
+        },
+        {
+          "path": "tools/graphics/render.js",
+          "sha256": "0a89beea12a1badb343ad3be5b73291d3aa08f452322089b0ed53e164b8280ea"
+        }
+      ],
+      "files": [
+        {
+          "path": "assets/graphics/thermal-1600.webp",
+          "width": 1600,
+          "height": 1000,
+          "sha256": "6fed92aa87dac4f54dc70b99b1da1f1d27412f705f03e41e808bdc252ef82ea3"
+        },
+        {
+          "path": "assets/graphics/thermal-800.webp",
+          "width": 800,
+          "height": 500,
+          "sha256": "08102bf6ba82a20787336d801c7c3311e0f92a45dd9952c24c668b8dce2c88b2"
+        }
+      ]
+    },
+    {
+      "id": "volatility",
+      "caption": "03 · SPY VOLATILITY",
+      "note": "5,468 pairs · close-to-close",
+      "accent": "#ece7dc",
+      "metrics": {
+        "sessions": 5489,
+        "pairs": 5468,
+        "window": 20,
+        "first": "2005-02-01",
+        "last": "2026-10-26",
+        "returnConvention": "next adjusted simple return; 20 close-to-close log returns, sample SD × sqrt(252)"
+      },
+      "description": "Every eligible bundled adjusted-close pair, with no trimming or invented regression result. This is not a reproduction of the notebook’s OHLC/Garman–Klass estimator or 2000-onward sample.",
+      "sources": [
+        {
+          "path": "assets/fonts/archivo-var.woff2",
+          "sha256": "e3a28eade21a900c7155a247757f4b2834c07bb7ef07ad7efa55cebaac1e8f5e"
+        },
+        {
+          "path": "assets/fonts/ibm-plex-mono-400.woff2",
+          "sha256": "08949f728dc52d528e69b1667d15c89a5686a4ee9a296ff90983985f99c380f7"
+        },
+        {
+          "path": "lab/strategy/data/spy.json",
+          "sha256": "6a9161f62ce2f67588cff8bc33df58aed9e4f6ec15fc76e68a70d6823027fcb6"
+        },
+        {
+          "path": "prototypes/finance.js",
+          "sha256": "9bb98c96f77fefbf8a7e27983dc49751894c1bf14340b7d67cdc6d2636e648e4"
+        },
+        {
+          "path": "tools/graphics/generate.py",
+          "sha256": "b857bd7c65a5721ec92084743f5ca5545cfcf7d59f577b43480c2eab97f5c84b"
+        },
+        {
+          "path": "tools/graphics/model.js",
+          "sha256": "a98b0123c252c1cc9c6504845e2ddb5f6a446cdc975f0339c84b3315f1267543"
+        },
+        {
+          "path": "tools/graphics/render.html",
+          "sha256": "4d53000e10569154c26185733a50f4a03380ed4a1781820a5f0034e95d5ffa2c"
+        },
+        {
+          "path": "tools/graphics/render.js",
+          "sha256": "0a89beea12a1badb343ad3be5b73291d3aa08f452322089b0ed53e164b8280ea"
+        }
+      ],
+      "files": [
+        {
+          "path": "assets/graphics/volatility-1600.webp",
+          "width": 1600,
+          "height": 1000,
+          "sha256": "8a2638753e244a2ab71790e2282589f2c0edebb2b485ff3ef126d7f10ddbb4b8"
+        },
+        {
+          "path": "assets/graphics/volatility-800.webp",
+          "width": 800,
+          "height": 500,
+          "sha256": "414fd6bb2026b49096f38e1d41bb19a79a952ff72b41ae5debf1443ff004e2db"
+        }
+      ]
+    },
+    {
+      "id": "strategy",
+      "caption": "04 · STRATEGY SANDBOX",
+      "note": "5,489 sessions · 20/100 SMA",
+      "accent": "#8faeb3",
+      "metrics": {
+        "sessions": 5489,
+        "fills": 55,
+        "short": 20,
+        "long": 100,
+        "costBps": 5,
+        "first": "2005-01-03",
+        "last": "2026-10-27"
+      },
+      "description": "Entire bundled SPY adjusted-close series, engine-default 20/100 SMAs and executed next-close fill markers. Educational historical simulation, not live performance or executable quotes.",
+      "sources": [
+        {
+          "path": "assets/fonts/archivo-var.woff2",
+          "sha256": "e3a28eade21a900c7155a247757f4b2834c07bb7ef07ad7efa55cebaac1e8f5e"
+        },
+        {
+          "path": "assets/fonts/ibm-plex-mono-400.woff2",
+          "sha256": "08949f728dc52d528e69b1667d15c89a5686a4ee9a296ff90983985f99c380f7"
+        },
+        {
+          "path": "lab/strategy/data/spy.json",
+          "sha256": "6a9161f62ce2f67588cff8bc33df58aed9e4f6ec15fc76e68a70d6823027fcb6"
+        },
+        {
+          "path": "lab/strategy/engine.js",
+          "sha256": "8ae0179b9acc0f0d00e1047636cc331c63bafa68e16c0280eb496a95d82290eb"
+        },
+        {
+          "path": "tools/graphics/generate.py",
+          "sha256": "b857bd7c65a5721ec92084743f5ca5545cfcf7d59f577b43480c2eab97f5c84b"
+        },
+        {
+          "path": "tools/graphics/model.js",
+          "sha256": "a98b0123c252c1cc9c6504845e2ddb5f6a446cdc975f0339c84b3315f1267543"
+        },
+        {
+          "path": "tools/graphics/render.html",
+          "sha256": "4d53000e10569154c26185733a50f4a03380ed4a1781820a5f0034e95d5ffa2c"
+        },
+        {
+          "path": "tools/graphics/render.js",
+          "sha256": "0a89beea12a1badb343ad3be5b73291d3aa08f452322089b0ed53e164b8280ea"
+        }
+      ],
+      "files": [
+        {
+          "path": "assets/graphics/strategy-1600.webp",
+          "width": 1600,
+          "height": 1000,
+          "sha256": "0a3879fa747be7280a1c69aa6e032c9ce4384afc4381e70f535d536a0f504938"
+        },
+        {
+          "path": "assets/graphics/strategy-800.webp",
+          "width": 800,
+          "height": 500,
+          "sha256": "60ec3c305a4c6a9d5893936ebf0db0c1fb14c2f762f094515a42fee916dbe00f"
+        }
+      ]
+    },
+    {
+      "id": "chess",
+      "caption": "05 · CHESS PUZZLES",
+      "note": "12 verified puzzles · mate in 2",
+      "accent": "#9eae8e",
+      "metrics": {
+        "puzzle": "smothered-sacrifice",
+        "fen": "5r1k/6pp/7N/8/2Q5/8/8/6K1 w - - 0 1",
+        "solution": [
+          "Qg8+",
+          "Rxg8",
+          "Nf7#"
+        ],
+        "solutionEndsInMate": true,
+        "displayedPosition": "initial",
+        "count": 12
+      },
+      "description": "Initial position of Invite the rook, rendered by the existing shared board renderer. The bundled SAN solution is executed strictly and checked for checkmate before capture.",
+      "sources": [
+        {
+          "path": "assets/fonts/archivo-var.woff2",
+          "sha256": "e3a28eade21a900c7155a247757f4b2834c07bb7ef07ad7efa55cebaac1e8f5e"
+        },
+        {
+          "path": "assets/fonts/ibm-plex-mono-400.woff2",
+          "sha256": "08949f728dc52d528e69b1667d15c89a5686a4ee9a296ff90983985f99c380f7"
+        },
+        {
+          "path": "lab/chess/PIECES-LICENSE",
+          "sha256": "74822b1d2f41233a513bd317cc72ad093d35bf2e0cd990362bb6f349bb1d08a0"
+        },
+        {
+          "path": "lab/chess/board.js",
+          "sha256": "2025c5e20fc3a30097d0b7cd47996a98d0bea9e58dddd800fd8a8d40909c1b3e"
+        },
+        {
+          "path": "lab/chess/lab.css",
+          "sha256": "fc2540c447a4b0e2d89bf1cc2c4e20e7bc5ccb0ce32856db81efc11466d4a78a"
+        },
+        {
+          "path": "lab/chess/puzzles.js",
+          "sha256": "dda988491573a566fa3d2617738fa18f9661e5f1be9a283a31338569ff55d61d"
+        },
+        {
+          "path": "tools/graphics/generate.py",
+          "sha256": "b857bd7c65a5721ec92084743f5ca5545cfcf7d59f577b43480c2eab97f5c84b"
+        },
+        {
+          "path": "tools/graphics/model.js",
+          "sha256": "a98b0123c252c1cc9c6504845e2ddb5f6a446cdc975f0339c84b3315f1267543"
+        },
+        {
+          "path": "tools/graphics/render.html",
+          "sha256": "4d53000e10569154c26185733a50f4a03380ed4a1781820a5f0034e95d5ffa2c"
+        },
+        {
+          "path": "tools/graphics/render.js",
+          "sha256": "0a89beea12a1badb343ad3be5b73291d3aa08f452322089b0ed53e164b8280ea"
+        },
+        {
+          "path": "vendor/chess.js",
+          "sha256": "76c7c34f0e2e9ab076521a5d6fe786a9cce537bb1b6f29d32a9c9970b5b232d2"
+        }
+      ],
+      "files": [
+        {
+          "path": "assets/graphics/chess-1600.webp",
+          "width": 1600,
+          "height": 1000,
+          "sha256": "0a752c3a9280bde836e153805f9fabffb42663058845ee8cc6473b671808d74b"
+        },
+        {
+          "path": "assets/graphics/chess-800.webp",
+          "width": 800,
+          "height": 500,
+          "sha256": "799b8d1f45d9c922ec603603288b800b42309bca7e1ddd1257cbad0d42e194c6"
+        }
+      ]
+    },
+    {
+      "id": "poker",
+      "caption": "06 · POKER PRACTICE",
+      "note": "200 hands · public chip totals only",
+      "accent": "#e3b677",
+      "metrics": {
+        "hands": 200,
+        "firstHand": 1,
+        "lastHand": 200,
+        "firstStack": 2000,
+        "finalStack": 790,
+        "run": {
+          "repo": "ela57/pokerbot",
+          "commit": "eb245bfc6ec94a1f7158c30b403d6b5a07b4a878",
+          "seed": 1000000,
+          "run": "20261108T035626Z_b7c81b"
+        },
+        "privateCardsRead": false
+      },
+      "description": "Public end-of-hand hero chip totals only; ticks mark public elimination hands. No poker-run.json, observations, private hole cards, showdown hands or offline equity are loaded. This run is not evidence of playing strength.",
+      "sources": [
+        {
+          "path": "assets/fonts/archivo-var.woff2",
+          "sha256": "e3a28eade21a900c7155a247757f4b2834c07bb7ef07ad7efa55cebaac1e8f5e"
+        },
+        {
+          "path": "assets/fonts/ibm-plex-mono-400.woff2",
+          "sha256": "08949f728dc52d528e69b1667d15c89a5686a4ee9a296ff90983985f99c380f7"
+        },
+        {
+          "path": "prototypes/data/poker-session.json",
+          "sha256": "97d56b5f78759cb8c12f0b8b9b11850716779895ed5a5351fb9e02036af99207"
+        },
+        {
+          "path": "tools/export_poker.py",
+          "sha256": "a8cd50b5e558a32d91932ad661df4f99b62e1f61124e3412e92f182181a838ec"
+        },
+        {
+          "path": "tools/graphics/generate.py",
+          "sha256": "b857bd7c65a5721ec92084743f5ca5545cfcf7d59f577b43480c2eab97f5c84b"
+        },
+        {
+          "path": "tools/graphics/model.js",
+          "sha256": "a98b0123c252c1cc9c6504845e2ddb5f6a446cdc975f0339c84b3315f1267543"
+        },
+        {
+          "path": "tools/graphics/render.html",
+          "sha256": "4d53000e10569154c26185733a50f4a03380ed4a1781820a5f0034e95d5ffa2c"
+        },
+        {
+          "path": "tools/graphics/render.js",
+          "sha256": "0a89beea12a1badb343ad3be5b73291d3aa08f452322089b0ed53e164b8280ea"
+        }
+      ],
+      "files": [
+        {
+          "path": "assets/graphics/poker-1600.webp",
+          "width": 1600,
+          "height": 1000,
+          "sha256": "e7c026a831caf05bea5e88db945ef21cb82ba65cac98d95a72b88a02757cb379"
+        },
+        {
+          "path": "assets/graphics/poker-800.webp",
+          "width": 800,
+          "height": 500,
+          "sha256": "b06f299b516c5db4c080ccfe5c2541cfcc63d1721767643e20ed6c61941032da"
+        }
+      ]
+    },
+    {
+      "id": "portfolio-manager",
+      "caption": "07 · GTSF PORTFOLIO MANAGER",
+      "note": "Aug 2025–present · Quant Sector",
+      "accent": "#9eae8e",
+      "metrics": {
+        "dates": "Aug 2025–present",
+        "strategies": "two independent strategies",
+        "functions": [
+          "Capital allocation",
+          "Rebalancing",
+          "Risk constraints"
+        ]
+      },
+      "description": "Typographic role schematic using only the existing Portfolio Manager facts: two independent strategies, a central Python controller, capital allocation, rebalancing and risk constraints. Not a performance or architecture measurement.",
+      "sources": [
+        {
+          "path": "assets/fonts/archivo-var.woff2",
+          "sha256": "e3a28eade21a900c7155a247757f4b2834c07bb7ef07ad7efa55cebaac1e8f5e"
+        },
+        {
+          "path": "assets/fonts/ibm-plex-mono-400.woff2",
+          "sha256": "08949f728dc52d528e69b1667d15c89a5686a4ee9a296ff90983985f99c380f7"
+        },
+        {
+          "path": "content/eportfolio.js",
+          "sha256": "3deb198fb47252e751cedd3383e29784e5f4f59d28175aba939fc53d7ec06a49"
+        },
+        {
+          "path": "content/projects.js",
+          "sha256": "1e3dbd330248e15eaa7bdce4e0e224cd98a6e7e08512fb52ae5227361255e503"
+        },
+        {
+          "path": "tools/graphics/generate.py",
+          "sha256": "b857bd7c65a5721ec92084743f5ca5545cfcf7d59f577b43480c2eab97f5c84b"
+        },
+        {
+          "path": "tools/graphics/model.js",
+          "sha256": "a98b0123c252c1cc9c6504845e2ddb5f6a446cdc975f0339c84b3315f1267543"
+        },
+        {
+          "path": "tools/graphics/render.html",
+          "sha256": "4d53000e10569154c26185733a50f4a03380ed4a1781820a5f0034e95d5ffa2c"
+        },
+        {
+          "path": "tools/graphics/render.js",
+          "sha256": "0a89beea12a1badb343ad3be5b73291d3aa08f452322089b0ed53e164b8280ea"
+        }
+      ],
+      "files": [
+        {
+          "path": "assets/graphics/portfolio-manager-1600.webp",
+          "width": 1600,
+          "height": 1000,
+          "sha256": "6e385e0edf5b0ec1ef90444831afabdd73129b23fd690fa0dc607727d957396b"
+        },
+        {
+          "path": "assets/graphics/portfolio-manager-800.webp",
+          "width": 800,
+          "height": 500,
+          "sha256": "e0a2ee4253840dc806300f8953dd018f3d7051291049a9ef11cb8a36ad3bf7af"
+        }
+      ]
+    },
+    {
+      "id": "chess-buddies",
+      "caption": "08 · CHESS BUDDIES",
+      "note": "Aug 2022–May 2024 · President",
+      "accent": "#ece7dc",
+      "metrics": {
+        "dates": "Aug 2022–May 2024",
+        "children": "50+",
+        "team": "SIX",
+        "events": "60+",
+        "schools": "TWO"
+      },
+      "description": "Leadership facts from content/projects.js (its body references the supplied About copy). More than 50 children, a six-person volunteer team, more than 60 events each school year, two schools.",
+      "sources": [
+        {
+          "path": "assets/fonts/archivo-var.woff2",
+          "sha256": "e3a28eade21a900c7155a247757f4b2834c07bb7ef07ad7efa55cebaac1e8f5e"
+        },
+        {
+          "path": "assets/fonts/ibm-plex-mono-400.woff2",
+          "sha256": "08949f728dc52d528e69b1667d15c89a5686a4ee9a296ff90983985f99c380f7"
+        },
+        {
+          "path": "content/eportfolio.js",
+          "sha256": "3deb198fb47252e751cedd3383e29784e5f4f59d28175aba939fc53d7ec06a49"
+        },
+        {
+          "path": "content/projects.js",
+          "sha256": "1e3dbd330248e15eaa7bdce4e0e224cd98a6e7e08512fb52ae5227361255e503"
+        },
+        {
+          "path": "tools/graphics/generate.py",
+          "sha256": "b857bd7c65a5721ec92084743f5ca5545cfcf7d59f577b43480c2eab97f5c84b"
+        },
+        {
+          "path": "tools/graphics/model.js",
+          "sha256": "a98b0123c252c1cc9c6504845e2ddb5f6a446cdc975f0339c84b3315f1267543"
+        },
+        {
+          "path": "tools/graphics/render.html",
+          "sha256": "4d53000e10569154c26185733a50f4a03380ed4a1781820a5f0034e95d5ffa2c"
+        },
+        {
+          "path": "tools/graphics/render.js",
+          "sha256": "0a89beea12a1badb343ad3be5b73291d3aa08f452322089b0ed53e164b8280ea"
+        }
+      ],
+      "files": [
+        {
+          "path": "assets/graphics/chess-buddies-1600.webp",
+          "width": 1600,
+          "height": 1000,
+          "sha256": "a985536ab15ca5421379f7b04f919b9ea822ea54b5dbcbcc6791ee7422ee10ab"
+        },
+        {
+          "path": "assets/graphics/chess-buddies-800.webp",
+          "width": 800,
+          "height": 500,
+          "sha256": "3e7387886bbdf9db337ab39b804988ac3e6745b1059436ccb0fa4b124ffe2e6a"
+        }
+      ]
+    }
+  ]
+}

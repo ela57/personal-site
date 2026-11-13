@@ -11,7 +11,8 @@
   <meta property="og:title" content="Ethan Lam — Portfolio" />
   <meta property="og:description" content="Ethan Lam — Computer Engineering at Georgia Tech ('28). GPU/graphics programming and quantitative systems." />
   <meta property="og:url" content="https://ethan-lam.com/" />
-  <meta property="og:image" content="https://ethan-lam.com/og-image.png" />
+  <meta property="og:image" content="https://ethan-lam.com/assets/graphics/renderer-1600.webp" />
+  <meta property="og:image:width" content="1600"><meta property="og:image:height" content="1000"><meta property="og:image:alt" content="Code-generated shaded icosahedron from the Canvas renderer."><meta name="twitter:image" content="https://ethan-lam.com/assets/graphics/renderer-1600.webp">
   <meta name="twitter:card" content="summary" />
   <link rel="icon" type="image/png" href="/favicon.png">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
@@ -22,6 +23,7 @@
   <link rel="stylesheet" href="/styles.css" />
   <link rel="stylesheet" href="/projects/direct.css" />
   <link rel="stylesheet" href="/eportfolio/site.css" />
+<link rel="stylesheet" href="/eportfolio/scroll.css"><script type="module" src="/eportfolio/scroll.js"></script>
 </head>
 <body data-static-portfolio>
   <a class="skip" href="#main">Skip to content</a>
@@ -54,20 +56,20 @@
       <a class="scrollCue" href="#projects"><span>Selected work</span><span class="scrollLine" aria-hidden="true"></span></a>
     </section>
 
-    <!-- welcome:start --><section class="welcome-block" aria-labelledby="welcome-title"><h2 id="welcome-title">Welcome</h2><p>Hi, I&#39;m Ethan Lam, a computer engineering student at Georgia Tech, class of 2028. I like building software that handles data efficiently, which has pulled me toward systems programming, graphics and financial technology. This ePortfolio collects my projects, research and experience, along with my résumé and the plan for where I&#39;m headed next. Right now I&#39;m looking for a Summer 2027 software engineering internship in backend or systems work.</p></section><!-- welcome:end -->
+    <!-- welcome:start --><section class="welcome-block" aria-labelledby="welcome-title"><h2 id="welcome-title">Welcome</h2><p data-scroll-ink>Hi, I&#39;m Ethan Lam, a computer engineering student at Georgia Tech, class of 2028. I like building software that handles data efficiently, which has pulled me toward systems programming, graphics and financial technology. This ePortfolio collects my projects, research and experience, along with my résumé and the plan for where I&#39;m headed next. Right now I&#39;m looking for a Summer 2027 software engineering internship in backend or systems work.</p></section><!-- welcome:end -->
     <!-- Selected work -->
     <section class="work" id="projects" aria-labelledby="workTitle">
       <header class="secHead grid rule">
         <p class="sec mono">Selected work</p>
         <h2 id="workTitle" class="secTitle">Selected work</h2>
         <p class="secNote mono">Hover a figure to read its annotations.<br>Select it for the full case study.</p>
-      </header>
+      </header><!-- project-gallery:start --><section class="portfolio-gallery" data-scroll-gallery aria-label="Projects"><div class="portfolio-gallery-pin"><div class="portfolio-gallery-window"><div class="portfolio-gallery-track"><article class="portfolio-gallery-card"><picture class="project-preview"><source type="image/webp" srcset="/assets/graphics/renderer-800.webp 800w, /assets/graphics/renderer-1600.webp 1600w" sizes="(max-width: 899px) 100vw, 520px"><img src="/assets/graphics/renderer-800.webp" width="1600" height="1000" alt="Flat-shaded icosahedron projected by the site’s Canvas renderer, with a wireframe overlay." loading="lazy" decoding="async"></picture><div><h3><a href="#project/renderer">A renderer with no graphics API <span aria-hidden="true">↗</span></a></h3><p>A JavaScript and Canvas 2D illustration of a Python rendering pipeline.</p></div></article><article class="portfolio-gallery-card"><picture class="project-preview"><source type="image/webp" srcset="/assets/graphics/thermal-800.webp 800w, /assets/graphics/thermal-1600.webp 1600w" sizes="(max-width: 899px) 100vw, 520px"><img src="/assets/graphics/thermal-800.webp" width="1600" height="1000" alt="Illustrative renderer meshes at three depths, mapped to seven flat ember heat bands; not Unity output." loading="lazy" decoding="async"></picture><div><h3><a href="#project/thermal">Seeing depth as heat <span aria-hidden="true">↗</span></a></h3><p>A browser illustration of a depth-based thermal-vision effect.</p></div></article><article class="portfolio-gallery-card"><picture class="project-preview"><source type="image/webp" srcset="/assets/graphics/volatility-800.webp 800w, /assets/graphics/volatility-1600.webp 1600w" sizes="(max-width: 899px) 100vw, 520px"><img src="/assets/graphics/volatility-800.webp" width="1600" height="1000" alt="Bundled SPY: 20-session close-to-close realised volatility versus next-session adjusted return, 5,468 pairs." loading="lazy" decoding="async"></picture><div><h3><a href="#project/vol">Does today’s volatility predict tomorrow’s return? <span aria-hidden="true">↗</span></a></h3><p>A hypothesis-driven study of realized volatility and next-day SPY returns.</p></div></article><article class="portfolio-gallery-card"><picture class="project-preview"><source type="image/webp" srcset="/assets/graphics/strategy-800.webp 800w, /assets/graphics/strategy-1600.webp 1600w" sizes="(max-width: 899px) 100vw, 520px"><img src="/assets/graphics/strategy-800.webp" width="1600" height="1000" alt="SPY adjusted closes with 20- and 100-session moving averages and simulated next-close buy and sell fills." loading="lazy" decoding="async"></picture><div><h3><a href="#lab/strategy">Strategy sandbox <span aria-hidden="true">↗</span></a></h3><p>A moving-average model with historical prices, explicit assumptions and trading costs.</p></div></article><article class="portfolio-gallery-card"><picture class="project-preview"><source type="image/webp" srcset="/assets/graphics/chess-800.webp 800w, /assets/graphics/chess-1600.webp 1600w" sizes="(max-width: 899px) 100vw, 520px"><img src="/assets/graphics/chess-800.webp" width="1600" height="1000" alt="Verified Invite the rook puzzle: White to move and mate in two, drawn with the shared geometric chess pieces." loading="lazy" decoding="async"></picture><div><h3><a href="#lab/chess">Chess puzzles <span aria-hidden="true">↗</span></a></h3><p>Twelve chess puzzles: a board, a few clues and a move that changes everything.</p></div></article></div></div></div></section><!-- project-gallery:end -->
 
       <!-- 01 — wide spread, visual left -->
       <article class="proj proj--renderer grid" id="work-renderer" data-project="renderer">
         <figure class="plate plate--light" style="--ar:4/3">
           <a class="plateVis" href="#project/renderer" aria-label="Open software renderer case study">
-            <picture><img src="/assets/pipeline-5.png" width="800" height="600" alt="A closed icosahedron with triangular faces and directional diffuse shading." loading="lazy" decoding="async"></picture>
+            <picture class="project-preview"><source type="image/webp" srcset="/assets/graphics/renderer-800.webp 800w, /assets/graphics/renderer-1600.webp 1600w" sizes="(max-width: 899px) 100vw, 54vw"><img src="/assets/graphics/renderer-800.webp" width="1600" height="1000" alt="Flat-shaded icosahedron projected by the site’s Canvas renderer, with a wireframe overlay." loading="lazy" decoding="async"></picture>
           </a>
           <figcaption class="mono">Browser illustration · Solid shaded output</figcaption>
         </figure>
@@ -113,7 +115,7 @@
         </div>
         <figure class="plate plate--dark" style="--ar:3/2">
           <a class="plateVis" href="#project/thermal" aria-label="Open thermal-vision shader case study">
-            <picture><source type="image/webp" srcset="/assets/shader-cover-768.webp 768w, /assets/shader-cover.webp 1536w" sizes="(max-width:719px) 100vw, 54vw"><img src="/assets/shader-cover.webp" width="1536" height="1024" alt="Illustrated scene viewed through a thermal colour ramp, with warm foreground forms and cool distant geometry." loading="lazy" decoding="async"></picture>
+            <picture class="project-preview"><source type="image/webp" srcset="/assets/graphics/thermal-800.webp 800w, /assets/graphics/thermal-1600.webp 1600w" sizes="(max-width: 899px) 100vw, 54vw"><img src="/assets/graphics/thermal-800.webp" width="1600" height="1000" alt="Illustrative renderer meshes at three depths, mapped to seven flat ember heat bands; not Unity output." loading="lazy" decoding="async"></picture>
           </a>
           <figcaption class="mono">Illustration · Thermal vision</figcaption>
         </figure>
@@ -124,7 +126,7 @@
       <article class="proj proj--vol grid" id="work-vol" data-project="vol">
         <figure class="plate plate--paper" data-annotate="vol" style="--ar:768/418">
           <div class="plateVis">
-            <picture><source srcset="/assets/projects/realized-vol-equity.webp" type="image/webp"><img src="/assets/projects/realized-vol-equity.png" width="768" height="418" alt="Equity curves over the 2022–2025 test period: buy-and-hold SPY versus the regression signal, growth of $1." loading="lazy" decoding="async"></picture>
+            <picture class="project-preview"><source type="image/webp" srcset="/assets/graphics/volatility-800.webp 800w, /assets/graphics/volatility-1600.webp 1600w" sizes="(max-width: 899px) 100vw, 54vw"><img src="/assets/graphics/volatility-800.webp" width="1600" height="1000" alt="Bundled SPY: 20-session close-to-close realised volatility versus next-session adjusted return, 5,468 pairs." loading="lazy" decoding="async"></picture>
           </div>
           <ol class="notes">
             <li style="--lx:38%;--ly:45%" data-side="r" data-at=".293,.682"><b>1</b> Signal held up through the 2022 drawdown</li>
@@ -154,8 +156,8 @@
         <p class="secNote mono">Small systems. Playable ideas.</p>
       </header>
       <div class="gamePanels">
-        <a class="gamePanel" href="#lab/chess"><span class="mono">Interactive · 01 / Chess</span><img class="gameMini" src="/assets/chess-preview.svg" width="320" height="320" alt="The first puzzle: White rook e1 and king g1; Black king g8 and pawns f7, g7, h7. White to move." loading="lazy" decoding="async"><h3>Find the forcing line.</h3><p>Twelve chess puzzles. A board, a few clues, and a move that changes everything.</p><span class="gameAction">Play the puzzles →</span></a>
-        <a class="gamePanel" href="#lab/strategy"><span class="mono">Interactive · 02 / Strategy sandbox</span><img class="gameMini" src="/assets/strategy-preview.svg" width="640" height="320" alt="Bundled SPY adjusted closes in mist, with 20-day moving average in dawn gold and 100-day moving average in green." loading="lazy" decoding="async"><h3>Test the signal.</h3><p>A moving-average model. Historical prices, explicit assumptions, and the cost of being wrong.</p><span class="gameAction">Open the sandbox →</span></a>
+        <a class="gamePanel" href="#lab/chess"><span class="mono">Interactive · 01 / Chess</span><picture class="project-preview"><source type="image/webp" srcset="/assets/graphics/chess-800.webp 800w, /assets/graphics/chess-1600.webp 1600w" sizes="(max-width: 899px) 100vw, 54vw"><img src="/assets/graphics/chess-800.webp" width="1600" height="1000" alt="Verified Invite the rook puzzle: White to move and mate in two, drawn with the shared geometric chess pieces." class="gameMini" loading="lazy" decoding="async"></picture><h3>Find the forcing line.</h3><p>Twelve chess puzzles. A board, a few clues, and a move that changes everything.</p><span class="gameAction">Play the puzzles →</span></a>
+        <a class="gamePanel" href="#lab/strategy"><span class="mono">Interactive · 02 / Strategy sandbox</span><picture class="project-preview"><source type="image/webp" srcset="/assets/graphics/strategy-800.webp 800w, /assets/graphics/strategy-1600.webp 1600w" sizes="(max-width: 899px) 100vw, 54vw"><img src="/assets/graphics/strategy-800.webp" width="1600" height="1000" alt="SPY adjusted closes with 20- and 100-session moving averages and simulated next-close buy and sell fills." class="gameMini" loading="lazy" decoding="async"></picture><h3>Test the signal.</h3><p>A moving-average model. Historical prices, explicit assumptions, and the cost of being wrong.</p><span class="gameAction">Open the sandbox →</span></a>
       </div>
       <noscript><div class="approach"><section id="lab/chess"><h3>The locked back rank</h3><p>White to move in the board above. The three pawns deny the king an escape square. The rook owns the eighth rank. Answer: Re8#. Enable JavaScript to play all twelve puzzles.</p></section><section id="lab/strategy"><h3>Moving averages, explicit assumptions</h3><p>The chart above shows the bundled SPY prices and two moving averages. Enable JavaScript to change the windows, test transaction costs and inspect the trades.</p></section></div></noscript>
     </section>
@@ -200,9 +202,7 @@
         </div>
       </div>
 
-      <dl class="toolbox" id="skills">
-        <!-- skills:start --><div><dt class="mono">Languages</dt><dd>Java, C, C#, Python, HLSL/ShaderLab, VHDL, x86 Assembly</dd></div><div><dt class="mono">Tools</dt><dd>Unity, IDA Pro, FPGA, NumPy, JavaFx, REST API, Linux, Git</dd></div><!-- skills:end -->
-      </dl>
+      <section class="portfolio-marquee" id="skills" data-scroll-marquee aria-label="Skills"><button class="marquee-toggle" type="button" aria-pressed="false" hidden>Pause marquee</button><dl class="skills-readable"><div><dt>Languages</dt><dd>Java, C, C#, Python, HLSL/ShaderLab, VHDL, x86 Assembly</dd></div><div><dt>Tools</dt><dd>Unity, IDA Pro, FPGA, NumPy, JavaFx, REST API, Linux, Git</dd></div></dl><div class="marquee-visual" aria-hidden="true"><div class="marquee-window"><div class="marquee-row"><div class="marquee-copy" aria-hidden="true"><h3>Languages</h3><p>Java, C, C#, Python, HLSL/ShaderLab, VHDL, x86 Assembly</p></div><div class="marquee-copy" aria-hidden="true"><h3>Languages</h3><p>Java, C, C#, Python, HLSL/ShaderLab, VHDL, x86 Assembly</p></div></div></div><div class="marquee-window"><div class="marquee-row"><div class="marquee-copy" aria-hidden="true"><h3>Tools</h3><p>Unity, IDA Pro, FPGA, NumPy, JavaFx, REST API, Linux, Git</p></div><div class="marquee-copy" aria-hidden="true"><h3>Tools</h3><p>Unity, IDA Pro, FPGA, NumPy, JavaFx, REST API, Linux, Git</p></div></div></div></div></section>
     </section>
 
     <!-- Contact -->
@@ -217,20 +217,20 @@
       </ul>
     </section>
     <!-- destinations:start -->
-<section class="all-destinations" id="destinations" aria-labelledby="destinationsTitle"><h2 id="destinationsTitle">All destinations</h2><div class="destination-index"><div class="destination-group"><h3>Projects</h3><ul class="project-list"><li><h4>A renderer with no graphics API</h4><span class="classification">Illustrative simulation</span><p>A JavaScript and Canvas 2D illustration of a Python rendering pipeline.</p><a href="/projects/#project/renderer" aria-label="Open: A renderer with no graphics API">Open <span aria-hidden="true">↗</span></a></li>
-<li><h4>Seeing depth as heat</h4><span class="classification">Illustrative simulation</span><p>A browser illustration of a depth-based thermal-vision effect.</p><a href="/projects/#project/thermal" aria-label="Open: Seeing depth as heat">Open <span aria-hidden="true">↗</span></a></li>
+<section class="all-destinations" id="destinations" aria-labelledby="destinationsTitle"><h2 id="destinationsTitle">All destinations</h2><div class="destination-index"><div class="destination-group"><h3>Projects</h3><ul class="project-list"><li><picture class="project-preview"><source type="image/webp" srcset="/assets/graphics/renderer-800.webp 800w, /assets/graphics/renderer-1600.webp 1600w" sizes="(max-width: 899px) 100vw, 380px"><img src="/assets/graphics/renderer-800.webp" width="1600" height="1000" alt="Flat-shaded icosahedron projected by the site’s Canvas renderer, with a wireframe overlay." loading="lazy" decoding="async"></picture><h4>A renderer with no graphics API</h4><span class="classification">Illustrative simulation</span><p>A JavaScript and Canvas 2D illustration of a Python rendering pipeline.</p><a href="/projects/#project/renderer" aria-label="Open: A renderer with no graphics API">Open <span aria-hidden="true">↗</span></a></li>
+<li><picture class="project-preview"><source type="image/webp" srcset="/assets/graphics/thermal-800.webp 800w, /assets/graphics/thermal-1600.webp 1600w" sizes="(max-width: 899px) 100vw, 380px"><img src="/assets/graphics/thermal-800.webp" width="1600" height="1000" alt="Illustrative renderer meshes at three depths, mapped to seven flat ember heat bands; not Unity output." loading="lazy" decoding="async"></picture><h4>Seeing depth as heat</h4><span class="classification">Illustrative simulation</span><p>A browser illustration of a depth-based thermal-vision effect.</p><a href="/projects/#project/thermal" aria-label="Open: Seeing depth as heat">Open <span aria-hidden="true">↗</span></a></li>
 <li><h4>Data Universe</h4><span class="classification">Proposed future feature</span><p>Content needed</p></li>
 <li><h4>SCOMP</h4><span class="classification">Proposed future feature</span><p>Content needed</p></li>
 <li><h4>VHDL / palletizer FSM</h4><span class="classification">Proposed future feature</span><p>Content needed</p></li></ul></div>
-<div class="destination-group"><h3>Research &amp; labs</h3><ul class="project-list"><li><h4>Does today’s volatility predict tomorrow’s return?</h4><span class="classification">Research prototype</span><p>A hypothesis-driven study of realized volatility and next-day SPY returns.</p><a href="/projects/#project/vol" aria-label="Open: Does today’s volatility predict tomorrow’s return?">Open <span aria-hidden="true">↗</span></a></li>
-<li><h4>Strategy sandbox</h4><span class="classification">Working project integration</span><p>A moving-average model with historical prices, explicit assumptions and trading costs.</p><a href="/projects/#lab/strategy" aria-label="Open: Strategy sandbox">Open <span aria-hidden="true">↗</span></a></li>
+<div class="destination-group"><h3>Research &amp; labs</h3><ul class="project-list"><li><picture class="project-preview"><source type="image/webp" srcset="/assets/graphics/volatility-800.webp 800w, /assets/graphics/volatility-1600.webp 1600w" sizes="(max-width: 899px) 100vw, 380px"><img src="/assets/graphics/volatility-800.webp" width="1600" height="1000" alt="Bundled SPY: 20-session close-to-close realised volatility versus next-session adjusted return, 5,468 pairs." loading="lazy" decoding="async"></picture><h4>Does today’s volatility predict tomorrow’s return?</h4><span class="classification">Research prototype</span><p>A hypothesis-driven study of realized volatility and next-day SPY returns.</p><a href="/projects/#project/vol" aria-label="Open: Does today’s volatility predict tomorrow’s return?">Open <span aria-hidden="true">↗</span></a></li>
+<li><picture class="project-preview"><source type="image/webp" srcset="/assets/graphics/strategy-800.webp 800w, /assets/graphics/strategy-1600.webp 1600w" sizes="(max-width: 899px) 100vw, 380px"><img src="/assets/graphics/strategy-800.webp" width="1600" height="1000" alt="SPY adjusted closes with 20- and 100-session moving averages and simulated next-close buy and sell fills." loading="lazy" decoding="async"></picture><h4>Strategy sandbox</h4><span class="classification">Working project integration</span><p>A moving-average model with historical prices, explicit assumptions and trading costs.</p><a href="/projects/#lab/strategy" aria-label="Open: Strategy sandbox">Open <span aria-hidden="true">↗</span></a></li>
 <li><h4>Simulated strategy dataset</h4><span class="classification">Illustrative simulation</span><p>Seeded GBM, not market data.</p><a href="/projects/#lab/strategy/simulated" aria-label="Open: Simulated strategy dataset">Open <span aria-hidden="true">↗</span></a></li>
-<li><h4>Chess puzzles</h4><span class="classification">Working project integration</span><p>Twelve chess puzzles: a board, a few clues and a move that changes everything.</p><a href="/projects/#lab/chess" aria-label="Open: Chess puzzles">Open <span aria-hidden="true">↗</span></a></li>
-<li><h4>Poker Practice</h4><span class="classification">Research prototype</span><p>A local, deterministic Texas Hold’em simulation for developing and comparing bots.</p><a href="/projects/destinations.html#poker" aria-label="Open: Poker Practice">Open <span aria-hidden="true">↗</span></a></li>
+<li><picture class="project-preview"><source type="image/webp" srcset="/assets/graphics/chess-800.webp 800w, /assets/graphics/chess-1600.webp 1600w" sizes="(max-width: 899px) 100vw, 380px"><img src="/assets/graphics/chess-800.webp" width="1600" height="1000" alt="Verified Invite the rook puzzle: White to move and mate in two, drawn with the shared geometric chess pieces." loading="lazy" decoding="async"></picture><h4>Chess puzzles</h4><span class="classification">Working project integration</span><p>Twelve chess puzzles: a board, a few clues and a move that changes everything.</p><a href="/projects/#lab/chess" aria-label="Open: Chess puzzles">Open <span aria-hidden="true">↗</span></a></li>
+<li><picture class="project-preview"><source type="image/webp" srcset="/assets/graphics/poker-800.webp 800w, /assets/graphics/poker-1600.webp 1600w" sizes="(max-width: 899px) 100vw, 380px"><img src="/assets/graphics/poker-800.webp" width="1600" height="1000" alt="Hero end-of-hand chip totals across 200 public poker-session hands, including losses; no private cards." loading="lazy" decoding="async"></picture><h4>Poker Practice</h4><span class="classification">Research prototype</span><p>A local, deterministic Texas Hold’em simulation for developing and comparing bots.</p><a href="/projects/destinations.html#poker" aria-label="Open: Poker Practice">Open <span aria-hidden="true">↗</span></a></li>
 <li><h4>Human-interaction research</h4><span class="classification">Proposed future feature</span><p>Content needed</p></li>
 <li><h4>Malware research (IDA CFG)</h4><span class="classification">Proposed future feature</span><p>Content needed</p></li></ul></div>
-<div class="destination-group"><h3>Leadership &amp; experience</h3><ul class="project-list"><li><h4>Portfolio Manager</h4><span class="classification">Proposed future feature</span><p>Capital allocation, rebalancing and risk constraints in a central Python portfolio controller.</p><a href="/projects/#experience" aria-label="Open: Portfolio Manager">Open <span aria-hidden="true">↗</span></a></li>
-<li><h4>Chess Buddies leadership</h4><span class="classification">Working project integration</span><p>President · Aug 2022–May 2024 · Chess Buddies</p><a href="/about/#chess-buddies" aria-label="Open: Chess Buddies leadership">Open <span aria-hidden="true">↗</span></a></li></ul></div>
+<div class="destination-group"><h3>Leadership &amp; experience</h3><ul class="project-list"><li><picture class="project-preview"><source type="image/webp" srcset="/assets/graphics/portfolio-manager-800.webp 800w, /assets/graphics/portfolio-manager-1600.webp 1600w" sizes="(max-width: 899px) 100vw, 380px"><img src="/assets/graphics/portfolio-manager-800.webp" width="1600" height="1000" alt="GTSF role schematic: two independent strategies, a Python controller, capital allocation, rebalancing and risk constraints." loading="lazy" decoding="async"></picture><h4>Portfolio Manager</h4><span class="classification">Proposed future feature</span><p>Capital allocation, rebalancing and risk constraints in a central Python portfolio controller.</p><a href="/projects/#experience" aria-label="Open: Portfolio Manager">Open <span aria-hidden="true">↗</span></a></li>
+<li><picture class="project-preview"><source type="image/webp" srcset="/assets/graphics/chess-buddies-800.webp 800w, /assets/graphics/chess-buddies-1600.webp 1600w" sizes="(max-width: 899px) 100vw, 380px"><img src="/assets/graphics/chess-buddies-800.webp" width="1600" height="1000" alt="Chess Buddies: more than 50 children, a six-person volunteer team, more than 60 events each school year, two schools." loading="lazy" decoding="async"></picture><h4>Chess Buddies leadership</h4><span class="classification">Working project integration</span><p>President · Aug 2022–May 2024 · Chess Buddies</p><a href="/about/#chess-buddies" aria-label="Open: Chess Buddies leadership">Open <span aria-hidden="true">↗</span></a></li></ul></div>
 <div class="destination-group"><h3>Résumé</h3><ul class="project-list"><li><h4>Résumé</h4><span class="classification">Working project integration</span><p>Computer engineering at Georgia Tech, class of 2028.</p><a href="/resume/" aria-label="Open: Résumé">Open <span aria-hidden="true">↗</span></a></li></ul></div></div></section>
     <!-- destinations:end -->
     <section class="experimental-interactive" id="experimental" aria-labelledby="experimental-title">
@@ -262,7 +262,7 @@
     <header class="csHead grid">
       <p class="sec mono"><span>01</span> Graphics · Personal project</p>
       <h2 class="csTitle" id="detailTitle">A renderer with no graphics&nbsp;API</h2>
-    </header>
+    </header><figure class="preview-hero"><picture class="project-preview"><source type="image/webp" srcset="/assets/graphics/renderer-800.webp 800w, /assets/graphics/renderer-1600.webp 1600w" sizes="(max-width: 899px) 100vw, 50vw"><img src="/assets/graphics/renderer-800.webp" width="1600" height="1000" alt="Flat-shaded icosahedron projected by the site’s Canvas renderer, with a wireframe overlay." loading="lazy" decoding="async"></picture></figure>
     <figure class="plate plate--light csMedia" data-annotate="renderer" style="--ar:16/10">
       <div class="plateVis" data-vis="renderer" data-big></div>
       <ol class="notes">
@@ -313,13 +313,13 @@
       </section>
     <!-- renderer-pipeline:end -->
     <div class="benchMount" data-bench></div>
-  </template>
+</template>
 
   <template id="tpl-thermal">
     <header class="csHead grid">
       <p class="sec mono"><span>02</span> GPU programming · Personal project</p>
       <h2 class="csTitle" id="detailTitle">Seeing depth as&nbsp;heat</h2>
-    </header>
+    </header><figure class="preview-hero"><picture class="project-preview"><source type="image/webp" srcset="/assets/graphics/thermal-800.webp 800w, /assets/graphics/thermal-1600.webp 1600w" sizes="(max-width: 899px) 100vw, 50vw"><img src="/assets/graphics/thermal-800.webp" width="1600" height="1000" alt="Illustrative renderer meshes at three depths, mapped to seven flat ember heat bands; not Unity output." loading="lazy" decoding="async"></picture></figure>
     <section class="thermalDemo" aria-labelledby="thermalTryTitle">
       <h3 id="thermalTryTitle">Try it</h3>
       <div class="thermalDemoLayout">
@@ -358,14 +358,14 @@
         <p>Because heat is derived from the depth buffer, the effect is a pure screen-space pass: it needs no per-object temperature data and works on any scene it is applied to.</p>
       </div>
     </div>
-  </template>
+</template>
 
   <template id="tpl-vol">
     <header class="csHead grid">
       <p class="sec mono"><span>03</span> Quantitative research</p>
       <h2 class="csTitle" id="detailTitle">Does today’s volatility predict tomorrow’s&nbsp;return?</h2>
-    </header>
-    <figure class="plate plate--paper csMedia" style="--ar:768/418"><div class="plateVis"><picture><source srcset="/assets/projects/realized-vol-equity.webp" type="image/webp"><img src="/assets/projects/realized-vol-equity.png" width="768" height="418" alt="Equity curves over the test period: buy-and-hold SPY versus the regression signal." decoding="async"></picture></div></figure>
+    </header><figure class="preview-hero"><picture class="project-preview"><source type="image/webp" srcset="/assets/graphics/volatility-800.webp 800w, /assets/graphics/volatility-1600.webp 1600w" sizes="(max-width: 899px) 100vw, 50vw"><img src="/assets/graphics/volatility-800.webp" width="1600" height="1000" alt="Bundled SPY: 20-session close-to-close realised volatility versus next-session adjusted return, 5,468 pairs." loading="lazy" decoding="async"></picture></figure>
+
     <div class="csBody grid">
       <aside class="csMeta mono">
         <dl><div><dt>Stack</dt><dd>Python · pandas · statsmodels · yfinance</dd></div><div><dt>Data</dt><dd>SPY daily OHLCV, 2000–2025</dd></div><div><dt>Area</dt><dd>Quantitative research</dd></div></dl>
@@ -394,7 +394,7 @@
         <p>Out of sample the signal reached a Sharpe of 0.66 against 0.55 for buy-and-hold — but with about 49% average daily turnover, so transaction costs would matter in practice.</p>
       </div>
     </div>
-  </template>
+</template>
 
   <!-- Interactive renderer bench, mounted into [data-bench] -->
   <template id="tpl-bench">
@@ -429,13 +429,13 @@
   </template>
 
   <template id="tpl-lab-chess">
-    <header class="csHead grid"><p class="sec mono">Chess puzzles</p><h2 class="csTitle" id="detailTitle">Find the forcing line.</h2></header>
+    <header class="csHead grid"><p class="sec mono">Chess puzzles</p><h2 class="csTitle" id="detailTitle">Find the forcing line.</h2></header><figure class="preview-hero"><picture class="project-preview"><source type="image/webp" srcset="/assets/graphics/chess-800.webp 800w, /assets/graphics/chess-1600.webp 1600w" sizes="(max-width: 899px) 100vw, 50vw"><img src="/assets/graphics/chess-800.webp" width="1600" height="1000" alt="Verified Invite the rook puzzle: White to move and mate in two, drawn with the shared geometric chess pieces." loading="lazy" decoding="async"></picture></figure>
     <div class="chessMount" data-chess><p role="status">Loading the board…</p></div>
-  </template>
+</template>
   <template id="tpl-lab-strategy">
-    <header class="csHead grid"><p class="sec mono">Strategy sandbox</p><h2 class="csTitle" id="detailTitle">Test the signal.</h2></header>
+    <header class="csHead grid"><p class="sec mono">Strategy sandbox</p><h2 class="csTitle" id="detailTitle">Test the signal.</h2></header><figure class="preview-hero"><picture class="project-preview"><source type="image/webp" srcset="/assets/graphics/strategy-800.webp 800w, /assets/graphics/strategy-1600.webp 1600w" sizes="(max-width: 899px) 100vw, 50vw"><img src="/assets/graphics/strategy-800.webp" width="1600" height="1000" alt="SPY adjusted closes with 20- and 100-session moving averages and simulated next-close buy and sell fills." loading="lazy" decoding="async"></picture></figure>
     <div class="strategyMount" data-strategy><p role="status">Loading the sandbox…</p></div>
-  </template>
+</template>
   <script src="/main.js" type="module"></script>
   <script src="/projects/destinations.js" type="module"></script>
 </body>
