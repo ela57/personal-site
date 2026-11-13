@@ -76,31 +76,13 @@
         <div class="projText">
           <p class="projNo" aria-hidden="true">01</p>
           <h3 class="projTitle">A renderer with no graphics&nbsp;API</h3>
-          <p class="projDesc">Every stage of the pipeline written by hand in Python and NumPy — transforms, perspective divide, backface culling, NDC-space clipping, depth sorting and diffuse light — then drawn with Matplotlib.</p>
+          <p class="projDesc">A 3D renderer built from scratch without a 3D graphics API, using Python, NumPy and Matplotlib.</p>
           <p class="projWhy"><b>Why.</b> A draw call hides a lot of decisions. Writing the pipeline from scratch makes every transform, visibility test and colour something I can account for.</p>
-          <p class="projLearn"><b>What surprised me.</b> Sorting whole faces is a useful fit for filled polygons, but it cannot resolve faces that intersect or overlap in a cycle.</p>
           <dl class="meta mono"><div><dt>Area</dt><dd>Graphics</dd></div><div><dt>Stack</dt><dd>Python, NumPy, Matplotlib</dd></div><div><dt>Type</dt><dd>Personal project</dd></div></dl>
           <a class="more" href="#project/renderer"><span>Read case study</span><span aria-hidden="true">→</span></a>
         </div>
         <a class="cover" href="#project/renderer" tabindex="-1" aria-hidden="true"></a>
       </article>
-
-      <section class="pipeline" aria-labelledby="pipelineTitle">
-        <p class="sec mono">Inside project 01</p>
-        <h2 id="pipelineTitle">The pipeline, one stage at a time</h2>
-        <div class="pipelineLayout">
-          <figure class="pipelineStage" role="img" aria-label="An icosahedron rendered through the five pipeline stages. Each stage is described in the adjacent text.">
-            <div class="pipelineCanvasStack"></div><figcaption class="pipelineCaption">01 / Projection &amp; perspective divide</figcaption>
-          </figure>
-          <ol class="pipelineSteps">
-            <li tabindex="0"><span class="mono">01 / From points to a picture</span><h3>Projection &amp; perspective divide</h3><p>World, view and projection transforms move vertices into camera space. Dividing by depth maps them into normalized device coordinates. Wireframe edges over a solid shape keep the front and back edges visible.</p><img src="/assets/pipeline-1.png" width="800" height="600" alt="Solid icosahedron with projected front and back wireframe edges." loading="lazy" decoding="async"></li>
-            <li tabindex="0"><span class="mono">02 / Keep the visible side</span><h3>Backface culling</h3><p>Triangles whose normal points away from the camera are discarded. On a convex mesh, the front faces do not overlap each other: culling alone can fix visibility.</p><img src="/assets/pipeline-2.png" width="800" height="600" alt="Flat-filled front faces of the icosahedron with back faces removed." loading="lazy" decoding="async"></li>
-            <li tabindex="0"><span class="mono">03 / Define the depth range</span><h3>NDC clipping</h3><p>Geometry outside the depth range is removed in this cutaway. The original Python renderer clips in NDC; this browser illustration clips in view space before projecting, so the cut edges stay geometrically consistent.</p><img src="/assets/pipeline-3.png" width="800" height="600" alt="Icosahedron cut away at the depth boundary, with the NDC frame outlined." loading="lazy" decoding="async"></li>
-            <li tabindex="0"><span class="mono">04 / Choose the draw order</span><h3>Painter’s depth sort</h3><p>The full shape returns here. Visible faces are drawn far to near; the numbers show their drawing order. Sorting whole polygons fits the Matplotlib output, but is not a per-pixel depth buffer.</p><img src="/assets/pipeline-4.png" width="800" height="600" alt="Closed icosahedron with faces numbered in far-to-near painter’s order." loading="lazy" decoding="async"></li>
-            <li tabindex="0"><span class="mono">05 / Let the normal catch the light</span><h3>Diffuse shading</h3><p>A directional light supplies a per-face brightness: max(0, n·l). Geometry and light direction become the shaded triangles on the page.</p><img src="/assets/pipeline-5.png" width="800" height="600" alt="Closed icosahedron shaded with directional diffuse light." loading="lazy" decoding="async"></li>
-          </ol>
-        </div>
-      </section>
 
       <!-- 02 — narrow text left, visual offset right and lower -->
       <article class="proj proj--thermal grid" id="work-thermal" data-project="thermal">
@@ -292,6 +274,18 @@
         <p>Painter’s algorithm sorts whole faces instead of keeping a per-pixel depth buffer. That fits an output made of filled polygons, but it can’t resolve faces that intersect or overlap in a cycle. Clipping after the perspective divide turns the depth test into a simple range comparison in NDC.</p>
         <h3><span class="mono">D</span> Try the pipeline</h3>
         <p>The bench below re-implements the same stages in JavaScript and Canvas 2D. It is an illustration for the web; the original renderer is Python.</p>
+        <!-- renderer-details:start -->
+        <h3><span class="mono">E</span> Mesh and coordinate spaces</h3>
+        <p>The browser version starts with an indexed icosahedron: twelve vertices built from the golden ratio, normalized to unit length, and twenty triangular faces. It rotates each model-space vertex around Y, then X, and adds the camera-distance offset along positive Z to obtain view-space coordinates. Projection divides X and Y by depth, with focal-length and normalization factors. Mapping to canvas pixels centres the image and flips Y so positive view-space Y points upward on screen.</p>
+        <h3><span class="mono">F</span> Visibility, clipping and ordering</h3>
+        <p>Each triangle gets a view-space normal from the normalized cross product of two edges. A negative dot product between that normal and the face centroid marks it as facing the camera; culling keeps those faces. For the cutaway, depths from 3.45 to 4.95 are mapped to a −1 to 1 interval. The clipping routine walks both depth boundaries, retains inside vertices and interpolates intersections along crossing edges. These points are projected afterward: this browser demonstration clips before perspective division, rather than implementing the original project's NDC-space clipping.</p>
+        <p>The ordering stage restores the uncut shape and sorts visible faces by descending centroid depth, drawing farthest first. Its labels show the resulting order. This is polygon ordering, not a per-pixel visibility test.</p>
+        <h3><span class="mono">G</span> A light per face</h3>
+        <p>The default directional light is the normalized vector (−0.5, 0.75, −0.9), expressed in view space. For each front face, the normal–light dot product is clamped between zero and one. An ambient contribution of 0.18 plus 0.82 times that diffuse term controls the blend from paper to blue. The resulting colour fills the whole polygon; there are no textures or interpolated vertex colours in this illustration.</p>
+        <h3><span class="mono">H</span> Reading the story and using the bench</h3>
+        <p>Scrolling the story selects a fixed, non-rotating rendering mode as each step crosses a reading line 55% down the overlay. Going backward selects earlier stages again. Reduced motion leaves the five static stage images and descriptions instead.</p>
+        <p>The separate bench buttons select vertices, wireframe, filled faces or shading. Its checkboxes independently toggle backface culling and painter's sorting. Dragging rotates the model and stops automatic rotation. The focal-length slider also adjusts camera distance, keeping the mesh approximately the same size while changing perspective. Live readouts report drawn and culled faces and the current ordering rule.</p>
+        <!-- renderer-details:end -->
       </div>
     </div>
     <!-- renderer-pipeline:start -->
