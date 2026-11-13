@@ -1,8 +1,9 @@
 import { pipelineModes } from '../../lab/pipeline.js';
 import { createRenderer } from '../../lab/renderer.js';
+import { createScrollScheduler, clamp, progress } from '../../eportfolio/scroll-scheduler.js';
+import { inkWords, paintInk, advanceMarquee, marqueeTransform, paintStack, paintTimeline } from '../../eportfolio/scroll-effects.js';
 
-export const clamp = value => Math.max(0, Math.min(1, value));
-export const progress = (scroll, start, distance) => clamp((scroll - start) / Math.max(.000001, distance));
+export { clamp, progress };
 export const tones = [[236, 231, 220], [19, 44, 35], [24, 55, 68], [73, 43, 35]];
 export function paletteInk(a, b, t) {
   const rgb = tones[a].map((value, i) => value * (1 - t) + tones[b][i] * t);
@@ -19,13 +20,7 @@ if (typeof document !== 'undefined') {
   const fine = matchMedia('(hover: hover) and (pointer: fine)');
   const active = new Set();
   const ink = document.querySelector('.ink-copy');
-  const words = ink.textContent.trim().split(/\s+/).map(word => {
-    const span = document.createElement('span');
-    span.className = 'ink-word';
-    span.textContent = word;
-    return span;
-  });
-  ink.replaceChildren(...words.flatMap((word, index) => index ? [document.createTextNode(' '), word] : [word]));
+  const words = inkWords(ink);
   const lines = [...document.querySelectorAll('.rise-line')];
   const cards = [...document.querySelectorAll('.career-card')];
   const track = document.querySelector('.gallery-track');
@@ -58,12 +53,11 @@ if (typeof document !== 'undefined') {
   const preview = document.querySelector('.cursor-preview');
   const previewImage = preview.querySelector('img');
   let geometry = [], lineTops = [], cardTops = [], travel = 0, height = innerHeight, width = innerWidth, headerHeight = 0;
-  let frame = 0, needsMeasure = true, lastTime = 0, current = '';
+  let lastTime = 0, current = '';
   let previewLink = null, pointer = null, position = { x: 0, y: 0 }, target = { x: 0, y: 0 }, previewOpacity = 0;
 
-  function schedule() {
-    if (!frame) frame = requestAnimationFrame(render);
-  }
+  const scheduler = createScrollScheduler(render, { measure });
+  function schedule() { scheduler.schedule(); }
 
   function measure() {
     width = innerWidth;
@@ -93,7 +87,6 @@ if (typeof document !== 'undefined') {
     timelineHeight = timeline.getBoundingClientRect().height;
     counterTops = counters.map(counter => counter.getBoundingClientRect().top + scroll);
     marqueeWidths = marquee.map(row => row.scrollWidth / 2);
-    needsMeasure = false;
     return scroll;
   }
 
@@ -156,9 +149,7 @@ if (typeof document !== 'undefined') {
     document.body.dataset.ink = paletteInk(a, b, t);
   }
 
-  function render(time) {
-    frame = 0;
-    const scroll = needsMeasure ? measure() : window.scrollY;
+  function render(time, scroll) {
     const dt = Math.min(64, Math.max(1, time - (lastTime || time - 16)));
     const instantaneous = lastScroll === null ? 0 : Math.max(-1, Math.min(1, (scroll - lastScroll) / dt / 3));
     velocity += (instantaneous - velocity) * (1 - Math.exp(-dt / 110));
@@ -168,7 +159,7 @@ if (typeof document !== 'undefined') {
       if (active.has(sections[0])) {
         const g = geometry[0];
         const p = progress(scroll, g.top, g.height - height);
-        words.forEach((word, index) => { word.style.opacity = .2 + .8 * clamp(p * (words.length + 6) - index); });
+        paintInk(words, p);
       }
       if (active.has(sections[1])) lines.forEach((line, index) => {
         const p = progress(scroll + height * .86, lineTops[index], height * .3);
@@ -182,8 +173,7 @@ if (typeof document !== 'undefined') {
       if (active.has(sections[4])) cards.forEach((card, index) => {
         const next = cardTops[index + 1];
         const p = next === undefined ? 0 : progress(scroll + headerHeight + 100, next, height * .3);
-        card.style.transform = `scale(${1 - p * .045})`;
-        card.style.opacity = 1 - p * .16;
+        paintStack(card, p);
       });
       expansions.forEach(section => {
         if (!active.has(section)) return;
@@ -195,16 +185,14 @@ if (typeof document !== 'undefined') {
         caption.style.transform = `translateY(${(1 - p) * 22}px)`;
       });
       if (active.has(sections[7]) && !marqueePaused && !document.hidden) {
-        marqueePhase += dt / 1000 * (18 + Math.abs(velocity) * 220);
+        marqueePhase = advanceMarquee(marqueePhase, dt, velocity);
         marquee.forEach((row, i) => {
-          const distance = marqueeWidths[i] || 1, phase = marqueePhase % distance;
-          row.style.transform = `translateX(${i ? phase - distance : -phase}px) skewX(${velocity * (i ? -3 : 3)}deg)`;
+          row.style.transform = marqueeTransform(marqueePhase, marqueeWidths[i] || 1, i, velocity);
         });
       }
       if (active.has(sections[8])) {
         const p = progress(scroll + height * .65, timelineTop, timelineHeight);
-        path.style.strokeDasharray = 1; path.style.strokeDashoffset = 1 - p;
-        milestones.forEach((milestone, i) => milestone.classList.toggle('milestone-lit', p + .001 >= i / 3));
+        paintTimeline(path, milestones, p);
       }
       if (!narrow.matches && active.has(sections[9])) {
         const g = geometry[9], p = progress(scroll, g.top, g.height - height), distance = 360 * 4;
@@ -269,7 +257,7 @@ if (typeof document !== 'undefined') {
     schedule();
   }, { rootMargin: '50% 0px 50% 0px' });
   sections.forEach(section => observer.observe(section));
-  function resize() { needsMeasure = true; schedule(); }
+  function resize() { scheduler.resize(); }
   function preferenceChange() { resetEffects(); previewLink = null; resize(); }
   marqueeToggle.hidden = false;
   marqueeToggle.addEventListener('click', () => {
@@ -283,9 +271,6 @@ if (typeof document !== 'undefined') {
   reduced.addEventListener('change', preferenceChange);
   narrow.addEventListener('change', preferenceChange);
   fine.addEventListener('change', preferenceChange);
-  window.addEventListener('scroll', schedule, { passive: true });
-  window.addEventListener('resize', resize);
-  window.addEventListener('pageshow', resize);
   document.fonts.ready.then(resize);
   document.querySelectorAll('img').forEach(image => image.addEventListener('load', resize, { once: true }));
   document.querySelectorAll('.preview-link').forEach(link => {

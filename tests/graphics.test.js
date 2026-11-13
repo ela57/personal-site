@@ -57,7 +57,7 @@ test('all eight graphics have full/small lossless outputs, common framing and cu
   assert.match(js, /x="40\.5" y="40\.5"/);
   assert.match(js, /createRenderer\(canvas/);
   assert.match(js, /renderChessPosition\(puzzle.fen\)/);
-  for (const page of ['index.html', 'projects/index.html', 'projects/destinations.html', 'content/projects.js']) assert.ok(!read(page).toString().includes('assets/graphics/'), `${page} must remain unwired in phase 1`);
+  for (const page of ['index.html', 'projects/index.html', 'projects/destinations.html']) assert.ok(read(page).toString().includes('assets/graphics/'), `${page} uses approved previews`);
 });
 
 test('volatility pairs use past/current 20 log returns and only the next adjusted simple return', () => {

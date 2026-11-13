@@ -1,6 +1,6 @@
-# Code-generated project graphics · phase 1
+# Code-generated project graphics
 
-These are new preview candidates, **not wired into pages or content registries**. No AI image service, stock art, old preview image, network market-data fetch or private poker observation is used.
+The approved previews are wired into the primary pages and registry. No AI image service, stock art, old preview image, network market-data fetch or private poker observation is used to generate them. See `docs/primary-scroll.md` for page integration and shared scroll effects.
 
 ## Regenerate
 
@@ -37,19 +37,19 @@ Each row produces `{id}-1600.webp` and `{id}-800.webp` under `assets/graphics/`.
 | portfolio-manager | `content/projects.js`, referencing `content/eportfolio.js` | Typographic **role schematic**: central Python portfolio controller; two independent strategies; capital allocation, rebalancing and risk constraints; existing title/dates. Not an audited architecture diagram or performance claim. |
 | chess-buddies | `content/projects.js`, referencing `content/eportfolio.js` | President/dates, more than 50 children, six-person volunteer team, more than 60 events **each school year**, two schools. Extraction fails rather than silently inventing replacement facts when source wording changes. |
 
-## Preview inventory / phase-2 handoff
+## Preview inventory before integration
 
-The homepage and `/projects/` share markup. Their renderer lead image currently uses `assets/pipeline-5.png`; the registry also lists `renderer-cover*.webp`. The new `renderer` pair is for the **lead preview slot**, not a replacement for all five inline pipeline explanation stages.
+The homepage and `/projects/` share markup. Their renderer lead previously used `assets/pipeline-5.png`; the registry also listed `renderer-cover*.webp`. The new `renderer` pair replaces the **lead preview slot**, not all five inline pipeline explanation stages.
 
-| Current preview family | New candidate |
+| Previous preview family | Approved replacement |
 |---|---|
 | `pipeline-5.png` lead preview; `renderer-cover*.webp` registry images | `renderer` |
 | `shader-cover*.webp` | `thermal` |
 | `projects/realized-vol-equity.{png,webp}` preview | `volatility` |
 | `strategy-preview.svg` | `strategy` |
 | `chess-preview.svg` | `chess` |
-| No current preview: Poker Practice | `poker` |
-| No current preview: GTSF Portfolio Manager | `portfolio-manager` |
-| No current preview: Chess Buddies | `chess-buddies` |
+| Previously no preview: Poker Practice | `poker` |
+| Previously no preview: GTSF Portfolio Manager | `portfolio-manager` |
+| Previously no preview: Chess Buddies | `chess-buddies` |
 
-The destinations list currently has no `<img>` elements; its image-bearing registry destinations are the same families above. No other destination currently declares a preview image. The lake hero/journey world, résumé PDF, five inline pipeline-stage figures and original volatility-study result plots (including `realized-vol-rolling`) are not project preview replacements. Preserve those explanation/evidence assets unless a later brief explicitly asks to replace them. Placeholder destinations with no facts have not received invented graphics.
+The destinations lists now include all eight approved previews. No other destination declares a preview image. The lake hero/journey world, résumé PDF, five inline pipeline-stage figures and original volatility-study result plots (including `realized-vol-rolling`) are not project preview replacements. Preserve those explanation/evidence assets unless a later brief explicitly asks to replace them. Placeholder destinations with no facts have not received invented graphics.

@@ -1,4 +1,5 @@
 import { about } from './eportfolio.js';
+import { previewAssets } from './graphics.js';
 
 // Destination keys are content identifiers, not newly implemented hash routes.
 export const projects = [
@@ -13,7 +14,7 @@ export const projects = [
       "Painter’s algorithm sorts whole faces rather than keeping a per-pixel depth buffer, and cannot resolve intersecting faces or cyclic overlap."
     ],
     links: [{ title: "Case study and pipeline bench", href: "#project/renderer" }, { title: "Selected work", href: "#projects" }],
-    assets: ["assets/renderer-cover.webp", "assets/renderer-cover-768.webp", "assets/pipeline-1.png", "assets/pipeline-2.png", "assets/pipeline-3.png", "assets/pipeline-4.png", "assets/pipeline-5.png"],
+    assets: [...previewAssets('renderer'), "assets/pipeline-1.png", "assets/pipeline-2.png", "assets/pipeline-3.png", "assets/pipeline-4.png", "assets/pipeline-5.png"],
     dataSources: [{ repo: "personal-site", path: "projects/index.html", section: "#tpl-renderer, #tpl-bench, .pipeline" }, { repo: "personal-site", path: "main.js", symbol: "createRenderer" }, { repo: "personal-site", path: "lab/pipeline.js" }],
     needsContent: false
   },
@@ -28,7 +29,7 @@ export const projects = [
       "The browser illustration uses SVG. The real shader runs on the GPU inside Unity."
     ],
     links: [{ title: "Case study and Try it", href: "#project/thermal" }],
-    assets: ["assets/shader-cover.webp", "assets/shader-cover-768.webp"],
+    assets: previewAssets('thermal'),
     dataSources: [{ repo: "personal-site", path: "projects/index.html", section: "#tpl-thermal" }, { repo: "personal-site", path: "main.js", symbol: "mountThermal" }],
     needsContent: false
   },
@@ -43,7 +44,7 @@ export const projects = [
       "The notebook reports test-period signal Sharpe 0.66 versus 0.55 for buy-and-hold, with about 49% average daily turnover; transaction costs matter."
     ],
     links: [{ title: "Case study", href: "#project/vol" }],
-    assets: ["assets/projects/realized-vol-equity.png", "assets/projects/realized-vol-equity.webp", "assets/projects/realized-vol-rolling.png", "assets/projects/realized-vol-rolling.webp"],
+    assets: [...previewAssets('vol'), "assets/projects/realized-vol-equity.png", "assets/projects/realized-vol-equity.webp", "assets/projects/realized-vol-rolling.png", "assets/projects/realized-vol-rolling.webp"],
     dataSources: [
       { repo: "personal-site", path: "projects/index.html", section: "#tpl-vol" },
       { repo: "ela57/Projects", path: "realized_vol_spy.ipynb", revision: "2c21c801147cd2b768fb80a611cf59690d33f6d3", url: "https://github.com/ela57/Projects/blob/2c21c801147cd2b768fb80a611cf59690d33f6d3/realized_vol_spy.ipynb" },
@@ -61,7 +62,7 @@ export const projects = [
       "Adjusted-price fills are a modelling convention, not executable quotes. There is no cash interest, tax or slippage beyond the selected cost."
     ],
     links: [{ title: "Open the sandbox", href: "#lab/strategy" }],
-    assets: ["assets/strategy-preview.svg"],
+    assets: previewAssets('strategy'),
     dataSources: [{ repo: "personal-site", path: "lab/strategy/data/spy.json", source: "https://finance.yahoo.com/quote/SPY/history/", series: "Adj Close", retrieved: "2026-10-27", period: ["2005-01-03", "2026-10-27"] }, { repo: "personal-site", path: "lab/strategy/sandbox.js" }, { repo: "personal-site", path: "lab/strategy/engine.js" }],
     needsContent: false
   },
@@ -81,7 +82,7 @@ export const projects = [
     summary: "Twelve chess puzzles: a board, a few clues and a move that changes everything.",
     body: ["Drag a piece, or select a piece and its destination. Arrow keys navigate; Enter or Space selects.", "The first puzzle is White to move: the three pawns deny the king an escape square, and the rook owns the eighth rank."],
     links: [{ title: "Play the puzzles", href: "#lab/chess" }],
-    assets: ["assets/chess-preview.svg", "lab/chess/PIECES-LICENSE"],
+    assets: [...previewAssets('chess'), "lab/chess/PIECES-LICENSE"],
     dataSources: [{ repo: "personal-site", path: "projects/index.html", section: "#lab" }, { repo: "personal-site", path: "lab/chess/puzzles.js" }, { repo: "personal-site", path: "lab/chess/board.js" }, { repo: "personal-site", path: "vendor/chess.js" }],
     needsContent: false
   },
@@ -96,7 +97,7 @@ export const projects = [
       "Hero logs retain the hero’s observations; omniscient replay includes private hands and hindsight flags. Offline equity is calculated after the run and labelled separately from decisions.",
       "The build does not implement external network or AI calls."
     ],
-    links: [], assets: [],
+    links: [], assets: previewAssets('poker'),
     dataSources: [{ repo: "pokerbot", path: "README.md", revision: "eb245bfc6ec94a1f7158c30b403d6b5a07b4a878" }, { repo: "pokerbot", path: "docs/LOGGING.md" }, { repo: "pokerbot", path: "pokerpractice/logging_store.py" }, { repo: "pokerbot", path: "bots/my_bot.py" }],
     needsContent: false
   },
@@ -105,7 +106,7 @@ export const projects = [
     label: "Proposed future feature",
     summary: "Capital allocation, rebalancing and risk constraints in a central Python portfolio controller.",
     body: ["Portfolio Manager, Quant Sector — GTSF Investment Committee, Georgia Tech Student Foundation; Aug 2025–present.", "Built a central portfolio controller in Python for capital allocation, rebalancing and risk constraints.", "Reworked trading scripts and the backtesting pipeline for reproducible, out-of-sample validation.", "Led the integration of two independent strategies into one production-ready system."],
-    links: [{ title: "Existing experience text", href: "/projects/#experience" }], assets: [],
+    links: [{ title: "Existing experience text", href: "/projects/#experience" }], assets: previewAssets('portfolio-manager'),
     dataSources: [{ repo: "personal-site", path: "projects/index.html", section: "#experience" }],
     needsContent: false
   },
@@ -134,7 +135,7 @@ export const projects = [
     label: "Working project integration",
     summary: 'President · Aug 2022–May 2024 · Chess Buddies',
     body: [about[3]],
-    links: [{ title: 'Chess Buddies leadership', href: '/about/#chess-buddies' }], assets: [],
+    links: [{ title: 'Chess Buddies leadership', href: '/about/#chess-buddies' }], assets: previewAssets('chess-buddies'),
     dataSources: [{ repo: 'personal-site', path: 'assets/Lam_Ethan_Resume.pdf' }, { repo: 'personal-site', path: 'about/index.html', section: '#chess-buddies' }], needsContent: false
   },
   {
