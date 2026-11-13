@@ -10,9 +10,6 @@
 .direct-links a:hover { border-color: currentColor; }
 .hero .scrollCue { bottom: 20px; flex-direction: row; align-items: center; gap: 14px; font-size: 12px; }
 .hero .scrollLine { height: 24px; }
-body[data-static-portfolio] .welcome-block { display: grid; grid-template-columns: 1fr 3fr; gap: 40px; padding: 36px var(--margin) 44px; background: #ece7dcf2; color: #13201b; border-top: 1px solid #13201b26; }
-body[data-static-portfolio] .welcome-block h2 { font-size: 28px; margin: 0; }
-body[data-static-portfolio] .welcome-block p { font-size: 16px; line-height: 1.75; }
 body[data-static-portfolio] .work { background: linear-gradient(#13201bf5, #13201b00 600px); }
 @media(max-width:719px) {
   .hero { min-height: 340px; padding: 40px var(--margin) 76px; }
@@ -20,7 +17,6 @@ body[data-static-portfolio] .work { background: linear-gradient(#13201bf5, #1320
   .hero .heroFact { margin-bottom: 16px; }
   .hero .heroWords { margin-top: 12px; }
   .direct-links { margin-top: 20px; }
-  body[data-static-portfolio] .welcome-block { grid-template-columns: 1fr; gap: 16px; padding: 28px var(--margin) 36px; }
 }
 .experimental-interactive { padding: 48px var(--margin); background: #13201bf5; border-top: 1px solid #73836d66; scroll-margin-top: 160px; }
 .experimental-interactive h2 { font: 400 28px/1.2 var(--serif); margin-bottom: 16px; }

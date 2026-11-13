@@ -2,15 +2,10 @@ import { pipelineModes } from '../../lab/pipeline.js';
 import { createRenderer } from '../../lab/renderer.js';
 import { createScrollScheduler, clamp, progress } from '../../eportfolio/scroll-scheduler.js';
 import { inkWords, paintInk, advanceMarquee, marqueeTransform, paintStack, paintTimeline } from '../../eportfolio/scroll-effects.js';
+import { tones, paletteInk } from '../../eportfolio/palette.js';
 
 export { clamp, progress };
-export const tones = [[236, 231, 220], [19, 44, 35], [24, 55, 68], [73, 43, 35]];
-export function paletteInk(a, b, t) {
-  const rgb = tones[a].map((value, i) => value * (1 - t) + tones[b][i] * t);
-  const luminance = values => values.map(value => { const v = value / 255; return v <= .04045 ? v / 12.92 : ((v + .055) / 1.055) ** 2.4; }).reduce((sum, v, i) => sum + v * [.2126, .7152, .0722][i], 0);
-  const bg = luminance(rgb), dark = 0, light = 1;
-  return (bg + .05) / (dark + .05) >= (light + .05) / (bg + .05) ? 'dark' : 'light';
-}
+export { tones, paletteInk };
 
 if (typeof document !== 'undefined') {
   const root = document.documentElement;
