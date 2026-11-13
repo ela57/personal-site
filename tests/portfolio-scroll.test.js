@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { createScrollScheduler, progress } from '../eportfolio/scroll-scheduler.js';
 import { advanceMarquee, marqueeTransform, paintInk, inkRange, paintStack, paintTimeline } from '../eportfolio/scroll-effects.js';
-import { chapterPalette, luminance, tones } from '../eportfolio/palette.js';
+import { chapterPalette, luminance, tones, welcomePalette, welcomeTones } from '../eportfolio/palette.js';
 import { graphics, previewPicture } from '../content/graphics.js';
 import { galleryProjects } from '../eportfolio/features.js';
 
@@ -106,7 +106,7 @@ test('primary ink starts unrevealed at page top and completes at the reading cen
   assert.doesNotThrow(() => paintInk([], 0, 0));
 });
 
-test('Welcome shares the four F03 tones with AA ink throughout and a readable static gradient', () => {
+test('the shared F03 palette retains AA ink throughout its original four tones', () => {
   assert.match(read('experiments/scroll/scroll.js'), /import \{ tones, paletteInk \} from '..\/..\/eportfolio\/palette.js'/);
   assert.deepEqual(chapterPalette(0).background, tones[0]);
   assert.deepEqual(chapterPalette(1).background, tones[3]);
@@ -117,8 +117,28 @@ test('Welcome shares the four F03 tones with AA ink throughout and a readable st
     const ratio = palette.color === '#000000' ? (bg + .05) / .05 : 1.05 / (bg + .05);
     assert.ok(ratio >= 4.5, `${i}: ${ratio}`);
   }
-  const css = read('eportfolio/scroll.css');
-  assert.match(css, /section\.welcome-block/);
-  assert.match(css, /linear-gradient\(120deg, #132c23, #183744 55%, #492b23\)/);
   for (const tone of tones.slice(1)) assert.ok(1.05 / (luminance(tone) + .05) >= 4.5);
+});
+
+test('Welcome stays in dark forest and lake tones with light AA ink and blended centred edges', () => {
+  assert.deepEqual(welcomeTones, [[19, 32, 27], [19, 44, 35], [24, 55, 68]]);
+  assert.deepEqual(welcomePalette(0).background, welcomeTones[0]);
+  assert.deepEqual(welcomePalette(.5).background, welcomeTones[1]);
+  assert.deepEqual(welcomePalette(1).background, welcomeTones[2]);
+  assert.deepEqual(welcomePalette(-1), welcomePalette(0));
+  assert.deepEqual(welcomePalette(2), welcomePalette(1));
+  for (let i = 0; i <= 1000; i++) {
+    const palette = welcomePalette(i / 1000), bg = luminance(palette.background);
+    assert.equal(palette.color, '#ece7dc');
+    assert.ok(bg < .15);
+    assert.ok((luminance([236, 231, 220]) + .05) / (bg + .05) >= 4.5);
+  }
+  const css = read('eportfolio/scroll.css');
+  assert.match(css, /text-align: center; border: 0/);
+  assert.match(css, /max-width: 48ch/);
+  assert.match(css, /\.hero::after/);
+  assert.match(css, /--welcome-blend: linear-gradient/);
+  assert.match(css, /linear-gradient\(120deg, #13201b, #132c23 55%, #183744\)/);
+  assert.doesNotMatch(css, /#492b23/);
+  assert.match(read('eportfolio/scroll.js'), /welcomePalette\(p\)/);
 });
