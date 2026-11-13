@@ -2,7 +2,8 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { createScrollScheduler, progress } from '../eportfolio/scroll-scheduler.js';
-import { advanceMarquee, marqueeTransform, paintInk, paintStack, paintTimeline } from '../eportfolio/scroll-effects.js';
+import { advanceMarquee, marqueeTransform, paintInk, inkRange, paintStack, paintTimeline } from '../eportfolio/scroll-effects.js';
+import { chapterPalette, luminance, tones } from '../eportfolio/palette.js';
 import { graphics, previewPicture } from '../content/graphics.js';
 import { galleryProjects } from '../eportfolio/features.js';
 
@@ -89,4 +90,35 @@ test('shared effects retain bounded ink/stack/path end states and opposite marqu
   const path = { style: {} }; paintTimeline(path, [], 1); assert.equal(path.style.strokeDashoffset, 0);
   assert.equal(progress(0, 0, 0), 0);
   assert.equal(progress(100, 0, 0), 1);
+});
+
+test('primary ink starts unrevealed at page top and completes at the reading centre', () => {
+  for (const [top, paragraphTop, paragraphHeight, viewport] of [[630, 800, 260, 1000], [480, 600, 420, 844], [1500, 1620, 420, 844], [360, 360, 180, 1000]]) {
+    const range = inkRange(top, paragraphTop, paragraphHeight, viewport);
+    assert.equal(progress(0, range.start, range.distance), 0);
+    const end = Math.max(range.start + viewport * .25, paragraphTop + paragraphHeight / 2 - viewport / 2);
+    assert.equal(progress(end, range.start, range.distance), 1);
+    const words = Array.from({ length: 74 }, () => ({ style: {} }));
+    paintInk(words, 0, 0); assert.ok(words.every(word => word.style.opacity === .2));
+    paintInk(words, .5, 0); assert.equal(words.filter(word => word.style.opacity === 1).length, 37);
+    paintInk(words, 1, 0); assert.ok(words.every(word => word.style.opacity === 1));
+  }
+  assert.doesNotThrow(() => paintInk([], 0, 0));
+});
+
+test('Welcome shares the four F03 tones with AA ink throughout and a readable static gradient', () => {
+  assert.match(read('experiments/scroll/scroll.js'), /import \{ tones, paletteInk \} from '..\/..\/eportfolio\/palette.js'/);
+  assert.deepEqual(chapterPalette(0).background, tones[0]);
+  assert.deepEqual(chapterPalette(1).background, tones[3]);
+  assert.deepEqual(chapterPalette(-1), chapterPalette(0));
+  assert.deepEqual(chapterPalette(2), chapterPalette(1));
+  for (let i = 0; i <= 1000; i++) {
+    const palette = chapterPalette(i / 1000), bg = luminance(palette.background);
+    const ratio = palette.color === '#000000' ? (bg + .05) / .05 : 1.05 / (bg + .05);
+    assert.ok(ratio >= 4.5, `${i}: ${ratio}`);
+  }
+  const css = read('eportfolio/scroll.css');
+  assert.match(css, /section\.welcome-block/);
+  assert.match(css, /linear-gradient\(120deg, #132c23, #183744 55%, #492b23\)/);
+  for (const tone of tones.slice(1)) assert.ok(1.05 / (luminance(tone) + .05) >= 4.5);
 });

@@ -1,10 +1,11 @@
 import { createScrollScheduler, progress } from './scroll-scheduler.js';
-import { inkWords, paintInk, advanceMarquee, marqueeTransform, paintStack, paintTimeline } from './scroll-effects.js';
+import { inkWords, paintInk, inkRange, advanceMarquee, marqueeTransform, paintStack, paintTimeline } from './scroll-effects.js';
+import { chapterPalette } from './palette.js';
 
 const root = document.documentElement;
 const reduced = matchMedia('(prefers-reduced-motion: reduce)');
 const desktop = matchMedia('(min-width: 900px)');
-const ink = [...document.querySelectorAll('[data-scroll-ink]')].map(element => ({ element, words: inkWords(element) }));
+const ink = [...document.querySelectorAll('[data-scroll-ink]')].map(element => ({ element, words: inkWords(element), panel: element.closest('.welcome-block') }));
 const gallery = document.querySelector('[data-scroll-gallery]');
 const track = gallery?.querySelector('.portfolio-gallery-track');
 const marquee = document.querySelector('[data-scroll-marquee]');
@@ -43,6 +44,11 @@ function measure() {
   widths = rows.map(row => row.scrollWidth / 2);
   const scroll = window.scrollY;
   boxes = new Map(targets.map((element, i) => [element, { top: rects[i].top + scroll, height: rects[i].height }]));
+  ink.forEach(item => {
+    const g = boxes.get(item.element);
+    const top = item.panel ? item.panel.getBoundingClientRect().top + scroll : g.top;
+    item.range = inkRange(top, g.top, g.height, height);
+  });
   let top = stackRect ? stackRect.top + scroll : 0;
   cardTops = cards.map(card => { const natural = top; top += card.offsetHeight + gap; return natural; });
   return scroll;
@@ -54,9 +60,14 @@ function render(time, scroll) {
   velocity += (instantaneous - velocity) * (1 - Math.exp(-dt / 110));
   lastScroll = scroll; lastTime = time;
   if (reduced.matches) return;
-  for (const { element, words } of ink) if (active.has(element)) {
-    const g = boxes.get(element);
-    paintInk(words, progress(scroll + height * .85, g.top, Math.min(height, g.height + height * .2)));
+  for (const { words, panel, range } of ink) {
+    const p = progress(scroll, range.start, range.distance);
+    paintInk(words, p, 0);
+    if (panel) {
+      const palette = chapterPalette(p);
+      panel.style.setProperty('--welcome-background', `rgb(${palette.background.join(', ')})`);
+      panel.style.setProperty('--welcome-ink', palette.color);
+    }
   }
   if (gallery?.classList.contains('gallery-live') && active.has(gallery)) {
     track.style.transform = `translateX(${-travel * progress(scroll, boxes.get(gallery).top - header - 24, travel)}px)`;
@@ -78,7 +89,11 @@ function render(time, scroll) {
 
 function preferenceChange() {
   root.classList.toggle('motion-reduced', reduced.matches);
-  ink.forEach(({ words }) => words.forEach(word => { word.style.opacity = 1; }));
+  ink.forEach(({ words, panel }) => {
+    paintInk(words, reduced.matches ? 1 : 0, 0);
+    panel?.style.removeProperty('--welcome-background');
+    panel?.style.removeProperty('--welcome-ink');
+  });
   [...cards, ...rows, track].filter(Boolean).forEach(element => { element.style.removeProperty('transform'); element.style.removeProperty('opacity'); });
   if (path) paintTimeline(path, milestones, 1);
   if (toggle) {

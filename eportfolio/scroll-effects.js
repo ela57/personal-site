@@ -9,8 +9,13 @@ export function inkWords(element) {
   element.replaceChildren(...words.flatMap((word, i) => i ? [document.createTextNode(' '), word] : [word]));
   return words;
 }
-export function paintInk(words, p) {
-  words.forEach((word, index) => { word.style.opacity = .2 + .8 * clamp(p * (words.length + 6) - index); });
+export function paintInk(words, p, lead = 6) {
+  words.forEach((word, index) => { word.style.opacity = .2 + .8 * clamp(p * (words.length + lead) - index); });
+}
+export function inkRange(top, paragraphTop, paragraphHeight, viewportHeight) {
+  const start = Math.max(0, top - viewportHeight);
+  const end = Math.max(start + viewportHeight * .25, paragraphTop + paragraphHeight / 2 - viewportHeight / 2);
+  return { start, distance: end - start };
 }
 export const advanceMarquee = (phase, dt, velocity) => phase + dt / 1000 * (18 + Math.abs(velocity) * 220);
 export function marqueeTransform(phase, distance, index, velocity) {

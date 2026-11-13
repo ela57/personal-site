@@ -90,13 +90,19 @@ test('overlay pipeline uses its scroll root, supports preference changes, and cl
   for (const el of [scrollRoot, media, win, ...steps]) for (const listeners of el.listeners.values()) assert.equal(listeners.size, 0);
 });
 
-test('renderer overlays reuse all five static stages without enhancing the homepage', () => {
+test('renderer pipeline and stage details live only inside the project overlay', () => {
   for (const path of ['index.html', 'projects/index.html']) {
     const html = generatedPages[path];
-    const story = html.match(/<section class="pipeline"[\s\S]*?<\/section>/)[0];
     const renderer = html.match(/<template id="tpl-renderer">[\s\S]*?<\/template>/)[0];
-    assert.ok(renderer.includes(story.replaceAll('pipelineTitle', 'detailPipelineTitle')));
+    const publicPage = html.replace(/<template\b[\s\S]*?<\/template>/g, '');
+    assert.ok(renderer.includes('aria-labelledby="detailPipelineTitle"'));
     assert.equal((renderer.match(/<li tabindex="0">/g) || []).length, 5);
+    assert.doesNotMatch(publicPage, /class="pipeline|pipeline-[1-5]\.png|id="F14"/);
+    assert.doesNotMatch(publicPage, /Projection &amp; perspective divide|Backface culling|NDC clipping|Painter’s depth sort|Diffuse shading|NDC-space clipping/);
+    const details = renderer.match(/<!-- renderer-details:start -->([\s\S]*?)<!-- renderer-details:end -->/)[1];
+    const words = details.replace(/<[^>]+>/g, ' ').trim().split(/\s+/).length;
+    assert.ok(words >= 300 && words <= 500, `${words} words of new detail`);
+    for (const heading of ['Mesh and coordinate spaces', 'Visibility, clipping and ordering', 'A light per face', 'Reading the story and using the bench']) assert.ok(details.includes(heading));
     assert.ok(!html.includes('class="pipeline is-enhanced"'));
   }
   const runtime = readFileSync(new URL('../main.js', import.meta.url), 'utf8');
