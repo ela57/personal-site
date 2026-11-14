@@ -1,6 +1,6 @@
 import { createScrollScheduler, progress } from './scroll-scheduler.js';
 import { inkWords, paintInk, inkRange, advanceMarquee, marqueeTransform, paintStack, paintTimeline } from './scroll-effects.js';
-import { chapterPalette } from './palette.js';
+import { welcomePalette } from './palette.js';
 
 const root = document.documentElement;
 const reduced = matchMedia('(prefers-reduced-motion: reduce)');
@@ -64,7 +64,7 @@ function render(time, scroll) {
     const p = progress(scroll, range.start, range.distance);
     paintInk(words, p, 0);
     if (panel) {
-      const palette = chapterPalette(p);
+      const palette = welcomePalette(p);
       panel.style.setProperty('--welcome-background', `rgb(${palette.background.join(', ')})`);
       panel.style.setProperty('--welcome-ink', palette.color);
     }
