@@ -100,9 +100,12 @@ test('renderer pipeline and stage details live only inside the project overlay',
     assert.doesNotMatch(publicPage, /class="pipeline|pipeline-[1-5]\.png|id="F14"/);
     assert.doesNotMatch(publicPage, /Projection &amp; perspective divide|Backface culling|NDC clipping|Painter’s depth sort|Diffuse shading|NDC-space clipping/);
     const details = renderer.match(/<!-- renderer-details:start -->([\s\S]*?)<!-- renderer-details:end -->/)[1];
-    const words = details.replace(/<[^>]+>/g, ' ').trim().split(/\s+/).length;
-    assert.ok(words >= 300 && words <= 500, `${words} words of new detail`);
-    for (const heading of ['Mesh and coordinate spaces', 'Visibility, clipping and ordering', 'A light per face', 'Reading the story and using the bench']) assert.ok(details.includes(heading));
+    assert.equal((details.match(/<p>/g) || []).length, 6);
+    for (const heading of ['The shape', 'What gets drawn', 'Draw order', 'Lighting', 'Scrolling', 'Bench']) assert.ok(details.includes(heading));
+    assert.ok(details.includes("One difference: the browser version clips before projecting, and the Python version clips after."));
+    assert.ok(renderer.includes('The demo below is a JavaScript rewrite of the same steps, so it runs in the browser. The original is still in Python.'));
+    assert.ok(renderer.includes('Each face is lit based on how directly it faces the light. Faces turned away get only ambient light.'));
+    assert.ok(renderer.includes('Drawn back to front · <span data-live="culled">10</span> faces skipped'));
     assert.ok(!html.includes('class="pipeline is-enhanced"'));
   }
   const runtime = readFileSync(new URL('../main.js', import.meta.url), 'utf8');

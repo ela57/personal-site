@@ -1,41 +1,50 @@
 # Renderer case-study copy: claim ledger
 
-The E–H sections describe the **current JavaScript/Canvas illustration**, not a newly inspected Python implementation. No original Python renderer source is present in this repository (`generate_image.py` and the other Python tools are unrelated). The first-person rewrite keeps the existing Python-project facts and motivation. It adds no performance measurements, course details or results.
+## Draft v2 mapping
 
-The copy now explains the calculations in plain words. Exact depth bounds, light-vector components, lighting coefficients and the scroll reading-line percentage have been omitted from the prose, not changed in the implementation. The Python project still clips after the perspective divide in NDC; the browser illustration clips before projection in the camera's coordinate system. The Python facts come from the existing project description, not an inspection of unavailable Python source.
+The approved text is supplied in `~/shots/copy/draft-v2.md`. Public copy is transcribed verbatim, with HTML emphasis around list labels and the existing live face-count span retained. No explanatory sentences have been added. The draft supersedes the previous four implementation sections and their 300–500-word requirement.
 
-Line references below are to the unchanged renderer/runtime sources in this branch.
-
-| Claim in the revised E–H copy | Supporting code |
+| Draft block | Source element |
 |---|---|
-| Icosahedron has twenty triangular faces and twelve points built from the golden ratio, each one unit from the centre | `lab/renderer.js:9–14`, explicit vertex and face arrays |
-| Points rotate around Y then X and move along Z into the camera's coordinate system | `lab/renderer.js:20–21,48–49` |
-| Projection divides X/Y by depth; the picture is centred on the canvas and Y is flipped | `lab/renderer.js:45,50–52,71–74` |
-| A face normal is worked out from two edges to determine which way the triangle faces | `lab/renderer.js:64–68`, cross product and normal–centroid facing test |
-| Faces pointing away from the camera get skipped | `lab/renderer.js:80–82` |
-| Browser clipping removes points outside the depth range before projection | `lab/renderer.js:69–74` |
-| An edge crossing a clipping boundary gets a new cut point | `lab/pipeline.js:9–24`, linear interpolation at each boundary |
-| Sort stage restores the uncut mesh, enables sorting and order labels | `lab/pipeline.js:1–6`, especially mode four |
-| Whole faces are drawn farthest first and numbered to show the order; depth is not checked at every pixel | `lab/renderer.js:67,76,83,111–114` |
-| Directional light is expressed in the camera's coordinate system | `lab/renderer.js:22,31` |
-| Facing the light sets brightness between zero and one; ambient light is added to mix paper and blue colours | `lab/renderer.js:3–4,31,76,88–91` |
-| Each triangle has one fill colour, with no textures or blending between vertex colours | `lab/renderer.js:85–93` |
-| Scrolling selects the five stages in either direction | `lab/pipeline.js:27–31,50–55,81` |
-| Story views do not rotate; reduced motion retains static images and descriptions | `lab/pipeline.js:57–70`; `projects/index.html`, `tpl-renderer .pipelineSteps` |
-| Bench buttons select points, wireframe, filled faces or shading; culling and sorting toggle independently | `main.js:129–136`; `projects/index.html`, `tpl-bench` control labels/data attributes |
-| Drag adjusts rotation and stops automatic rotation | `lab/renderer.js:130–139`; `main.js:137` |
-| Focal slider changes perspective and moves the camera to keep the shape about the same size | `lab/renderer.js:45–52`; `main.js:135–136` |
-| Readouts show drawn/skipped face counts and the current ordering rule | `main.js:122–126` |
+| How I work; three Approach headings and paragraphs | `projects/index.html`, `#approach` (`h2`, three `h3`/`p` pairs) |
+| Software renderer | Selected-work `h3`, overlay `h2`, renderer registry title |
+| Summary | Selected-work `.projDesc`; registry summary |
+| Intro | Overlay `.csLead` |
+| Why | Selected-work `.projWhy`; overlay section A |
+| The steps | Section B heading and five `.steps li` items |
+| Tradeoffs; Try it | Sections C and D |
+| The shape; What gets drawn; Draw order; Lighting; Scrolling; Bench | Sections E–J, one heading and paragraph each |
+| Five stage captions | Five `.pipelineSteps li p` elements |
+| Figure labels and caption | `.csMedia .notes li` and `.csMedia figcaption` |
 
-The five stage captions restate the same operations. Their existing convex-shape visibility explanation, Python/Matplotlib context and original clipping distinction are retained. Figure annotations use plain-language versions of the perspective, lighting and draw-order explanations above. The existing motivation in section A is rephrased, not extended.
+Old implementation paragraphs and headings are replaced, not retained as extra blocks. The prior visibility/order and story/bench groupings now have separate headings matching the draft. Existing technical stage names, stage numbers, accessibility text and interactive controls remain functional.
 
-## Copy sources and reuse
+The four shortened registry paragraphs contain only complete sentences from the draft: the first Intro sentence, the Try it paragraph, the last What gets drawn sentence, and the last Draw order sentence. The summary is the draft Summary without changes.
 
-- `projects/index.html` is the source HTML read by `journey/generate.js`. It contains the public `#approach` section, the selected-work renderer introduction and the `tpl-renderer` overlay. Regeneration copies these to `/` and `/projects/`.
-- `content/projects.js` holds the renderer summary and four context paragraphs. These are reworded consistently for the gallery, destinations and journey project entry; their facts and links are unchanged.
-- The public **Approach** label occurs once on `/` and once on `/projects/`. Its heading changes from “Make the mechanism visible.” to “I want to see how it works.” The three paragraphs keep the existing renderer/thermal explanation, SPY out-of-sample and turnover discussion, and browser-control examples.
-- Two unrelated **Approach** headings are generated by `journey/lab-presenter.js` for `/explore/#/lab/strategy/understand` and `/explore/#/lab/chess/understand`, using `content/labs.js`. Those lab descriptions are outside this rewrite and remain unchanged.
+## Evidence and limits
 
-Public-page audit before editing: `/` and `/projects/` each rendered one `.pipeline` containing five static stage images/descriptions between renderer and thermal selected work. The renderer summary enumerated the stages and its learning note described sorting. There was no `#F14` on either route. The ordinary single-image renderer previews in the gallery, selected work and destination index are not five-stage stories; they remain links to the case study.
+No original Python renderer source is present in this repository. Python/NumPy/Matplotlib and Python clipping context were already supplied project facts; this edit is not a new inspection of Python code. The draft's first-person recollection about prior graphics-library use and its motivation are owner-supplied statements, not claims verified from code. The Approach reflections are likewise supplied copy.
 
-The overlay template is now the sole primary-page source of the story. The generator no longer reads a public-page story and copies it into that template. `/experiments/scroll/` and `/explore/` are unchanged.
+The browser implementation remains distinct: it clips before projection; the original Python project clips after the perspective divide. Exact lighting coefficients, light-vector components, depth bounds, rotation axes and scroll thresholds remain in code but are no longer spelled out in the prose.
+
+| Claim retained in draft v2 | Supporting code or provenance |
+|---|---|
+| Original Python renderer uses NumPy; Matplotlib draws the finished triangles | Existing project description and supplied Intro; original source unavailable |
+| Original clips after perspective divide; painter's ordering can fail for intersecting faces | Existing project description and supplied Tradeoffs; original source unavailable |
+| Browser demo is JavaScript | `lab/renderer.js`; `main.js:1,146–169` |
+| Icosahedron has 20 faces and 12 points | `lab/renderer.js:9–14` |
+| Rotation, camera offset, divide by depth, canvas centring and Y flip | `lab/renderer.js:20–21,45–52,71–74` |
+| Face orientation decides which triangles are skipped | `lab/renderer.js:64–68,80–82` |
+| Clipping trims the depth range and inserts cut points on crossing edges, before projection | `lab/renderer.js:69–74`; `lab/pipeline.js:9–24` |
+| Sorting restores the whole shape and numbers faces from farthest to nearest | `lab/pipeline.js:1–6`; `lab/renderer.js:67,76,83,111–114` |
+| Whole-face sorting, without a per-pixel depth test | `lab/renderer.js:64–114` |
+| One directional light, one brightness per face and a positive ambient contribution; no textures or smooth shading | `lab/renderer.js:22,31,76,85–93` |
+| Five reversible scroll stages; reduced motion keeps static images | `lab/pipeline.js:1–6,27–31,50–70,81` |
+| Bench modes, culling/sorting toggles, drag rotation, focal-length control and face counters | `main.js:122–137`; `lab/renderer.js:130–139`; `projects/index.html`, `tpl-bench` |
+| Figure shows depth division, directional lighting and back-to-front drawing; skipped count updates live | `lab/renderer.js:45–52,76–93`; `main.js:153–161` |
+
+## Source and reuse
+
+`projects/index.html` is read by `journey/generate.js` to regenerate `/` and `/projects/`. The overlay template remains the sole primary-page source of the five-stage story. `content/projects.js` supplies the shared renderer title, summary and shortened context; regeneration updates gallery/destination entries, Explore fallback content and scroll-experiment summaries. No renderer or scroll interaction code changes.
+
+The unrelated strategy and chess journey-lab **Approach** sections remain unchanged in `content/labs.js`, rendered by `journey/lab-presenter.js` at `/explore/#/lab/strategy/understand` and `/explore/#/lab/chess/understand`.

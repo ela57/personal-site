@@ -459,7 +459,7 @@
         },
         {
           "path": "content/projects.js",
-          "sha256": "922efd4c6e4e11ed50099daed4418274b128ec1e4f738f3ba26bbdf55d622202"
+          "sha256": "73a255c9d5e03fd2e4bc512fb8bb6160394b9af58179d04895c5c742329728a4"
         },
         {
           "path": "tools/graphics/generate.py",
@@ -521,7 +521,7 @@
         },
         {
           "path": "content/projects.js",
-          "sha256": "922efd4c6e4e11ed50099daed4418274b128ec1e4f738f3ba26bbdf55d622202"
+          "sha256": "73a255c9d5e03fd2e4bc512fb8bb6160394b9af58179d04895c5c742329728a4"
         },
         {
           "path": "tools/graphics/generate.py",
