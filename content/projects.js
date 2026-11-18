@@ -6,12 +6,12 @@ export const projects = [
   {
     id: "renderer", title: "A renderer with no graphics API", destination: "renderer",
     label: "Illustrative simulation",
-    summary: "A JavaScript and Canvas 2D illustration of a Python rendering pipeline.",
+    summary: "A browser demo of my Python renderer, built with JavaScript and Canvas 2D.",
     body: [
-      "The original renderer computes transformation matrices and shaded triangles in Python and NumPy, then draws them with Matplotlib.",
-      "The pipeline includes world, view and projection transforms, perspective divide, backface culling, depth clipping, painter’s sorting and diffuse lighting.",
-      "The browser bench re-implements the stages in JavaScript and Canvas 2D; the original Python renderer clips in NDC, while this browser illustration clips in view space before projecting.",
-      "Painter’s algorithm sorts whole faces rather than keeping a per-pixel depth buffer, and cannot resolve intersecting faces or cyclic overlap."
+      "I wrote the original renderer in Python and NumPy. My code works out where the triangles go and how they’re lit, then Matplotlib draws them.",
+      "I move the points into the camera’s view and divide by depth. Faces pointing away get skipped. I clip to the depth range, draw farthest faces first and add light to each face.",
+      "The browser demo uses JavaScript and Canvas 2D. It clips in the camera’s coordinate system before projection; my Python renderer clips afterward, in NDC.",
+      "I sort whole faces, without checking depth at every pixel. Faces that intersect or overlap in a cycle are cases this ordering can’t fix."
     ],
     links: [{ title: "Case study and pipeline bench", href: "#project/renderer" }, { title: "Selected work", href: "#projects" }],
     assets: [...previewAssets('renderer'), "assets/pipeline-1.png", "assets/pipeline-2.png", "assets/pipeline-3.png", "assets/pipeline-4.png", "assets/pipeline-5.png"],

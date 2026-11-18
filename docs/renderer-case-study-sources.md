@@ -1,29 +1,40 @@
-# Renderer case-study additions: claim ledger
+# Renderer case-study copy: claim ledger
 
-The new E–H sections describe the **current JavaScript/Canvas illustration**, not a newly inspected Python implementation. No original Python renderer source is present in this repository (`generate_image.py` and the other Python tools are unrelated). Existing Python-project context remains unchanged. No performance measurements, course details or results were added.
+The E–H sections describe the **current JavaScript/Canvas illustration**, not a newly inspected Python implementation. No original Python renderer source is present in this repository (`generate_image.py` and the other Python tools are unrelated). The first-person rewrite keeps the existing Python-project facts and motivation. It adds no performance measurements, course details or results.
+
+The copy now explains the calculations in plain words. Exact depth bounds, light-vector components, lighting coefficients and the scroll reading-line percentage have been omitted from the prose, not changed in the implementation. The Python project still clips after the perspective divide in NDC; the browser illustration clips before projection in the camera's coordinate system. The Python facts come from the existing project description, not an inspection of unavailable Python source.
 
 Line references below are to the unchanged renderer/runtime sources in this branch.
 
-| New claim | Supporting code |
+| Claim in the revised E–H copy | Supporting code |
 |---|---|
-| Indexed icosahedron has twelve vertices, constructed using the golden ratio and normalized to unit length; twenty triangular faces | `lab/renderer.js:9–14`, explicit vertex and face arrays |
-| Model vertices rotate around Y then X, then translate in positive Z into view space | `lab/renderer.js:20–21,48–49` |
-| Projection divides X/Y by depth and includes focal/normalization factors; canvas mapping centres and flips Y | `lab/renderer.js:45,50–52,71–74` |
-| View-space normal is the normalized cross product of two edges; negative normal–centroid dot product determines front-facing triangles | `lab/renderer.js:64–68` |
-| Backface culling keeps front-facing triangles | `lab/renderer.js:80–82` |
-| Clipping maps view depths 3.45–4.95 into −1…1, clips before projection, then reconstructs depth for projection | `lab/renderer.js:69–74` |
-| Clipper processes both boundaries, keeps inside vertices and linearly interpolates edge intersections | `lab/pipeline.js:9–24` |
+| Icosahedron has twenty triangular faces and twelve points built from the golden ratio, each one unit from the centre | `lab/renderer.js:9–14`, explicit vertex and face arrays |
+| Points rotate around Y then X and move along Z into the camera's coordinate system | `lab/renderer.js:20–21,48–49` |
+| Projection divides X/Y by depth; the picture is centred on the canvas and Y is flipped | `lab/renderer.js:45,50–52,71–74` |
+| A face normal is worked out from two edges to determine which way the triangle faces | `lab/renderer.js:64–68`, cross product and normal–centroid facing test |
+| Faces pointing away from the camera get skipped | `lab/renderer.js:80–82` |
+| Browser clipping removes points outside the depth range before projection | `lab/renderer.js:69–74` |
+| An edge crossing a clipping boundary gets a new cut point | `lab/pipeline.js:9–24`, linear interpolation at each boundary |
 | Sort stage restores the uncut mesh, enables sorting and order labels | `lab/pipeline.js:1–6`, especially mode four |
-| Faces sort by descending centroid depth, not per-pixel depth; order labels use that list | `lab/renderer.js:67,76,83,111–114` |
-| Default normalized light vector is (−0.5,0.75,−0.9) in view space | `lab/renderer.js:22,31` |
-| Diffuse term is a clamped normal–light dot product; ambient 0.18 and diffuse 0.82 drive paper-to-blue front-face colour | `lab/renderer.js:3–4,31,76,88–91` |
-| Colour fills each polygon rather than using textures/interpolated vertex colours | `lab/renderer.js:85–93`, single fill colour per face |
-| Scroll selection uses a 55%-height reading line in the overlay, in either direction | `lab/pipeline.js:27–31,50–55,81` |
-| Story renderers disable rotation and drag; reduced motion skips enhancement and retains the existing static images/descriptions | `lab/pipeline.js:57–70`; `projects/index.html:300–304`, renderer template's five static step images |
-| Four bench buttons select vertices, wireframe, fill, shade; checkboxes toggle culling and sorting; slider changes focal length | `main.js:129–136`; `projects/index.html:399–407`, `tpl-bench` control labels/data attributes |
+| Whole faces are drawn farthest first and numbered to show the order; depth is not checked at every pixel | `lab/renderer.js:67,76,83,111–114` |
+| Directional light is expressed in the camera's coordinate system | `lab/renderer.js:22,31` |
+| Facing the light sets brightness between zero and one; ambient light is added to mix paper and blue colours | `lab/renderer.js:3–4,31,76,88–91` |
+| Each triangle has one fill colour, with no textures or blending between vertex colours | `lab/renderer.js:85–93` |
+| Scrolling selects the five stages in either direction | `lab/pipeline.js:27–31,50–55,81` |
+| Story views do not rotate; reduced motion retains static images and descriptions | `lab/pipeline.js:57–70`; `projects/index.html`, `tpl-renderer .pipelineSteps` |
+| Bench buttons select points, wireframe, filled faces or shading; culling and sorting toggle independently | `main.js:129–136`; `projects/index.html`, `tpl-bench` control labels/data attributes |
 | Drag adjusts rotation and stops automatic rotation | `lab/renderer.js:130–139`; `main.js:137` |
-| Focal slider also adjusts camera distance to approximately preserve apparent size while changing perspective | `lab/renderer.js:45–52`; `main.js:135–136` |
-| Live readouts show drawn/culled face counts and ordering rule | `main.js:122–126` |
+| Focal slider changes perspective and moves the camera to keep the shape about the same size | `lab/renderer.js:45–52`; `main.js:135–136` |
+| Readouts show drawn/skipped face counts and the current ordering rule | `main.js:122–126` |
+
+The five stage captions restate the same operations. Their existing convex-shape visibility explanation, Python/Matplotlib context and original clipping distinction are retained. Figure annotations use plain-language versions of the perspective, lighting and draw-order explanations above. The existing motivation in section A is rephrased, not extended.
+
+## Copy sources and reuse
+
+- `projects/index.html` is the source HTML read by `journey/generate.js`. It contains the public `#approach` section, the selected-work renderer introduction and the `tpl-renderer` overlay. Regeneration copies these to `/` and `/projects/`.
+- `content/projects.js` holds the renderer summary and four context paragraphs. These are reworded consistently for the gallery, destinations and journey project entry; their facts and links are unchanged.
+- The public **Approach** label occurs once on `/` and once on `/projects/`. Its heading changes from “Make the mechanism visible.” to “I want to see how it works.” The three paragraphs keep the existing renderer/thermal explanation, SPY out-of-sample and turnover discussion, and browser-control examples.
+- Two unrelated **Approach** headings are generated by `journey/lab-presenter.js` for `/explore/#/lab/strategy/understand` and `/explore/#/lab/chess/understand`, using `content/labs.js`. Those lab descriptions are outside this rewrite and remain unchanged.
 
 Public-page audit before editing: `/` and `/projects/` each rendered one `.pipeline` containing five static stage images/descriptions between renderer and thermal selected work. The renderer summary enumerated the stages and its learning note described sorting. There was no `#F14` on either route. The ordinary single-image renderer previews in the gallery, selected work and destination index are not five-stage stories; they remain links to the case study.
 
