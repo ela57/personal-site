@@ -4,14 +4,14 @@ import { previewAssets } from './graphics.js';
 // Destination keys are content identifiers, not newly implemented hash routes.
 export const projects = [
   {
-    id: "renderer", title: "A renderer with no graphics API", destination: "renderer",
+    id: "renderer", title: "Software renderer", destination: "renderer",
     label: "Illustrative simulation",
-    summary: "A JavaScript and Canvas 2D illustration of a Python rendering pipeline.",
+    summary: "A small 3D renderer I wrote in Python, plus a version you can try in the browser.",
     body: [
-      "The original renderer computes transformation matrices and shaded triangles in Python and NumPy, then draws them with Matplotlib.",
-      "The pipeline includes world, view and projection transforms, perspective divide, backface culling, depth clipping, painter’s sorting and diffuse lighting.",
-      "The browser bench re-implements the stages in JavaScript and Canvas 2D; the original Python renderer clips in NDC, while this browser illustration clips in view space before projecting.",
-      "Painter’s algorithm sorts whole faces rather than keeping a per-pixel depth buffer, and cannot resolve intersecting faces or cyclic overlap."
+      "I wrote this renderer in Python with NumPy, and used Matplotlib only to draw the finished triangles.",
+      "The demo below is a JavaScript rewrite of the same steps, so it runs in the browser. The original is still in Python.",
+      "One difference: the browser version clips before projecting, and the Python version clips after.",
+      "There's no per-pixel depth check; it sorts whole faces."
     ],
     links: [{ title: "Case study and pipeline bench", href: "#project/renderer" }, { title: "Selected work", href: "#projects" }],
     assets: [...previewAssets('renderer'), "assets/pipeline-1.png", "assets/pipeline-2.png", "assets/pipeline-3.png", "assets/pipeline-4.png", "assets/pipeline-5.png"],

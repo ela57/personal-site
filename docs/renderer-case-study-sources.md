@@ -1,30 +1,50 @@
-# Renderer case-study additions: claim ledger
+# Renderer case-study copy: claim ledger
 
-The new E–H sections describe the **current JavaScript/Canvas illustration**, not a newly inspected Python implementation. No original Python renderer source is present in this repository (`generate_image.py` and the other Python tools are unrelated). Existing Python-project context remains unchanged. No performance measurements, course details or results were added.
+## Draft v2 mapping
 
-Line references below are to the unchanged renderer/runtime sources in this branch.
+The approved text is supplied in `~/shots/copy/draft-v2.md`. Public copy is transcribed verbatim, with HTML emphasis around list labels and the existing live face-count span retained. No explanatory sentences have been added. The draft supersedes the previous four implementation sections and their 300–500-word requirement.
 
-| New claim | Supporting code |
+| Draft block | Source element |
 |---|---|
-| Indexed icosahedron has twelve vertices, constructed using the golden ratio and normalized to unit length; twenty triangular faces | `lab/renderer.js:9–14`, explicit vertex and face arrays |
-| Model vertices rotate around Y then X, then translate in positive Z into view space | `lab/renderer.js:20–21,48–49` |
-| Projection divides X/Y by depth and includes focal/normalization factors; canvas mapping centres and flips Y | `lab/renderer.js:45,50–52,71–74` |
-| View-space normal is the normalized cross product of two edges; negative normal–centroid dot product determines front-facing triangles | `lab/renderer.js:64–68` |
-| Backface culling keeps front-facing triangles | `lab/renderer.js:80–82` |
-| Clipping maps view depths 3.45–4.95 into −1…1, clips before projection, then reconstructs depth for projection | `lab/renderer.js:69–74` |
-| Clipper processes both boundaries, keeps inside vertices and linearly interpolates edge intersections | `lab/pipeline.js:9–24` |
-| Sort stage restores the uncut mesh, enables sorting and order labels | `lab/pipeline.js:1–6`, especially mode four |
-| Faces sort by descending centroid depth, not per-pixel depth; order labels use that list | `lab/renderer.js:67,76,83,111–114` |
-| Default normalized light vector is (−0.5,0.75,−0.9) in view space | `lab/renderer.js:22,31` |
-| Diffuse term is a clamped normal–light dot product; ambient 0.18 and diffuse 0.82 drive paper-to-blue front-face colour | `lab/renderer.js:3–4,31,76,88–91` |
-| Colour fills each polygon rather than using textures/interpolated vertex colours | `lab/renderer.js:85–93`, single fill colour per face |
-| Scroll selection uses a 55%-height reading line in the overlay, in either direction | `lab/pipeline.js:27–31,50–55,81` |
-| Story renderers disable rotation and drag; reduced motion skips enhancement and retains the existing static images/descriptions | `lab/pipeline.js:57–70`; `projects/index.html:300–304`, renderer template's five static step images |
-| Four bench buttons select vertices, wireframe, fill, shade; checkboxes toggle culling and sorting; slider changes focal length | `main.js:129–136`; `projects/index.html:399–407`, `tpl-bench` control labels/data attributes |
-| Drag adjusts rotation and stops automatic rotation | `lab/renderer.js:130–139`; `main.js:137` |
-| Focal slider also adjusts camera distance to approximately preserve apparent size while changing perspective | `lab/renderer.js:45–52`; `main.js:135–136` |
-| Live readouts show drawn/culled face counts and ordering rule | `main.js:122–126` |
+| How I work; three Approach headings and paragraphs | `projects/index.html`, `#approach` (`h2`, three `h3`/`p` pairs) |
+| Software renderer | Selected-work `h3`, overlay `h2`, renderer registry title |
+| Summary | Selected-work `.projDesc`; registry summary |
+| Intro | Overlay `.csLead` |
+| Why | Selected-work `.projWhy`; overlay section A |
+| The steps | Section B heading and five `.steps li` items |
+| Tradeoffs; Try it | Sections C and D |
+| The shape; What gets drawn; Draw order; Lighting; Scrolling; Bench | Sections E–J, one heading and paragraph each |
+| Five stage captions | Five `.pipelineSteps li p` elements |
+| Figure labels and caption | `.csMedia .notes li` and `.csMedia figcaption` |
 
-Public-page audit before editing: `/` and `/projects/` each rendered one `.pipeline` containing five static stage images/descriptions between renderer and thermal selected work. The renderer summary enumerated the stages and its learning note described sorting. There was no `#F14` on either route. The ordinary single-image renderer previews in the gallery, selected work and destination index are not five-stage stories; they remain links to the case study.
+Old implementation paragraphs and headings are replaced, not retained as extra blocks. The prior visibility/order and story/bench groupings now have separate headings matching the draft. Existing technical stage names, stage numbers, accessibility text and interactive controls remain functional.
 
-The overlay template is now the sole primary-page source of the story. The generator no longer reads a public-page story and copies it into that template. `/experiments/scroll/` and `/explore/` are unchanged.
+The four shortened registry paragraphs contain only complete sentences from the draft: the first Intro sentence, the Try it paragraph, the last What gets drawn sentence, and the last Draw order sentence. The summary is the draft Summary without changes.
+
+## Evidence and limits
+
+No original Python renderer source is present in this repository. Python/NumPy/Matplotlib and Python clipping context were already supplied project facts; this edit is not a new inspection of Python code. The draft's first-person recollection about prior graphics-library use and its motivation are owner-supplied statements, not claims verified from code. The Approach reflections are likewise supplied copy.
+
+The browser implementation remains distinct: it clips before projection; the original Python project clips after the perspective divide. Exact lighting coefficients, light-vector components, depth bounds, rotation axes and scroll thresholds remain in code but are no longer spelled out in the prose.
+
+| Claim retained in draft v2 | Supporting code or provenance |
+|---|---|
+| Original Python renderer uses NumPy; Matplotlib draws the finished triangles | Existing project description and supplied Intro; original source unavailable |
+| Original clips after perspective divide; painter's ordering can fail for intersecting faces | Existing project description and supplied Tradeoffs; original source unavailable |
+| Browser demo is JavaScript | `lab/renderer.js`; `main.js:1,146–169` |
+| Icosahedron has 20 faces and 12 points | `lab/renderer.js:9–14` |
+| Rotation, camera offset, divide by depth, canvas centring and Y flip | `lab/renderer.js:20–21,45–52,71–74` |
+| Face orientation decides which triangles are skipped | `lab/renderer.js:64–68,80–82` |
+| Clipping trims the depth range and inserts cut points on crossing edges, before projection | `lab/renderer.js:69–74`; `lab/pipeline.js:9–24` |
+| Sorting restores the whole shape and numbers faces from farthest to nearest | `lab/pipeline.js:1–6`; `lab/renderer.js:67,76,83,111–114` |
+| Whole-face sorting, without a per-pixel depth test | `lab/renderer.js:64–114` |
+| One directional light, one brightness per face and a positive ambient contribution; no textures or smooth shading | `lab/renderer.js:22,31,76,85–93` |
+| Five reversible scroll stages; reduced motion keeps static images | `lab/pipeline.js:1–6,27–31,50–70,81` |
+| Bench modes, culling/sorting toggles, drag rotation, focal-length control and face counters | `main.js:122–137`; `lab/renderer.js:130–139`; `projects/index.html`, `tpl-bench` |
+| Figure shows depth division, directional lighting and back-to-front drawing; skipped count updates live | `lab/renderer.js:45–52,76–93`; `main.js:153–161` |
+
+## Source and reuse
+
+`projects/index.html` is read by `journey/generate.js` to regenerate `/` and `/projects/`. The overlay template remains the sole primary-page source of the five-stage story. `content/projects.js` supplies the shared renderer title, summary and shortened context; regeneration updates gallery/destination entries, Explore fallback content and scroll-experiment summaries. No renderer or scroll interaction code changes.
+
+The unrelated strategy and chess journey-lab **Approach** sections remain unchanged in `content/labs.js`, rendered by `journey/lab-presenter.js` at `/explore/#/lab/strategy/understand` and `/explore/#/lab/chess/understand`.
