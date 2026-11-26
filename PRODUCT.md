@@ -3,7 +3,7 @@
 A static, no-build portfolio for a Georgia Tech computer engineering student.
 The public `/` is the static ePortfolio, with `/projects/` retaining the same direct
 view: Welcome, three selected projects, two opt-in lab panels, Approach, About and
-Contact. Shared navigation reaches About, the viewable/downloadable Résumé and
+Contact. Shared navigation reaches About and
 Career Goals. Neither direct page automatically mounts canvases or loads WebGL/Three.js;
 the five-stage renderer pipeline uses static images. Preserve project facts, annotations, case-study
 hash routes, chess puzzles, strategy sandbox, and the renderer bench inside its

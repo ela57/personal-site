@@ -136,15 +136,6 @@ export const projects = [
     summary: 'President · Aug 2022–May 2024 · Chess Buddies',
     body: [about[3]],
     links: [{ title: 'Chess Buddies leadership', href: '/about/#chess-buddies' }], assets: previewAssets('chess-buddies'),
-    dataSources: [{ repo: 'personal-site', path: 'assets/Lam_Ethan_Resume.pdf' }, { repo: 'personal-site', path: 'about/index.html', section: '#chess-buddies' }], needsContent: false
-  },
-  {
-    id: "resume", title: "Résumé", destination: "resume",
-    label: "Working project integration",
-    summary: "Computer engineering at Georgia Tech, class of 2028.",
-    body: ["Cybersecurity and Distributed Systems & Software Design threads.", "B.S. Computer Engineering, Georgia Institute of Technology, 2028."],
-    links: [{ title: "View résumé", href: "/resume/" }, { title: "About", href: "/about/" }, { title: "Contact", href: "/projects/#contact" }, { title: "Email", href: "mailto:ethanlam52@gmail.com" }, { title: "LinkedIn", href: "https://www.linkedin.com/in/ethanlam7/" }],
-    assets: ['assets/Lam_Ethan_Resume.pdf'], dataSources: [{ repo: "personal-site", path: "assets/Lam_Ethan_Resume.pdf" }],
-    needsContent: false
+    dataSources: [{ repo: 'personal-site', path: 'about/index.html', section: '#chess-buddies' }], needsContent: false
   }
 ];

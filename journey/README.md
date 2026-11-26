@@ -79,7 +79,7 @@ Title-only entries explicitly say “Content needed”. Journey lab links open t
 five-stage presenter; existing direct lab hash routes remain playable.
 
 The header owns the six station links, progress/location, direct view and
-Résumé/Contact shortcut. `#/at/<station>` is replaced during native scrolling;
+Contact shortcut. `#/at/<station>` is replaced during native scrolling;
 menu/key navigation pushes one history entry and eases native scroll for 1000ms.
 Back/Forward and initial station hashes restore the station instantly. The keys
 `[` / `]` and Alt+Up/Down select adjacent stations; PageDown/Space stay native.

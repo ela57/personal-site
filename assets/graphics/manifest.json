@@ -455,11 +455,11 @@
         },
         {
           "path": "content/eportfolio.js",
-          "sha256": "3deb198fb47252e751cedd3383e29784e5f4f59d28175aba939fc53d7ec06a49"
+          "sha256": "7af548452ba08c5c1a4251461641aed23d9ff9a145c83ad6a2696f9d982f8511"
         },
         {
           "path": "content/projects.js",
-          "sha256": "73a255c9d5e03fd2e4bc512fb8bb6160394b9af58179d04895c5c742329728a4"
+          "sha256": "9b02c31c4d468865f4f75327a524d1a3a3a8f30b9abed138d15c43538aeb4e1e"
         },
         {
           "path": "tools/graphics/generate.py",
@@ -517,11 +517,11 @@
         },
         {
           "path": "content/eportfolio.js",
-          "sha256": "3deb198fb47252e751cedd3383e29784e5f4f59d28175aba939fc53d7ec06a49"
+          "sha256": "7af548452ba08c5c1a4251461641aed23d9ff9a145c83ad6a2696f9d982f8511"
         },
         {
           "path": "content/projects.js",
-          "sha256": "73a255c9d5e03fd2e4bc512fb8bb6160394b9af58179d04895c5c742329728a4"
+          "sha256": "9b02c31c4d468865f4f75327a524d1a3a3a8f30b9abed138d15c43538aeb4e1e"
         },
         {
           "path": "tools/graphics/generate.py",
