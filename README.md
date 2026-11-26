@@ -26,8 +26,7 @@ static HTML without JavaScript. See `journey/README.md` for navigation and rende
 - `/` and `/projects/`: Welcome, selected work, static pipeline figures, project/lab
   write-ups, About, Contact and the bottom experiment link. Direct `#project/*` /
   `#lab/*` links work on either route, including `#lab/strategy/simulated`.
-- `/about/`, `/resume/`, `/career/`: no-JS reading pages; the résumé is viewable
-  and downloadable at `/assets/Lam_Ethan_Resume.pdf`.
+- `/about/`, `/career/`: no-JS reading pages.
 - `/explore/`: six forest stations, translucent panels and `#/at/<station>` history.
   Use the destination menu, `[ ]` or Alt+Arrow; native PageDown/Space still scroll.
   Reduced motion cuts between stations. Static/no-WebGL/no-JS alternatives retain

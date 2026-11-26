@@ -1,4 +1,4 @@
-export const welcome = "Hi, I'm Ethan Lam, a computer engineering student at Georgia Tech, class of 2028. I like building software that handles data efficiently, which has pulled me toward systems programming, graphics and financial technology. This ePortfolio collects my projects, research and experience, along with my résumé and the plan for where I'm headed next. Right now I'm looking for a Summer 2027 software engineering internship in backend or systems work.";
+export const welcome = "Hi, I'm Ethan Lam, a computer engineering student at Georgia Tech, class of 2028. I like building software that handles data efficiently, which has pulled me toward systems programming, graphics and financial technology. This ePortfolio collects my projects, research and experience, along with the plan for where I'm headed next. Right now I'm looking for a Summer 2027 software engineering internship in backend or systems work.";
 
 export const aboutHeading = 'Most of what I build starts with one question: how does this actually work?';
 export const about = [

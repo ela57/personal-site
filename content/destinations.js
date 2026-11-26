@@ -8,14 +8,13 @@ export const destinations = [
   { id: 'archive', name: 'Archive', subtitle: 'Data and research', projects: ['data-universe', 'human-interaction'] },
   { id: 'workshop', name: 'Workshop', subtitle: 'Graphics, hardware and analysis labs', projects: ['renderer', 'thermal', 'scomp', 'palletizer-fsm', 'malware-research'] },
   { id: 'clearing', name: 'Clearing', subtitle: 'Games and experiments', projects: ['chess', 'poker', 'chess-buddies'] },
-  { id: 'overlook', name: 'Overlook', subtitle: 'About and contact', projects: ['resume'] }
+  { id: 'overlook', name: 'Overlook', subtitle: 'About and contact', projects: [] }
 ];
 
 export const categories = [
   { id: 'projects', name: 'Projects', projects: ['renderer', 'thermal', 'data-universe', 'scomp', 'palletizer-fsm'] },
   { id: 'research-labs', name: 'Research & labs', projects: ['vol', 'strategy', 'strategy-simulation', 'chess', 'poker', 'human-interaction', 'malware-research'] },
-  { id: 'leadership-experience', name: 'Leadership & experience', projects: ['portfolio-manager', 'chess-buddies'] },
-  { id: 'resume', name: 'Résumé', projects: ['resume'] }
+  { id: 'leadership-experience', name: 'Leadership & experience', projects: ['portfolio-manager', 'chess-buddies'] }
 ];
 
 export function categoryProjects(id) {
